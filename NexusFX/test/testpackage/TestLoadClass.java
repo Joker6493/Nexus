@@ -12,6 +12,7 @@ package testpackage;
 
 import api.NexusPlugin;
 import java.net.MalformedURLException;
+import javafx.application.Application;
 import javafx.stage.*;
 import pluginloader.PluginLoader;
 
@@ -36,6 +37,7 @@ public class TestLoadClass {
         NexusPlugin local_test = (NexusPlugin) test_ob;
         System.out.println(test_ob.getClass());
         System.out.println(local_test.getClass());
+        Application.launch(testClass, args);
         local_test.invoke();
         
     }
