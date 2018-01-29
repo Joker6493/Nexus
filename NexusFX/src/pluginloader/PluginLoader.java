@@ -6,7 +6,6 @@
 package pluginloader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.net.URL;
