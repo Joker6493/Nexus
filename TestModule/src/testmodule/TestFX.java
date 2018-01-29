@@ -46,8 +46,7 @@ public class TestFX extends Application implements NexusPlugin {
 
     @Override
     public void invoke() {
-        System.out.println("Hello World!");
-        launch();
+        System.out.println("Ежжиииии!");
         
     }
    
