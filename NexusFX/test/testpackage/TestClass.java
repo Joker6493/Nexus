@@ -11,11 +11,13 @@ package testpackage;
  *
  * @author dboro
  */
-import oracledbconn.DBAccessObj;
+import java.sql.*;
+import oracledbconn.OracleConn;
 
 public class TestClass { 
     public static void main(String[] args) {
-        DBAccessObj conexao = new DBAccessObj();
+        OracleConn orc = new OracleConn();
+        orc.connectDatabase();
         
     }
 }
