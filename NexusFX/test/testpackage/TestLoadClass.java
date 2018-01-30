@@ -23,8 +23,8 @@ public class TestLoadClass {
      */
     public static void main(String[] args) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         // TODO code application logic here
-        //String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
-        String pluginPath = "C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX\\plugins";
+        String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
+        //String pluginPath = "C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX\\plugins";
         String fileName = "TestModule";
         String className = "testmodule.TestFX";
         PluginLoader clist = new PluginLoader();

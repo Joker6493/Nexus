@@ -30,10 +30,10 @@ public class OracleTest {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM SYSTEM_INFO");
                 System.out.println("Результат запроса");
-                System.out.println("ID Систем: ");
+                System.out.println("ID Систем и Код: ");
                 while (rs.next()) {
                     String str = rs.getString("systemid") + ":" + rs.getString(2);
-                    System.out.println("Contact:" + str);
+                    System.out.println("ID: " + str);
                 }
                 rs.close();
                 stmt.close();
