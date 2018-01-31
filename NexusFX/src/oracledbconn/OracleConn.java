@@ -21,6 +21,7 @@ public class OracleConn {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection(url, login, password);
+            System.out.println("Соединение установлено");
         } catch (Exception e){
             System.out.println("Ошибка " + e.getMessage());
             e.printStackTrace();
