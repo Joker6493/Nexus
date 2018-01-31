@@ -9,7 +9,11 @@
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <jar href="NexusFX.jar" size="17034" download="eager" />
+=======
+    <jar href="NexusFX.jar" size="16097" download="eager" />
+>>>>>>> 17e063a6591b5bfa7eeeca47c78ecf7e6e4c7d66
 =======
     <jar href="NexusFX.jar" size="16097" download="eager" />
 >>>>>>> 17e063a6591b5bfa7eeeca47c78ecf7e6e4c7d66
