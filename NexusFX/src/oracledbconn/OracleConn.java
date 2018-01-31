@@ -16,14 +16,16 @@ public class OracleConn {
     private final String url = "jdbc:oracle:thin:@localhost:1521:XE";
     private final String login = "nexusdb";
     private final String password = "Stavr0p0l";    
-    public void connectDatabase() {
+    public Connection connectDatabase() {
+        Connection con = null;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(url, login, password);
+            con = DriverManager.getConnection(url, login, password);
         } catch (Exception e){
             System.out.println("Ошибка " + e.getMessage());
             e.printStackTrace();
         }
+        return con;
         /*            try {
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM SYSTEM_INFO");
