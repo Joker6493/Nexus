@@ -5,14 +5,18 @@
  */
 package nexusfx;
 
+import java.sql.Connection;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import oracledbconn.OracleConn;
 import pluginloader.PluginLoader;
 
 /**
@@ -23,6 +27,8 @@ public class NexusFX extends Application {
     
     String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
     PluginLoader classLoader = new PluginLoader(); 
+    OracleConn oraconn = new OracleConn();
+    Connection dbconn = oraconn.connectDatabase();
     
     @Override
     public void start(Stage primaryStage) {
@@ -77,6 +83,21 @@ public class NexusFX extends Application {
             System.out.println("Hello World!");
         });
         
+        //Строка состояния
+        GridPane statusBar = new GridPane();
+        Label connStatus = new Label("Соединение установлено");
+        
+        Label timeLabel = new Label();
+        
+        
+        //Панель задач
+        HBox taskBar = new HBox();
+        
+        //Нижние панели
+        GridPane bottomPane = new GridPane();
+        bottomPane.setConstraints(taskBar, 0, 0);
+        bottomPane.setConstraints(statusBar, 0, 1);
+        bottomPane.getChildren().addAll(taskBar,statusBar);
         
         classLoader.fillLists(pluginPath);
         
@@ -84,7 +105,7 @@ public class NexusFX extends Application {
         root.setTop(MenuBarMain);
         root.setLeft(new Button("Left"));
         root.setRight(new Button("Right"));
-        root.setBottom(new Button("Bottom"));
+        root.setBottom(statusBar);
         root.setCenter(new Button("Center"));
         root.setCenter(btn);
         
