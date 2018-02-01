@@ -21,7 +21,7 @@ import pluginloader.PluginLoader;
  */
 public class NexusFX extends Application {
     
-    String pluginPath = "C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX\\plugins";
+    String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
     PluginLoader loader = new PluginLoader();
         
     @Override
@@ -56,7 +56,7 @@ public class NexusFX extends Application {
             calc.start(calcStage);
         });
         MenuItem testClass = new MenuItem("Проверка ClassLoader");
-        loadcalc.setOnAction((ActionEvent event) -> {
+        testClass.setOnAction((ActionEvent event) -> {
             String fileName = "TestModule";
             String className = "TestModule";
             
