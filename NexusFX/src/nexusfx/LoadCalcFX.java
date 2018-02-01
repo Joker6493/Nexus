@@ -28,15 +28,15 @@ public class LoadCalcFX extends Application {
     //Labels    
         Label WeightWEqLabel = new Label("Вес парашютиста со снаряжением, кг.");
         WeightWEqLabel.setWrapText(true);
-        WeightWEqLabel.setPrefSize(115, 35);
+        WeightWEqLabel.setPrefSize(140, 50);
         Label WeightSysLabel = new Label("Вес системы, кг.");
-        WeightSysLabel.setPrefSize(115, 35);
+        WeightSysLabel.setPrefSize(140, 50);
         Label CanopySizeLabel = new Label("Площадь купола, кв. фут.");
-        CanopySizeLabel.setPrefSize(115, 35);
+        CanopySizeLabel.setPrefSize(140, 50);
         CanopySizeLabel.setWrapText(true);
     //TextFields
         TextField WeightWEq = new TextField();
-        WeightWEq.setPrefWidth(115);
+        WeightWEq.setPrefWidth(140);
         WeightWEq.setPromptText("Ваш вес со снаряжением");
         WeightWEq.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
@@ -44,7 +44,7 @@ public class LoadCalcFX extends Application {
             }
         });
         TextField WeightSys = new TextField();
-        WeightSys.setPrefWidth(115);
+        WeightSys.setPrefWidth(140);
         WeightSys.setPromptText("Вес Вашей системы");
         WeightSys.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
@@ -52,7 +52,7 @@ public class LoadCalcFX extends Application {
             }
         });
         TextField CanopySize = new TextField();
-        CanopySize.setPrefWidth(115);
+        CanopySize.setPrefWidth(140);
         CanopySize.setPromptText("Площадь купола");
         CanopySize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
@@ -60,7 +60,7 @@ public class LoadCalcFX extends Application {
             }
         });
         TextField CanopyLoad = new TextField();
-        CanopyLoad.setPrefWidth(115);
+        CanopyLoad.setPrefWidth(140);
         CanopyLoad.setPromptText("Ваша загрузка");
         CanopyLoad.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
@@ -79,7 +79,7 @@ public class LoadCalcFX extends Application {
             CanopyLoad.setText(String.valueOf(CL));
         });
         Button clear = new Button();
-        clear.setPrefWidth(70);
+        clear.setPrefWidth(100);
         clear.setText("Очистить");
         clear.setOnAction((ActionEvent event) -> {
             WeightWEq.clear();
@@ -88,7 +88,7 @@ public class LoadCalcFX extends Application {
             CanopyLoad.clear();
         });
         Button close = new Button();
-        close.setPrefWidth(70);
+        close.setPrefWidth(100);
         close.setText("Закрыть");
         close.setOnAction((ActionEvent event) -> {
             CalcStage.close();

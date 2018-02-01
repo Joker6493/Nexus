@@ -49,7 +49,6 @@ public class NexusFX extends Application {
         Menu menuHelp = new Menu("Помощь");
         MenuItem loadcalc = new MenuItem("Расчет загрузки купола");
         loadcalc.setOnAction((ActionEvent event) -> {
-            System.out.println("Жопа");
             LoadCalcFX calc = new LoadCalcFX();
             Stage calcStage = new Stage();
             calcStage.initModality(Modality.WINDOW_MODAL);
