@@ -8,10 +8,8 @@ package nexusfx;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -40,84 +38,60 @@ public class LoadCalcFX extends Application {
         TextField WeightWEq = new TextField();
         WeightWEq.setPrefWidth(115);
         WeightWEq.setPromptText("Ваш вес со снаряжением");
-        WeightWEq.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
-                    WeightWEq.setText(oldValue);
-                }
+        WeightWEq.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
+                WeightWEq.setText(oldValue);
             }
         });
         TextField WeightSys = new TextField();
         WeightSys.setPrefWidth(115);
         WeightSys.setPromptText("Вес Вашей системы");
-        WeightSys.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    WeightSys.setText(oldValue);
-                }
+        WeightSys.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                WeightSys.setText(oldValue);
             }
         });
         TextField CanopySize = new TextField();
         CanopySize.setPrefWidth(115);
         CanopySize.setPromptText("Площадь купола");
-        CanopySize.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    CanopySize.setText(oldValue);
-                }
+        CanopySize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                CanopySize.setText(oldValue);
             }
         });
         TextField CanopyLoad = new TextField();
         CanopyLoad.setPrefWidth(115);
         CanopyLoad.setPromptText("Ваша загрузка");
-        CanopyLoad.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    CanopyLoad.setText(oldValue);
-                }
+        CanopyLoad.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                CanopyLoad.setText(oldValue);
             }
         });
     //Buttons    
         Button calcLoad = new Button();
         calcLoad.setText("Рассчитать загрузку");
-        calcLoad.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                double WWE, WS, CS, CL;
-                WWE = Double.parseDouble(WeightWEq.getText());
-                WS = Double.parseDouble(WeightSys.getText());
-                CS = Double.parseDouble(CanopySize.getText());
-                CL = new BigDecimal(((WWE+WS)*2.2)/CS).setScale(2, RoundingMode.CEILING).doubleValue();
-                CanopyLoad.setText(String.valueOf(CL));
-            }
+        calcLoad.setOnAction((ActionEvent event) -> {
+            double WWE, WS, CS, CL;
+            WWE = Double.parseDouble(WeightWEq.getText());
+            WS = Double.parseDouble(WeightSys.getText());
+            CS = Double.parseDouble(CanopySize.getText());
+            CL = new BigDecimal(((WWE+WS)*2.2)/CS).setScale(2, RoundingMode.CEILING).doubleValue();
+            CanopyLoad.setText(String.valueOf(CL));
         });
         Button clear = new Button();
         clear.setPrefWidth(70);
         clear.setText("Очистить");
-        clear.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                WeightWEq.clear();
-                WeightSys.clear();
-                CanopySize.clear();
-                CanopyLoad.clear();
-            }
+        clear.setOnAction((ActionEvent event) -> {
+            WeightWEq.clear();
+            WeightSys.clear();
+            CanopySize.clear();
+            CanopyLoad.clear();
         });
         Button close = new Button();
         close.setPrefWidth(70);
         close.setText("Закрыть");
-        close.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                CalcStage.close();
-            }
+        close.setOnAction((ActionEvent event) -> {
+            CalcStage.close();
         });
     //Window    
         GridPane root = new GridPane();

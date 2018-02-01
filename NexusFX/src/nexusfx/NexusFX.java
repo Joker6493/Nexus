@@ -21,9 +21,9 @@ import pluginloader.PluginLoader;
  */
 public class NexusFX extends Application {
     
-    String pluginPath = "C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX\\plugins";
-    PluginLoader loader = new PluginLoader();
-        
+    String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
+    PluginLoader classLoader = new PluginLoader(); 
+    
     @Override
     public void start(Stage primaryStage) {
         MenuBar MenuBarMain = new MenuBar();
@@ -49,6 +49,7 @@ public class NexusFX extends Application {
         Menu menuHelp = new Menu("Помощь");
         MenuItem loadcalc = new MenuItem("Расчет загрузки купола");
         loadcalc.setOnAction((ActionEvent event) -> {
+            System.out.println("Жопа");
             LoadCalcFX calc = new LoadCalcFX();
             Stage calcStage = new Stage();
             calcStage.initModality(Modality.WINDOW_MODAL);
@@ -77,7 +78,8 @@ public class NexusFX extends Application {
             System.out.println("Hello World!");
         });
         
-        loader.fillLists(pluginPath);
+        
+        classLoader.fillLists(pluginPath);
         
         BorderPane root = new BorderPane();
         root.setTop(MenuBarMain);
