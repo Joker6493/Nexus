@@ -57,7 +57,7 @@ public class NexusFX extends Application {
             calc.start(calcStage);
         });
         MenuItem testClass = new MenuItem("Проверка ClassLoader");
-        loadcalc.setOnAction((ActionEvent event) -> {
+        testClass.setOnAction((ActionEvent event) -> {
             String fileName = "TestModule";
             String className = "TestModule";
             
