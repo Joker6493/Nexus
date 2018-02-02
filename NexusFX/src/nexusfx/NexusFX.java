@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -63,10 +64,10 @@ public class NexusFX extends Application {
         });
         MenuItem testClass = new MenuItem("Проверка ClassLoader");
         testClass.setOnAction((ActionEvent event) -> {
-            String fileName = "TestModule";
+            /*String fileName = "TestModule";
             String className = "TestModule";
             
-            /*loader.loadClass (pluginPath, fileName, className);
+            loader.loadClass (pluginPath, fileName, className);
             Stage testStage = new Stage();
             testStage.initModality(Modality.WINDOW_MODAL);
             testStage.initOwner(primaryStage);
@@ -83,21 +84,29 @@ public class NexusFX extends Application {
             System.out.println("Hello World!");
         });
         
+        //Панель задач
+        HBox taskBar = new HBox();
+        taskBar.getChildren().addAll(new Button("Scene1"),new Button("Scene2"),new Button("Scene3"));
+        
         //Строка состояния
         GridPane statusBar = new GridPane();
         Label connStatus = new Label("Соединение установлено");
         
         Label timeLabel = new Label();
+        Button menuButton = new Button("Menu");
+        statusBar.setConstraints(menuButton, 0, 0);
+        statusBar.setConstraints(taskBar, 1, 0);
+        statusBar.setConstraints(connStatus, 2, 0);
         
+        ColumnConstraints columnButton = new ColumnConstraints();
+        columnButton.setPrefWidth(130.0);
+        ColumnConstraints columnTask = new ColumnConstraints();
+        columnTask.setPercentWidth(70);
+        ColumnConstraints columnConnection = new ColumnConstraints();
+        columnConnection.setPrefWidth(200.0);
+        statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
-        //Панель задач
-        HBox taskBar = new HBox();
-        
-        //Нижние панели
-        GridPane bottomPane = new GridPane();
-        bottomPane.setConstraints(taskBar, 0, 0);
-        bottomPane.setConstraints(statusBar, 0, 1);
-        bottomPane.getChildren().addAll(taskBar,statusBar);
+        statusBar.getChildren().addAll(menuButton,taskBar,connStatus);
         
         classLoader.fillLists(pluginPath);
         
