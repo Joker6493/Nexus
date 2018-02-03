@@ -7,24 +7,45 @@ package oracledbconn;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.util.Duration;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Label;
+
 
 /**
  *
  * @author dboro
  */
-public class ConnectionCheck implements Runnable {
-    public String statusConn = "Off-line";
-    OracleConn oc = new OracleConn();
-    Connection dbc = oc.connectDatabase();
+public class ConnectionCheck extends Label {
+    private static String statusConn = "Off-line";
+    OracleConn db = new OracleConn();
+    Connection dbconn =db.connectDatabase();
+    public ConnectionCheck()
+    {
+        bindToTime();
+    }
 
-    @Override
-    public void run() {
-        try {
-            if (dbc.isValid(1)) {
-                    statusConn = "On-line";
-                }
-            } catch (SQLException ex) {
-            ex.printStackTrace();
+    public void bindToTime() {
+        this.setText("Статус: "+statusConn);
+        Timeline timeline = new Timeline(new KeyFrame (
+        Duration.seconds(5),
+        ae -> { try {
+            if (dbconn.isValid(10)) {
+                statusConn = "On-line";
+                this.setText("Статус: "+statusConn);
             }
+            } catch (SQLException ex) {
+                System.out.println("Ошибка " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+    ));
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 }
