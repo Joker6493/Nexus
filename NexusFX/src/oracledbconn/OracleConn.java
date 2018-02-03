@@ -15,6 +15,7 @@ import java.sql.*;
 public class OracleConn {
     private final String url = "jdbc:oracle:thin:@localhost:1521:XE";
     private final String login = "nexusdb";
+    //private final String password = "St";
     private final String password = "Stavr0p0l";    
     public Connection connectDatabase() {
         Connection oracon = null;

@@ -5,7 +5,14 @@
  */
 package nexusfx;
 
+import static java.lang.Thread.MAX_PRIORITY;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -18,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import oracledbconn.OracleConn;
+import oracledbconn.ConnectionCheck;
 import pluginloader.PluginLoader;
 
 /**
@@ -30,16 +38,24 @@ public class NexusFX extends Application {
     PluginLoader classLoader = new PluginLoader(); 
     OracleConn oraconn = new OracleConn();
     Connection dbconn = oraconn.connectDatabase();
+    ConnectionCheck check = new ConnectionCheck();
+    String statusConn = check.statusConn;
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException {
+        
+        classLoader.fillLists(pluginPath);
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.submit(check);
+        //service.schedule(check, 5, TimeUnit.SECONDS);
+        service.scheduleWithFixedDelay(check, 10, 5, TimeUnit.SECONDS);
+        
         MenuBar MenuBarMain = new MenuBar();
         // --- Menu Меню и элементы
         Menu menuMain = new Menu("Меню");
         MenuItem clear = new MenuItem("Clear");
         clear.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         clear.setOnAction((ActionEvent t) -> {
-            //vbox.setVisible(false);
         });
         MenuItem exit = new MenuItem("Выход");
         clear.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
@@ -90,7 +106,7 @@ public class NexusFX extends Application {
         
         //Строка состояния
         GridPane statusBar = new GridPane();
-        Label connStatus = new Label("Соединение установлено");
+        Label connStatus = new Label("Статус: "+check.statusConn);
         
         Label timeLabel = new Label();
         Button menuButton = new Button("Menu");
@@ -107,8 +123,6 @@ public class NexusFX extends Application {
         statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
         statusBar.getChildren().addAll(menuButton,taskBar,connStatus);
-        
-        classLoader.fillLists(pluginPath);
         
         BorderPane root = new BorderPane();
         root.setTop(MenuBarMain);
