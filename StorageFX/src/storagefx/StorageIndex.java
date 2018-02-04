@@ -23,7 +23,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     public void start(Stage primaryStage) {
         
         StackPane index = StorageIndex();
-        Scene scene = new Scene(index, 300, 250);
+        Scene scene = new Scene(index, 600, 400);
         
         
         primaryStage.setTitle("Hello World!");
