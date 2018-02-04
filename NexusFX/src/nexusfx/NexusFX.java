@@ -5,14 +5,23 @@
  */
 package nexusfx;
 
+import java.sql.Connection;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import utils.ConnectionCheck;
+import utils.OracleConn;
 import pluginloader.PluginLoader;
 
 /**
@@ -22,17 +31,27 @@ import pluginloader.PluginLoader;
 public class NexusFX extends Application {
     
     String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
+<<<<<<< HEAD
     PluginLoader loader = new PluginLoader();
         
+=======
+    PluginLoader classLoader = new PluginLoader(); 
+    OracleConn oraconn = new OracleConn();
+    Connection dbconn = oraconn.connectDatabase();
+    String statusConn = null;
+    
+>>>>>>> Nexus_prealpha
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException {
+        
+        classLoader.fillLists(pluginPath);
+                
         MenuBar MenuBarMain = new MenuBar();
         // --- Menu Меню и элементы
         Menu menuMain = new Menu("Меню");
         MenuItem clear = new MenuItem("Clear");
         clear.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         clear.setOnAction((ActionEvent t) -> {
-            //vbox.setVisible(false);
         });
         MenuItem exit = new MenuItem("Выход");
         clear.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
@@ -57,10 +76,14 @@ public class NexusFX extends Application {
         });
         MenuItem testClass = new MenuItem("Проверка ClassLoader");
         testClass.setOnAction((ActionEvent event) -> {
+<<<<<<< HEAD
             String fileName = "TestModule";
+=======
+            /*String fileName = "TestModule";
+>>>>>>> Nexus_prealpha
             String className = "TestModule";
             
-            /*loader.loadClass (pluginPath, fileName, className);
+            loader.loadClass (pluginPath, fileName, className);
             Stage testStage = new Stage();
             testStage.initModality(Modality.WINDOW_MODAL);
             testStage.initOwner(primaryStage);
@@ -77,13 +100,35 @@ public class NexusFX extends Application {
             System.out.println("Hello World!");
         });
         
-        loader.fillLists(pluginPath);
+        //Панель задач
+        HBox taskBar = new HBox();
+        taskBar.getChildren().addAll(new Button("Scene1"),new Button("Scene2"),new Button("Scene3"));
+        
+        //Строка состояния
+        GridPane statusBar = new GridPane();
+        ConnectionCheck connStatus = new ConnectionCheck();
+        connStatus.bindToTime();
+        Label timeLabel = new Label();
+        Button menuButton = new Button("Menu");
+        statusBar.setConstraints(menuButton, 0, 0);
+        statusBar.setConstraints(taskBar, 1, 0);
+        statusBar.setConstraints(connStatus, 2, 0);
+        
+        ColumnConstraints columnButton = new ColumnConstraints();
+        columnButton.setPrefWidth(130.0);
+        ColumnConstraints columnTask = new ColumnConstraints();
+        columnTask.setPercentWidth(70);
+        ColumnConstraints columnConnection = new ColumnConstraints();
+        columnConnection.setPrefWidth(200.0);
+        statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
+        
+        statusBar.getChildren().addAll(menuButton,taskBar,connStatus);
         
         BorderPane root = new BorderPane();
         root.setTop(MenuBarMain);
         root.setLeft(new Button("Left"));
         root.setRight(new Button("Right"));
-        root.setBottom(new Button("Bottom"));
+        root.setBottom(statusBar);
         root.setCenter(new Button("Center"));
         root.setCenter(btn);
         

@@ -8,10 +8,8 @@ package nexusfx;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -30,110 +28,86 @@ public class LoadCalcFX extends Application {
     //Labels    
         Label WeightWEqLabel = new Label("Вес парашютиста со снаряжением, кг.");
         WeightWEqLabel.setWrapText(true);
-        WeightWEqLabel.setPrefSize(115, 35);
+        WeightWEqLabel.setPrefSize(140, 50);
         Label WeightSysLabel = new Label("Вес системы, кг.");
-        WeightSysLabel.setPrefSize(115, 35);
+        WeightSysLabel.setPrefSize(140, 50);
         Label CanopySizeLabel = new Label("Площадь купола, кв. фут.");
-        CanopySizeLabel.setPrefSize(115, 35);
+        CanopySizeLabel.setPrefSize(140, 50);
         CanopySizeLabel.setWrapText(true);
     //TextFields
         TextField WeightWEq = new TextField();
-        WeightWEq.setPrefWidth(115);
+        WeightWEq.setPrefWidth(140);
         WeightWEq.setPromptText("Ваш вес со снаряжением");
-        WeightWEq.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
-                    WeightWEq.setText(oldValue);
-                }
+        WeightWEq.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
+                WeightWEq.setText(oldValue);
             }
         });
         TextField WeightSys = new TextField();
-        WeightSys.setPrefWidth(115);
+        WeightSys.setPrefWidth(140);
         WeightSys.setPromptText("Вес Вашей системы");
-        WeightSys.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    WeightSys.setText(oldValue);
-                }
+        WeightSys.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                WeightSys.setText(oldValue);
             }
         });
         TextField CanopySize = new TextField();
-        CanopySize.setPrefWidth(115);
+        CanopySize.setPrefWidth(140);
         CanopySize.setPromptText("Площадь купола");
-        CanopySize.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    CanopySize.setText(oldValue);
-                }
+        CanopySize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                CanopySize.setText(oldValue);
             }
         });
         TextField CanopyLoad = new TextField();
-        CanopyLoad.setPrefWidth(115);
+        CanopyLoad.setPrefWidth(140);
         CanopyLoad.setPromptText("Ваша загрузка");
-        CanopyLoad.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
-                    CanopyLoad.setText(oldValue);
-                }
+        CanopyLoad.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}([\\.]\\d{0,2})?")) {
+                CanopyLoad.setText(oldValue);
             }
         });
     //Buttons    
         Button calcLoad = new Button();
         calcLoad.setText("Рассчитать загрузку");
-        calcLoad.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                double WWE, WS, CS, CL;
-                WWE = Double.parseDouble(WeightWEq.getText());
-                WS = Double.parseDouble(WeightSys.getText());
-                CS = Double.parseDouble(CanopySize.getText());
-                CL = new BigDecimal(((WWE+WS)*2.2)/CS).setScale(2, RoundingMode.CEILING).doubleValue();
-                CanopyLoad.setText(String.valueOf(CL));
-            }
+        calcLoad.setOnAction((ActionEvent event) -> {
+            double WWE, WS, CS, CL;
+            WWE = Double.parseDouble(WeightWEq.getText());
+            WS = Double.parseDouble(WeightSys.getText());
+            CS = Double.parseDouble(CanopySize.getText());
+            CL = new BigDecimal(((WWE+WS)*2.2)/CS).setScale(2, RoundingMode.CEILING).doubleValue();
+            CanopyLoad.setText(String.valueOf(CL));
         });
         Button clear = new Button();
-        clear.setPrefWidth(70);
+        clear.setPrefWidth(100);
         clear.setText("Очистить");
-        clear.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                WeightWEq.clear();
-                WeightSys.clear();
-                CanopySize.clear();
-                CanopyLoad.clear();
-            }
+        clear.setOnAction((ActionEvent event) -> {
+            WeightWEq.clear();
+            WeightSys.clear();
+            CanopySize.clear();
+            CanopyLoad.clear();
         });
         Button close = new Button();
-        close.setPrefWidth(70);
+        close.setPrefWidth(100);
         close.setText("Закрыть");
-        close.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                CalcStage.close();
-            }
+        close.setOnAction((ActionEvent event) -> {
+            CalcStage.close();
         });
     //Window    
         GridPane root = new GridPane();
         root.setPadding(new Insets(10, 10, 10, 10));
         root.setGridLinesVisible(false);
-        GridPane.setConstraints(WeightWEqLabel, 0, 0);
-        GridPane.setConstraints(WeightSysLabel, 0, 1);
-        GridPane.setConstraints(CanopySizeLabel, 0, 2);
-        GridPane.setConstraints(calcLoad, 0, 3);
-        GridPane.setConstraints(WeightWEq, 1, 0);
-        GridPane.setConstraints(WeightSys, 1, 1);
-        GridPane.setConstraints(CanopySize, 1, 2);
-        GridPane.setConstraints(CanopyLoad, 1, 3);
-        GridPane.setConstraints(clear, 0, 4);
-        GridPane.setHalignment(clear, HPos.RIGHT);
-        GridPane.setConstraints(close, 1, 4);
+        root.setConstraints(WeightWEqLabel, 0, 0);
+        root.setConstraints(WeightSysLabel, 0, 1);
+        root.setConstraints(CanopySizeLabel, 0, 2);
+        root.setConstraints(calcLoad, 0, 3);
+        root.setConstraints(WeightWEq, 1, 0);
+        root.setConstraints(WeightSys, 1, 1);
+        root.setConstraints(CanopySize, 1, 2);
+        root.setConstraints(CanopyLoad, 1, 3);
+        root.setConstraints(clear, 0, 4);
+        root.setHalignment(clear, HPos.RIGHT);
+        root.setConstraints(close, 1, 4);
         root.getChildren().addAll(WeightWEqLabel, WeightSysLabel, CanopySizeLabel, calcLoad, WeightWEq, WeightSys, CanopySize, CanopyLoad, clear, close);
         root.setVgap(5);
         root.setHgap(10);

@@ -6,6 +6,7 @@
 package oracletestpackage;
 
 import java.sql.*;
+import utils.OracleConn;
 
 /**
  *
@@ -20,14 +21,10 @@ public class OracleTest {
  
     private void testDatabase() {
         try {
-            
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            String url = "jdbc:oracle:thin:@localhost:1521:XE";
-            String login = "nexusdb";
-            String password = "Stavr0p0l";
-            Connection con = DriverManager.getConnection(url, login, password);
+            OracleConn oraco = new OracleConn();
+            Connection bdcon = oraco.connectDatabase();
             try {
-                Statement stmt = con.createStatement();
+                Statement stmt = bdcon.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM SYSTEM_INFO");
                 System.out.println("Результат запроса");
                 System.out.println("ID Систем и Код: ");
@@ -38,7 +35,7 @@ public class OracleTest {
                 rs.close();
                 stmt.close();
             } finally {
-                con.close();
+                bdcon.close();
                 System.out.println("Соединение закрыто");
             }
         } catch (Exception e) {
