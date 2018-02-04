@@ -20,8 +20,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import oracledbconn.ConnectionCheck;
-import oracledbconn.OracleConn;
+import utils.ConnectionCheck;
+import utils.OracleConn;
 import pluginloader.PluginLoader;
 
 /**

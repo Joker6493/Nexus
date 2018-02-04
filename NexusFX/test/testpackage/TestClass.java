@@ -12,7 +12,7 @@ package testpackage;
  * @author dboro
  */
 import java.sql.*;
-import oracledbconn.OracleConn;
+import utils.OracleConn;
 
 public class TestClass { 
     public static void main(String[] args) {

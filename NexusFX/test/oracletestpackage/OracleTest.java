@@ -6,7 +6,7 @@
 package oracletestpackage;
 
 import java.sql.*;
-import oracledbconn.OracleConn;
+import utils.OracleConn;
 
 /**
  *
