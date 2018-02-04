@@ -22,7 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.ConnectionCheck;
 import utils.OracleConn;
-import pluginloader.PluginLoader;
+import utils.PluginLoader;
 
 /**
  *

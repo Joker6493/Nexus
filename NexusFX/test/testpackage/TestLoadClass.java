@@ -13,7 +13,7 @@ package testpackage;
 import api.NexusPlugin;
 import java.net.MalformedURLException;
 import javafx.application.Application;
-import pluginloader.PluginLoader;
+import utils.PluginLoader;
 
 public class TestLoadClass {
 
