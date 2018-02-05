@@ -11,6 +11,7 @@ package testpackage;
  */
 
 import api.NexusPlugin;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import javafx.application.Application;
 import utils.PluginLoader;
@@ -20,14 +21,13 @@ public class TestLoadClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         // TODO code application logic here
         String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
         String fileName = "TestModule";
         String className = "testmodule.TestFX";
         PluginLoader clist = new PluginLoader();
-        clist.fillLists(pluginPath);
-        Class testClass = clist.loadClass(pluginPath, fileName, className);
+        Class testClass = clist.loadClass(pluginPath, fileName);
         System.out.println("Класс "+testClass.getName()+" загружен!");
         System.out.println("Создаем объект");
         Object test_ob = testClass.newInstance();

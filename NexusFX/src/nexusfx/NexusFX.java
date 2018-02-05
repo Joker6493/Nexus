@@ -39,7 +39,6 @@ public class NexusFX extends Application {
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
         
-        classLoader.fillLists(pluginPath);
                 
         MenuBar MenuBarMain = new MenuBar();
         // --- Menu Меню и элементы
