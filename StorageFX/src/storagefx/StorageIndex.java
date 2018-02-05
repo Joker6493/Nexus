@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import api.NexusPlugin;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -60,6 +61,19 @@ public class StorageIndex extends Application implements NexusPlugin {
     public void invoke(){
         
     }
+    
+    
+    /*private ObservableList<UserAccount> getUserList() {
+ 
+      UserAccount user1 = new UserAccount(1L, "smith", "smith@gmail.com", //
+              "Susan", "Smith", true);
+      UserAccount user2 = new UserAccount(2L, "mcneil", "mcneil@gmail.com", //
+              "Anne", "McNeil", true);
+      UserAccount user3 = new UserAccount(3L, "white", "white@gmail.com", //
+              "Kenvin", "White", false);
+ 
+      ObservableList<UserAccount> list = FXCollections.observableArrayList(user1, user2, user3);
+      return list;*/
     
     /**
      * @param args the command line arguments
