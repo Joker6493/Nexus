@@ -25,36 +25,33 @@ public class PluginLoader {
     //Массивы файлов, JAR-файлов и классов
     ArrayList<File> jarFileList = new ArrayList();
     ArrayList<String> ClassList = new ArrayList();
-    
         
-    public Class<?> loadClass (String path, String fileName) throws MalformedURLException, ClassNotFoundException, IOException{
+    public Class<?> loadClass (String path, String fileName, String className) throws MalformedURLException, ClassNotFoundException, IOException{
         Class<?> clazz = null;
         File file = new File (path.concat("/").concat(fileName).concat(".jar"));
-              
         if (!file.exists()) {
             //если файл не найден
             System.out.println("Файл не найден");
         } else {
-            
             JarFile jFile = new JarFile(file);
             jFile.stream().forEach(jc -> {
                 if (jc.getName().endsWith(".class")) {
                     ClassList.add(jc.getName().replace("/", ".").replace(".class", ""));
                 }
             });
-            
-            String classForLoad = null;
             URL url = file.toURI().toURL(); 
             URL[] urls = new URL[] { url };
             for (String classes : ClassList) {
-                    classForLoad = classes;
-                    ClassLoader cl = new URLClassLoader(urls);
-                    clazz = cl.loadClass(classForLoad);
+                ClassLoader cl = new URLClassLoader(urls);
+                if (!classes.equals(className)) {
+                    cl.loadClass(classes);
+                    //загружаем все классы из jar-ки
+                }else{
+                    clazz = cl.loadClass(classes);
+                    //загружаем и получаем нужный нам класс
+                }
             }
-                        
         }
-        
         return clazz;
     }
-    
 }

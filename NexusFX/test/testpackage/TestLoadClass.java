@@ -27,7 +27,7 @@ public class TestLoadClass {
         String fileName = "TestModule";
         String className = "testmodule.TestFX";
         PluginLoader clist = new PluginLoader();
-        Class testClass = clist.loadClass(pluginPath, fileName);
+        Class testClass = clist.loadClass(pluginPath, fileName, className);
         System.out.println("Класс "+testClass.getName()+" загружен!");
         System.out.println("Создаем объект");
         Object test_ob = testClass.newInstance();
