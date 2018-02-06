@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="NexusFX.jnlp">
+  <information>
+    <title>NexusFX</title>
+    <vendor>dboro</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="NexusFX.jar" size="12520" download="eager" />
+    <jar href="lib\NexusPlugin-API.jar" size="676" download="eager" />
+    <jar href="lib\ojdbc7.jar" size="3698857" download="eager" />
+    <jar href="lib\ojdbc7_g.jar" size="5875485" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="NexusFX" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="nexusfx.NexusFX"  name="NexusFX" />
+  <update check="always"/>
+</jnlp>
