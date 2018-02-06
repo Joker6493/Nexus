@@ -17,13 +17,12 @@ public class Manufacturer {
     protected String manufacturerEmail;
             
     public void Manufacturer (int manufacturerID, String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail){
-        
         this.manufacturerName = manufacturerName;
         this.manufacturerCountry = manufacturerCountry;
         this.manufacturerTelephone = manufacturerTelephone;
         this.manufacturerEmail = manufacturerEmail;
     }
-    
+    //Get methods
     public int get_manufacturerID (){
         return manufacturerID;
     }
@@ -39,9 +38,9 @@ public class Manufacturer {
     public String get_manufacturerEmail (){
         return manufacturerEmail;
     }
-    
+    //Set methods
     public void set_manufacturerID (){
-        
+        //In process    
     }
     public void set_manufacturerName (String manufacturerName){
         this.manufacturerName = manufacturerName;
