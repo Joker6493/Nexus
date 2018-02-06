@@ -9,7 +9,7 @@ package storagefx;
  *
  * @author dboro
  */
-public class SkydiveSystem {
+public class Container {
     //Система
     protected int systemID;
     protected String systemCode;
@@ -22,7 +22,7 @@ public class SkydiveSystem {
     protected int aadID;
 
     
-    public void SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID){
+    public void Container (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID){
         this.systemID = systemID; 
         this.systemCode = systemCode;
         this.systemModel = systemModel;

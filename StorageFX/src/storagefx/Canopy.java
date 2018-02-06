@@ -9,7 +9,7 @@ package storagefx;
  *
  * @author dboro
  */
-public class Canopy extends SkydiveSystem{
+public class Canopy extends Container{
     //ОП
     protected int systemID;
     protected int canopyID;

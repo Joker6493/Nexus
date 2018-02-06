@@ -9,7 +9,7 @@ package storagefx;
  *
  * @author dboro
  */
-public class Reserve extends SkydiveSystem{
+public class Reserve extends Container{
     //ПЗ
     protected int systemID;
     protected int reserveID;

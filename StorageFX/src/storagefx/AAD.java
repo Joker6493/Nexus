@@ -9,7 +9,7 @@ package storagefx;
  *
  * @author dboro
  */
-public class AAD extends SkydiveSystem{
+public class AAD extends Container{
     //AAD
     protected int systemID;
     protected int aadID;
