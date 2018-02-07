@@ -9,7 +9,7 @@ package storagefx;
  *
  * @author dboro
  */
-public class Container {
+public class Container extends SkydiveSystem {
     //Система
     protected int systemID;
     protected String systemCode;

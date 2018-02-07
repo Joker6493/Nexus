@@ -9,17 +9,17 @@ package storagefx;
  *
  * @author dboro
  */
-public class Reserve extends Container{
+public class Reserve extends SkydiveSystem {
     //ПЗ
-    protected int systemID;
+    /*protected int systemID;
     protected int reserveID;
     protected String reserveModel;
     protected int reserveSize;
     protected String reserveSN;
-    protected String reserveDOM;
+    protected String reserveDOM;*/
     protected int manufacturerID;
-    protected int reserveJumps;
-    protected String reservePackDate;
+    /*protected int reserveJumps;
+    protected String reservePackDate;*/
     
     public void Reserve (int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int manufacturerID, int reserveJumps, String reservePackDate){
         this.systemID = systemID; 
@@ -36,8 +36,8 @@ public class Reserve extends Container{
     public int get_systemID (){
         return systemID;
     }
-    public int get_canopyID (){
-        return canopyID;
+    public int get_reserveID (){
+        return reserveID;
     }
     public String get_reserveModel (){
         return reserveModel;
