@@ -11,15 +11,9 @@ package storagefx;
  */
 public class Reserve extends SkydiveSystem {
     //ПЗ
-    /*protected int systemID;
-    protected int reserveID;
-    protected String reserveModel;
-    protected int reserveSize;
-    protected String reserveSN;
-    protected String reserveDOM;*/
     protected int manufacturerID;
-    /*protected int reserveJumps;
-    protected String reservePackDate;*/
+    
+    protected String manufacturerName;
     
     public void Reserve (int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int manufacturerID, int reserveJumps, String reservePackDate){
         this.systemID = systemID; 

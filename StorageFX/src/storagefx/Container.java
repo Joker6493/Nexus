@@ -11,17 +11,10 @@ package storagefx;
  */
 public class Container extends SkydiveSystem {
     //Система
-    protected int systemID;
-    protected String systemCode;
-    protected String systemModel;
-    protected String systemSN;
-    protected String systemDOM;
     protected int manufacturerID;
-    protected int canopyID;
-    protected int reserveID;
-    protected int aadID;
-
     
+    protected String manufacturerName;
+        
     public void Container (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID){
         this.systemID = systemID; 
         this.systemCode = systemCode;

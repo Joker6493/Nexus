@@ -11,14 +11,9 @@ package storagefx;
  */
 public class Canopy extends SkydiveSystem {
     //ОП
-    /*protected int systemID;
-    protected int canopyID;
-    protected String canopyModel;
-    protected int canopySize;
-    protected String canopySN;
-    protected String canopyDOM;*/
     protected int manufacturerID;
-    /*protected int canopyJumps;*/
+    
+    protected String manufacturerName;
     
     public void Canopy (int systemID, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int manufacturerID, int canopyJumps){
         this.systemID = systemID; 

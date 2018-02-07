@@ -11,15 +11,9 @@ package storagefx;
  */
 public class AAD extends SkydiveSystem {
     //AAD
-    /*protected int systemID;
-    protected int aadID;
-    protected String aadModel;
-    protected String aadSN;
-    protected String aadDOM;*/
     protected int manufacturerID;
-    /*protected int aadJumps;
-    protected String aadNextRegl;
-    protected boolean aadFired;*/
+    
+    protected String manufacturerName;
     
     public void Reserve (int systemID, int aadID, String aadModel, String aadSN, String aadDOM, int manufacturerID, int aadJumps, String aadNextRegl, boolean aadFired){
         this.systemID = systemID; 
