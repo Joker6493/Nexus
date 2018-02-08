@@ -66,6 +66,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         
         
         
+        
         StackPane index = new StackPane();
         index.getChildren().add(indexStore);
         
