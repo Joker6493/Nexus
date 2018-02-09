@@ -26,53 +26,11 @@ public class Canopy extends SkydiveSystem {
         this.canopyJumps = canopyJumps;
         }
     //Get methods
-    public int get_systemID (){
-        return systemID;
-    }
-    public int get_canopyID (){
-        return canopyID;
-    }
-    public String get_canopyModel (){
-        return canopyModel;
-    }
-    public int get_canopySize (){
-        return canopySize;
-    }
-    public String get_canopySN (){
-        return canopySN;
-    }
-    public String get_canopyDOM (){
-        return canopyDOM;
-    }
     public int get_manufacturerID (){
         return manufacturerID;
     }
-    public int get_canopyJumps (){
-        return canopyJumps;
-    }
-    //Set methods
-    public void set_systemID (int systemID){
-        this.systemID = systemID;
-    }
-    public void set_canopyID (int canopyID){
-        //In process
-    }
-    public void set_canopyModel (String canopyModel){
-        this.canopyModel = canopyModel;
-    }
-    public void set_canopySize (int canopySize){
-        this.canopySize = canopySize;;
-    }
-    public void set_canopySN (String canopySN){
-        this.canopySN = canopySN;
-    }
-    public void set_canopyDOM (String canopyDOM){
-        this.canopyDOM = canopyDOM;
-    }
+    //Set methods 
     public void set_manufacturerID (int manufacturerID){
         this.manufacturerID = manufacturerID;
-    }
-    public void set_canopyJumps (int canopyJumps){
-        this.canopyJumps = canopyJumps;
     }
 }

@@ -10,10 +10,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import api.NexusPlugin;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import connection.OracleConn;
 
 /**
  *
@@ -64,13 +69,23 @@ public class StorageIndex extends Application implements NexusPlugin {
         canopyJumps.setCellValueFactory(new PropertyValueFactory<>("systemcanopyJumpsCode"));        
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
         
-        
-        
-        
+        //Добавили данные
+        ObservableList<SkydiveSystem> indexList = getUserList();
+        indexStore.setItems(indexList);
+                
         StackPane index = new StackPane();
         index.getChildren().add(indexStore);
         
         return index;
+    }
+    
+    
+    private ObservableList<SkydiveSystem> getUserList() {
+        
+        
+        
+        ObservableList<SkydiveSystem> list = FXCollections.observableArrayList();
+        return list;
     }
     
     @Override
