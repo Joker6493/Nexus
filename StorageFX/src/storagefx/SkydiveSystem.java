@@ -53,9 +53,34 @@ public class SkydiveSystem {
         this.canopyJumps = canopyJumps;
         this.reservePackDate = reservePackDate;
     }
-    
     //Full
-    
+    public void SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired){
+        this.systemID = systemID;
+        this.systemCode = systemCode;
+        this.systemModel = systemModel;
+        this.systemSN = systemSN;
+        this.systemDOM = systemDOM;
+        this.canopyID = canopyID;
+        this.canopyModel = canopyModel;
+        this.canopySize = canopySize;
+        this.canopySN = canopySN;
+        this.canopyDOM = canopyDOM;
+        this.canopyJumps = canopyJumps;
+        this.reserveID = reserveID;
+        this.reserveModel = reserveModel;
+        this.reserveSize = reserveSize;
+        this.reserveSN = reserveSN;
+        this.reserveDOM = reserveDOM;
+        this.reserveJumps = reserveJumps;
+        this.reservePackDate = reservePackDate;
+        this.aadID = aadID;
+        this.aadModel = aadModel;
+        this.aadSN = aadSN;
+        this.aadDOM = aadDOM;
+        this.aadJumps = aadJumps;
+        this.aadNextRegl = aadNextRegl;
+        this.aadFired = aadFired;
+    }
     //Get methods
     public int get_systemID (){
         return systemID;
