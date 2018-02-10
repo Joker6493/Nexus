@@ -15,6 +15,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import connection.OracleConn;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -41,31 +45,16 @@ public class DataRelay {
     }
     
     protected ObservableList<SkydiveSystem> getIndexList() throws SQLException {
-        ObservableList<SkydiveSystem> list = null;
-        String selectQuery = "SELECT\n" +
-"SI.SYSTEM_CODE, \n" +
-"SI.SYSTEM_MODEL, \n" +
-"CI.CANOPY_MODEL, \n" +
-"CI.CANOPY_SIZE, \n" +
-"RI.RESERVE_MODEL, \n" +
-"RI.RESERVE_SIZE, \n" +
-"AI.AAD_MODEL, \n" +
-"CI.CANOPY_JUMPS, \n" +
-"RI.RESERVE_PACKDATE\n" +
-"FROM SYSTEM_INFO SI\n" +
-"INNER JOIN CANOPY_INFO CI ON SI.CANOPYID = CI.CANOPYID\n" +
-"INNER JOIN RESERVE_INFO RI ON SI.RESERVEID = RI.RESERVEID\n" +
-"INNER JOIN AAD_INFO AI ON SI.AADID = AI.AADID\n" +
-"WHERE SI.DISABLE = 0;";
+        ArrayList<SkydiveSystem> indexList = new ArrayList<>();
+        String selectQuery = "SELECT SI.SYSTEM_CODE, SI.SYSTEM_MODEL, CI.CANOPY_MODEL, CI.CANOPY_SIZE, RI.RESERVE_MODEL, RI.RESERVE_SIZE, AI.AAD_MODEL, CI.CANOPY_JUMPS, RI.RESERVE_PACKDATE FROM SYSTEM_INFO SI INNER JOIN CANOPY_INFO CI ON SI.CANOPYID = CI.CANOPYID INNER JOIN RESERVE_INFO RI ON SI.RESERVEID = RI.RESERVEID INNER JOIN AAD_INFO AI ON SI.AADID = AI.AADID WHERE SI.DISABLE = 0";
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
-            SkydiveSystem skySystem = new SkydiveSystem(rs.getString("systemCode"), rs.getString("systemModel"), rs.getString("canopyModel"), rs.getInt("canopySize"), 
-            rs.getString("reserveModel"), rs.getInt("reserveSize"), rs.getString("aadModel"), rs.getInt("canopyJumps"), rs.getString("reservePackDate"));
-            list.add(skySystem);
+            indexList.add(new SkydiveSystem(rs.getString("system_Code"), rs.getString("system_Model"), rs.getString("canopy_Model"), rs.getInt("canopy_Size"), rs.getString("reserve_Model"), rs.getInt("reserve_Size"), rs.getString("aad_Model"), rs.getInt("canopy_Jumps"), rs.getString("reserve_PackDate")));
         }
         Statement stmt = rs.getStatement();
         Connection bdcon = stmt.getConnection();
         closeDB(bdcon, stmt, rs);
+        ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
         return list;
     }
 }

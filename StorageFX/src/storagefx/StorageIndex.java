@@ -27,7 +27,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     public void start(Stage primaryStage) throws SQLException {
         
         StackPane index = StorageIndex();
-        Scene scene = new Scene(index, 600, 400);
+        Scene scene = new Scene(index);
         
         
         primaryStage.setTitle("Hello World!");
@@ -37,7 +37,7 @@ public class StorageIndex extends Application implements NexusPlugin {
 
     public StackPane StorageIndex () throws SQLException{
         
-        TableView<SkydiveSystem> indexStore = new TableView<SkydiveSystem>();
+        TableView<SkydiveSystem> indexStore = new TableView<>();
         //Столбцы
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn("Код системы");
         TableColumn <SkydiveSystem, String> systemModel = new TableColumn("Модель системы");
@@ -63,7 +63,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         reserveModel.setCellValueFactory(new PropertyValueFactory<>("reserveModel"));
         reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
         aadModel.setCellValueFactory(new PropertyValueFactory<>("aadModel"));        
-        canopyJumps.setCellValueFactory(new PropertyValueFactory<>("systemcanopyJumpsCode"));        
+        canopyJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
         
         //Добавили данные
