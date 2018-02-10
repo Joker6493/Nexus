@@ -40,7 +40,7 @@ public class DataRelay {
         bdcon.close();
     }
     
-    private ObservableList<SkydiveSystem> getIndexList() throws SQLException {
+    protected ObservableList<SkydiveSystem> getIndexList() throws SQLException {
         ObservableList<SkydiveSystem> list = null;
         String selectQuery = "SELECT\n" +
 "SI.SYSTEM_CODE, \n" +
@@ -58,38 +58,14 @@ public class DataRelay {
 "INNER JOIN AAD_INFO AI ON SI.AADID = AI.AADID\n" +
 "WHERE SI.DISABLE = 0;";
         ResultSet rs = getData(selectQuery);
-        
         while (rs.next()) {
-            
-            SkydiveSystem skySystem = new SkydiveSystem();
-            
-        
+            SkydiveSystem skySystem = new SkydiveSystem(rs.getString("systemCode"), rs.getString("systemModel"), rs.getString("canopyModel"), rs.getInt("canopySize"), 
+            rs.getString("reserveModel"), rs.getInt("reserveSize"), rs.getString("aadModel"), rs.getInt("canopyJumps"), rs.getString("reservePackDate"));
+            list.add(skySystem);
         }
-        
         Statement stmt = rs.getStatement();
         Connection bdcon = stmt.getConnection();
         closeDB(bdcon, stmt, rs);
-        
-        
-        
-        
-        /*TableColumn <SkydiveSystem, String> systemCode = new TableColumn("Код системы");
-        TableColumn <SkydiveSystem, String> systemModel = new TableColumn("Модель системы");
-        TableColumn <SkydiveSystem, String> canopy = new TableColumn("Основной парашют");
-        TableColumn <SkydiveSystem, String> canopyModel = new TableColumn("Модель");
-        TableColumn <SkydiveSystem, Integer> canopySize = new TableColumn("Размер, кв.фут");
-        canopy.getColumns().addAll(canopyModel,canopySize);
-        TableColumn <SkydiveSystem, String> reserve = new TableColumn("Запасной парашют");
-        TableColumn <SkydiveSystem, String> reserveModel = new TableColumn("Модель");
-        TableColumn <SkydiveSystem, Integer> reserveSize = new TableColumn("Размер, кв.фут");
-        reserve.getColumns().addAll(reserveModel,reserveSize);
-        TableColumn <SkydiveSystem, String> aadModel = new TableColumn("Модель AAD");
-        TableColumn <SkydiveSystem, Integer> canopyJumps = new TableColumn("Прыжков на куполе");
-        TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn("Дата переукладки");*/
-        
-        //ObservableList<SkydiveSystem> list = FXCollections.observableArrayList();
-        
         return list;
     }
-    
 }

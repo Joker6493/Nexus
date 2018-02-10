@@ -14,18 +14,11 @@ public class Container extends SkydiveSystem {
     protected int manufacturerID;
     
     protected String manufacturerName;
-        
-    public void Container (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID){
-        this.systemID = systemID; 
-        this.systemCode = systemCode;
-        this.systemModel = systemModel;
-        this.systemSN = systemSN;
-        this.systemDOM = systemDOM;
-        this.manufacturerID = manufacturerID;
-        this.canopyID = canopyID;
-        this.reserveID = reserveID;
-        this.aadID = aadID;
-        }
+
+    public Container(int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID) {
+        super(systemID, systemCode, systemModel, systemSN, systemDOM, manufacturerID, canopyID, reserveID, aadID);
+    }
+    
     //Get methods
     public int get_manufacturerID (){
         return manufacturerID;

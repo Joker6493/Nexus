@@ -15,10 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import connection.OracleConn;
+import java.sql.SQLException;
 
 /**
  *
@@ -27,7 +24,7 @@ import connection.OracleConn;
 public class StorageIndex extends Application implements NexusPlugin {
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws SQLException {
         
         StackPane index = StorageIndex();
         Scene scene = new Scene(index, 600, 400);
@@ -38,7 +35,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         primaryStage.show();
     }
 
-    public StackPane StorageIndex (){
+    public StackPane StorageIndex () throws SQLException{
         
         TableView<SkydiveSystem> indexStore = new TableView<SkydiveSystem>();
         //Столбцы
@@ -70,7 +67,8 @@ public class StorageIndex extends Application implements NexusPlugin {
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
         
         //Добавили данные
-        ObservableList<SkydiveSystem> indexList = getUserList();
+        DataRelay dr = new DataRelay();
+        ObservableList<SkydiveSystem> indexList = dr.getIndexList();
         indexStore.setItems(indexList);
                 
         StackPane index = new StackPane();

@@ -12,20 +12,12 @@ package storagefx;
 public class Reserve extends SkydiveSystem {
     //ПЗ
     protected int manufacturerID;
-    
     protected String manufacturerName;
+
+    public Reserve(int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int manufacturerID, int reserveJumps, String reservePackDate) {
+        super(systemID, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, manufacturerID, reserveJumps, reservePackDate);
+    }
     
-    public void Reserve (int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int manufacturerID, int reserveJumps, String reservePackDate){
-        this.systemID = systemID; 
-        this.reserveID = reserveID;
-        this.reserveModel = reserveModel;
-        this.reserveSize = reserveSize;
-        this.reserveSN = reserveSN;
-        this.reserveDOM = reserveDOM;
-        this.manufacturerID = manufacturerID;
-        this.reserveJumps = reserveJumps;
-        this.reservePackDate = reservePackDate;
-        }
     //Get methods
     public int get_manufacturerID (){
         return manufacturerID;

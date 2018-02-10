@@ -12,20 +12,12 @@ package storagefx;
 public class AAD extends SkydiveSystem {
     //AAD
     protected int manufacturerID;
-    
     protected String manufacturerName;
-    
-    public void Reserve (int systemID, int aadID, String aadModel, String aadSN, String aadDOM, int manufacturerID, int aadJumps, String aadNextRegl, boolean aadFired){
-        this.systemID = systemID; 
-        this.aadID = aadID;
-        this.aadModel = aadModel;
-        this.aadSN = aadSN;
-        this.aadDOM = aadDOM;
-        this.manufacturerID = manufacturerID;
-        this.aadJumps = aadJumps;
-        this.aadNextRegl = aadNextRegl;
-        this.aadFired = aadFired;
-        }
+
+    public AAD(int systemID, int aadID, String aadModel, String aadSN, String aadDOM, int manufacturerID, int aadJumps, String aadNextRegl, boolean aadFired) {
+        super(systemID, aadID, aadModel, aadSN, aadDOM, manufacturerID, aadJumps, aadNextRegl, aadFired);
+    }
+        
     //Get methods
     public int get_manufacturerID (){
         return manufacturerID;
