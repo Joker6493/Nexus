@@ -1,5 +1,7 @@
 package storagefx;
 
+import javafx.beans.property.*;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -279,6 +281,81 @@ public class SkydiveSystem {
         this.aadFired = aadFired;
     }
     
-    
+    /*//Property methods
+    public IntegerProperty  get_systemID (){
+        return systemID;
+    }
+    public StringProperty get_systemCode (){
+        return systemCode;
+    }
+    public StringProperty get_systemModel (){
+        return systemModel;
+    }
+    public StringProperty get_systemSN (){
+        return systemSN;
+    }
+    public StringProperty get_systemDOM (){
+        return systemDOM;
+    }
+    public IntegerProperty  get_canopyID (){
+        return canopyID;
+    }
+    public IntegerProperty  get_reserveID (){
+        return reserveID;
+    }
+    public IntegerProperty  get_aadID (){
+        return aadID;
+    }
+    public StringProperty get_canopyModel (){
+        return canopyModel;
+    }
+    public IntegerProperty  get_canopySize (){
+        return canopySize;
+    }
+    public StringProperty get_canopySN (){
+        return canopySN;
+    }
+    public StringProperty get_canopyDOM (){
+        return canopyDOM;
+    }
+    public IntegerProperty  get_canopyJumps (){
+        return canopyJumps;
+    }
+    public StringProperty get_reserveModel (){
+        return reserveModel;
+    }
+    public IntegerProperty  get_reserveSize (){
+        return reserveSize;
+    }
+    public StringProperty get_reserveSN (){
+        return reserveSN;
+    }
+    public StringProperty get_reserveDOM (){
+        return reserveDOM;
+    }
+    public IntegerProperty  get_reserveJumps (){
+        return reserveJumps;
+    }
+    public StringProperty get_reservePackDate () {
+        return reservePackDate;
+    }
+    public StringProperty get_aadModel (){
+        return aadModel;
+    }
+    public StringProperty get_aadSN (){
+        return aadSN;
+    }
+    public StringProperty get_aadDOM (){
+        return aadDOM;
+    }
+    public IntegerProperty  get_aadJumps (){
+        return aadJumps;
+    }
+    public StringProperty get_aadNextRegl () {
+        return aadNextRegl;
+    }
+    public BooleanProperty get_aadFired (){
+        return aadFired;
+    }*/
     
 }

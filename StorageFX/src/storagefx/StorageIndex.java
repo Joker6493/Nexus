@@ -39,19 +39,19 @@ public class StorageIndex extends Application implements NexusPlugin {
         
         TableView<SkydiveSystem> indexStore = new TableView<>();
         //Столбцы
-        TableColumn <SkydiveSystem, String> systemCode = new TableColumn("Код системы");
-        TableColumn <SkydiveSystem, String> systemModel = new TableColumn("Модель системы");
-        TableColumn <SkydiveSystem, String> canopy = new TableColumn("Основной парашют");
-        TableColumn <SkydiveSystem, String> canopyModel = new TableColumn("Модель");
-        TableColumn <SkydiveSystem, Integer> canopySize = new TableColumn("Размер, кв.фут");
+        TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
+        TableColumn <SkydiveSystem, String> systemModel = new TableColumn<>("Модель системы");
+        TableColumn <SkydiveSystem, String> canopy = new TableColumn<>("Основной парашют");
+        TableColumn <SkydiveSystem, String> canopyModel = new TableColumn<>("Модель");
+        TableColumn <SkydiveSystem, Integer> canopySize = new TableColumn<>("Размер, кв.фут");
         canopy.getColumns().addAll(canopyModel,canopySize);
-        TableColumn <SkydiveSystem, String> reserve = new TableColumn("Запасной парашют");
-        TableColumn <SkydiveSystem, String> reserveModel = new TableColumn("Модель");
-        TableColumn <SkydiveSystem, Integer> reserveSize = new TableColumn("Размер, кв.фут");
+        TableColumn <SkydiveSystem, String> reserve = new TableColumn<>("Запасной парашют");
+        TableColumn <SkydiveSystem, String> reserveModel = new TableColumn<>("Модель");
+        TableColumn <SkydiveSystem, Integer> reserveSize = new TableColumn<>("Размер, кв.фут");
         reserve.getColumns().addAll(reserveModel,reserveSize);
-        TableColumn <SkydiveSystem, String> aadModel = new TableColumn("Модель AAD");
-        TableColumn <SkydiveSystem, Integer> canopyJumps = new TableColumn("Прыжков на куполе");
-        TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn("Дата переукладки");
+        TableColumn <SkydiveSystem, String> aadModel = new TableColumn<>("Модель AAD");
+        TableColumn <SkydiveSystem, Integer> canopyJumps = new TableColumn<>("Прыжков на куполе");
+        TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn<>("Дата переукладки");
         //Добавляем столбцы в таблицу
         indexStore.getColumns().addAll(systemCode,systemModel,canopy,reserve,aadModel,canopyJumps,reservePackDate);
         
