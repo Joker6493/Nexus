@@ -1,7 +1,5 @@
 package storagefx;
 
-import javafx.beans.property.*;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -129,233 +127,155 @@ public class SkydiveSystem {
         }    
     
     //Get methods
-    public int get_systemID (){
+    public int getSystemID (){
         return systemID;
     }
-    public String get_systemCode (){
+    public String getSystemCode (){
         return systemCode;
     }
-    public String get_systemModel (){
+    public String getSystemModel (){
         return systemModel;
     }
-    public String get_systemSN (){
+    public String getSystemSN (){
         return systemSN;
     }
-    public String get_systemDOM (){
+    public String getSystemDOM (){
         return systemDOM;
     }
-    public int get_canopyID (){
+    public int getCanopyID (){
         return canopyID;
     }
-    public int get_reserveID (){
+    public int getReserveID (){
         return reserveID;
     }
-    public int get_aadID (){
+    public int getAadID (){
         return aadID;
     }
-    public String get_canopyModel (){
+    public String getCanopyModel (){
         return canopyModel;
     }
-    public int get_canopySize (){
+    public int getCanopySize (){
         return canopySize;
     }
-    public String get_canopySN (){
+    public String getCanopySN (){
         return canopySN;
     }
-    public String get_canopyDOM (){
+    public String getCanopyDOM (){
         return canopyDOM;
     }
-    public int get_canopyJumps (){
+    public int getCanopyJumps (){
         return canopyJumps;
     }
-    public String get_reserveModel (){
+    public String getReserveModel (){
         return reserveModel;
     }
-    public int get_reserveSize (){
+    public int getReserveSize (){
         return reserveSize;
     }
-    public String get_reserveSN (){
+    public String getReserveSN (){
         return reserveSN;
     }
-    public String get_reserveDOM (){
+    public String getReserveDOM (){
         return reserveDOM;
     }
-    public int get_reserveJumps (){
+    public int getReserveJumps (){
         return reserveJumps;
     }
-    public String get_reservePackDate () {
+    public String getReservePackDate () {
         return reservePackDate;
     }
-    public String get_aadModel (){
+    public String getAadModel (){
         return aadModel;
     }
-    public String get_aadSN (){
+    public String getAadSN (){
         return aadSN;
     }
-    public String get_aadDOM (){
+    public String getAadDOM (){
         return aadDOM;
     }
-    public int get_aadJumps (){
+    public int getAadJumps (){
         return aadJumps;
     }
-    public String get_aadNextRegl () {
+    public String getAadNextRegl () {
         return aadNextRegl;
     }
-    public boolean get_aadFired (){
+    public boolean getAadFired (){
         return aadFired;
     }
     //Set methods 
-    public void set_systemID (int systemID){
+    public void setSystemID (int systemID){
         this.systemID = systemID;
     }
-    public void set_systemCode (String systemCode){
+    public void setSystemCode (String systemCode){
         this.systemCode = systemCode;
     }
-    public void set_systemModel (String systemModel){
+    public void setSystemModel (String systemModel){
         this.systemModel = systemModel;
     }
-    public void set_systemSN (String systemSN){
+    public void setSystemSN (String systemSN){
         this.systemSN = systemSN;
     }
-    public void set_systemDOM (String systemDOM){
+    public void setSystemDOM (String systemDOM){
         this.systemDOM = systemDOM;
     }
-    public void set_canopyID (int canopyID){
+    public void setCanopyID (int canopyID){
         this.canopyID = canopyID;
     }
-    public void set_reserveID (int reserveID){
+    public void setReserveID (int reserveID){
         this.reserveID = reserveID;
     }
-    public void set_aadID (int aadID){
+    public void setAadID (int aadID){
         this.aadID = aadID;
     }
-    public void set_canopyModel (String canopyModel){
+    public void setCanopyModel (String canopyModel){
         this.canopyModel = canopyModel;
     }
-    public void set_canopySize (int canopySize){
-        this.canopySize = canopySize;;
+    public void setCanopySize (int canopySize){
+        this.canopySize = canopySize;
     }
-    public void set_canopySN (String canopySN){
+    public void setCanopySN (String canopySN){
         this.canopySN = canopySN;
     }
-    public void set_canopyDOM (String canopyDOM){
+    public void setCanopyDOM (String canopyDOM){
         this.canopyDOM = canopyDOM;
     }
-    public void set_canopyJumps (int canopyJumps){
+    public void setCanopyJumps (int canopyJumps){
         this.canopyJumps = canopyJumps;
     }
-    public void set_reserveModel (String reserveModel){
+    public void setReserveModel (String reserveModel){
         this.reserveModel = reserveModel;
     }
-    public void set_reserveSize (int reserveSize){
-        this.reserveSize = reserveSize;;
+    public void setReserveSize (int reserveSize){
+        this.reserveSize = reserveSize;
     }
-    public void set_reserveSN (String reserveSN){
+    public void setReserveSN (String reserveSN){
         this.reserveSN = reserveSN;
     }
-    public void set_reserveDOM (String reserveDOM){
+    public void setReserveDOM (String reserveDOM){
         this.reserveDOM = reserveDOM;
     }
-    public void set_reserveJumps (int reserveJumps){
+    public void setReserveJumps (int reserveJumps){
         this.reserveJumps = reserveJumps;
     }
-    public void set_reservePackDate (String reservePackDate){
+    public void setReservePackDate (String reservePackDate){
         this.reservePackDate = reservePackDate;
     }
-    public void set_aadModel (String aadModel){
+    public void setAadModel (String aadModel){
         this.aadModel = aadModel;
     }
-    public void set_aadSN (String aadSN){
-        this.aadSN = aadSN;;
+    public void setAadSN (String aadSN){
+        this.aadSN = aadSN;
     }
-    public void set_aadDOM (String aadDOM){
+    public void setAadDOM (String aadDOM){
         this.aadDOM = aadDOM;
     }
-    public void set_aadJumps (int aadJumps){
+    public void setAadJumps (int aadJumps){
         this.aadJumps = aadJumps;
     }
-    public void set_aadNextRegl (String aadNextRegl){
+    public void setAadNextRegl (String aadNextRegl){
         this.aadNextRegl = aadNextRegl;
     }
-    public void set_aadFired (boolean aadFired){
+    public void setAadFired (boolean aadFired){
         this.aadFired = aadFired;
     }
-    
-    /*//Property methods
-    public IntegerProperty  get_systemID (){
-        return systemID;
-    }
-    public StringProperty get_systemCode (){
-        return systemCode;
-    }
-    public StringProperty get_systemModel (){
-        return systemModel;
-    }
-    public StringProperty get_systemSN (){
-        return systemSN;
-    }
-    public StringProperty get_systemDOM (){
-        return systemDOM;
-    }
-    public IntegerProperty  get_canopyID (){
-        return canopyID;
-    }
-    public IntegerProperty  get_reserveID (){
-        return reserveID;
-    }
-    public IntegerProperty  get_aadID (){
-        return aadID;
-    }
-    public StringProperty get_canopyModel (){
-        return canopyModel;
-    }
-    public IntegerProperty  get_canopySize (){
-        return canopySize;
-    }
-    public StringProperty get_canopySN (){
-        return canopySN;
-    }
-    public StringProperty get_canopyDOM (){
-        return canopyDOM;
-    }
-    public IntegerProperty  get_canopyJumps (){
-        return canopyJumps;
-    }
-    public StringProperty get_reserveModel (){
-        return reserveModel;
-    }
-    public IntegerProperty  get_reserveSize (){
-        return reserveSize;
-    }
-    public StringProperty get_reserveSN (){
-        return reserveSN;
-    }
-    public StringProperty get_reserveDOM (){
-        return reserveDOM;
-    }
-    public IntegerProperty  get_reserveJumps (){
-        return reserveJumps;
-    }
-    public StringProperty get_reservePackDate () {
-        return reservePackDate;
-    }
-    public StringProperty get_aadModel (){
-        return aadModel;
-    }
-    public StringProperty get_aadSN (){
-        return aadSN;
-    }
-    public StringProperty get_aadDOM (){
-        return aadDOM;
-    }
-    public IntegerProperty  get_aadJumps (){
-        return aadJumps;
-    }
-    public StringProperty get_aadNextRegl () {
-        return aadNextRegl;
-    }
-    public BooleanProperty get_aadFired (){
-        return aadFired;
-    }*/
-    
 }

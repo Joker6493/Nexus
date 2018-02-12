@@ -23,35 +23,35 @@ public class Manufacturer {
         this.manufacturerEmail = manufacturerEmail;
     }
     //Get methods
-    public int get_manufacturerID (){
+    public int getManufacturerID (){
         return manufacturerID;
     }
-    public String get_manufacturerName (){
+    public String getManufacturerName (){
         return manufacturerName;
     }
-    public String get_manufacturerCountry (){
+    public String getManufacturerCountry (){
         return manufacturerCountry;
     }
-    public String get_manufacturerTelephone (){
+    public String getManufacturerTelephone (){
         return manufacturerTelephone;
     }
-    public String get_manufacturerEmail (){
+    public String getManufacturerEmail (){
         return manufacturerEmail;
     }
     //Set methods
-    public void set_manufacturerID (){
+    public void setManufacturerID (){
         //In process    
     }
-    public void set_manufacturerName (String manufacturerName){
+    public void setManufacturerName (String manufacturerName){
         this.manufacturerName = manufacturerName;
     }
-    public void set_manufacturerCountry (String manufacturerCountry){
+    public void setManufacturerCountry (String manufacturerCountry){
         this.manufacturerCountry = manufacturerCountry;
     }
-    public void set_manufacturerTelephone (String manufacturerTelephone){
+    public void setManufacturerTelephone (String manufacturerTelephone){
         this.manufacturerTelephone = manufacturerTelephone;
     }
-    public void set_manufacturerEmail (String manufacturerEmail){
+    public void setManufacturerEmail (String manufacturerEmail){
         this.manufacturerEmail = manufacturerEmail;
     }
     

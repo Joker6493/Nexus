@@ -20,11 +20,11 @@ public class Container extends SkydiveSystem {
     }
     
     //Get methods
-    public int get_manufacturerID (){
+    public int getManufacturerID (){
         return manufacturerID;
     }
     //Set methods 
-    public void set_manufacturerID (int manufacturerID){
+    public void setManufacturerID (int manufacturerID){
         this.manufacturerID = manufacturerID;
     }
 }
