@@ -17,6 +17,8 @@ public class SkydiveSystem {
     protected String systemModel;
     protected String systemSN;
     protected String systemDOM;
+    protected int systemManufacturerID;
+    protected String systemManufacturerName;
     //ОП
     protected int canopyID;
     protected String canopyModel;
@@ -24,6 +26,8 @@ public class SkydiveSystem {
     protected String canopySN;
     protected String canopyDOM;
     protected int canopyJumps;
+    protected int canopyManufacturerID;
+    protected String canopyManufacturerName;
     //ПЗ
     protected int reserveID;
     protected String reserveModel;
@@ -32,6 +36,8 @@ public class SkydiveSystem {
     protected String reserveDOM;
     protected int reserveJumps;
     protected String reservePackDate;
+    protected int reserveManufacturerID;
+    protected String reserveManufacturerName;
     //AAD
     protected int aadID;
     protected String aadModel;
@@ -40,6 +46,8 @@ public class SkydiveSystem {
     protected int aadJumps;
     protected String aadNextRegl;
     protected boolean aadFired;
+    protected int aadManufacturerID;
+    protected String aadManufacturerName;
         
     //Short
     SkydiveSystem (String systemCode, String systemModel, String canopyModel, int canopySize, String reserveModel, int reserveSize, String aadModel, int canopyJumps, String reservePackDate){
@@ -142,6 +150,12 @@ public class SkydiveSystem {
     public String getSystemDOM (){
         return systemDOM;
     }
+    public int getSystemManufacturerID (){
+        return systemManufacturerID;
+    }
+    public String getSystemManufacturerName (){
+        return systemManufacturerName;
+    }
     public int getCanopyID (){
         return canopyID;
     }
@@ -166,6 +180,12 @@ public class SkydiveSystem {
     public int getCanopyJumps (){
         return canopyJumps;
     }
+    public int getCanopyManufacturerID (){
+        return canopyManufacturerID;
+    }
+    public String getCanopyManufacturerName (){
+        return canopyManufacturerName;
+    }
     public String getReserveModel (){
         return reserveModel;
     }
@@ -184,6 +204,12 @@ public class SkydiveSystem {
     public String getReservePackDate () {
         return reservePackDate;
     }
+    public int getReserveManufacturerID (){
+        return reserveManufacturerID;
+    }
+    public String getReserveManufacturerName (){
+        return reserveManufacturerName;
+    }
     public String getAadModel (){
         return aadModel;
     }
@@ -201,6 +227,12 @@ public class SkydiveSystem {
     }
     public boolean getAadFired (){
         return aadFired;
+    }
+    public int getAadManufacturerID (){
+        return aadManufacturerID;
+    }
+    public String getAadManufacturerName (){
+        return aadManufacturerName;
     }
     //Set methods 
     public void setSystemID (int systemID){
@@ -227,6 +259,12 @@ public class SkydiveSystem {
     public void setAadID (int aadID){
         this.aadID = aadID;
     }
+    public void setSystemManufacturerID (int systemManufacturerID){
+        this.systemManufacturerID = systemManufacturerID;
+    }
+    public void setSystemManufacturerID (String systemManufacturerName){
+        this.systemManufacturerName = systemManufacturerName;
+    }
     public void setCanopyModel (String canopyModel){
         this.canopyModel = canopyModel;
     }
@@ -241,6 +279,12 @@ public class SkydiveSystem {
     }
     public void setCanopyJumps (int canopyJumps){
         this.canopyJumps = canopyJumps;
+    }
+    public void setCanopyManufacturerID (int canopyManufacturerID){
+        this.canopyManufacturerID = canopyManufacturerID;
+    }
+    public void setCanopyManufacturerID (String canopyManufacturerName){
+        this.canopyManufacturerName = canopyManufacturerName;
     }
     public void setReserveModel (String reserveModel){
         this.reserveModel = reserveModel;
@@ -260,6 +304,12 @@ public class SkydiveSystem {
     public void setReservePackDate (String reservePackDate){
         this.reservePackDate = reservePackDate;
     }
+    public void setReserveManufacturerID (int reserveManufacturerID){
+        this.reserveManufacturerID = reserveManufacturerID;
+    }
+    public void setReserveManufacturerID (String reserveManufacturerName){
+        this.reserveManufacturerName = reserveManufacturerName;
+    }
     public void setAadModel (String aadModel){
         this.aadModel = aadModel;
     }
@@ -277,5 +327,11 @@ public class SkydiveSystem {
     }
     public void setAadFired (boolean aadFired){
         this.aadFired = aadFired;
+    }
+    public void setAadManufacturerID (int aadManufacturerID){
+        this.aadManufacturerID = aadManufacturerID;
+    }
+    public void setAadManufacturerID (String aadManufacturerName){
+        this.aadManufacturerName = aadManufacturerName;
     }
 }
