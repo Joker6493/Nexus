@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import api.NexusPlugin;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,7 +28,6 @@ public class StorageIndex extends Application implements NexusPlugin {
         StackPane index = StorageIndex();
         Scene scene = new Scene(index);
         
-        
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -38,7 +36,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     public StackPane StorageIndex () throws SQLException{
         
         TableView<SkydiveSystem> indexStore = new TableView<>();
-        //Столбцы
+        //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
         TableColumn <SkydiveSystem, String> systemModel = new TableColumn<>("Модель системы");
         TableColumn <SkydiveSystem, String> canopy = new TableColumn<>("Основной парашют");
@@ -52,10 +50,10 @@ public class StorageIndex extends Application implements NexusPlugin {
         TableColumn <SkydiveSystem, String> aadModel = new TableColumn<>("Модель AAD");
         TableColumn <SkydiveSystem, Integer> canopyJumps = new TableColumn<>("Прыжков на куполе");
         TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn<>("Дата переукладки");
-        //Добавляем столбцы в таблицу
+        //Adding columns into TableView
         indexStore.getColumns().addAll(systemCode,systemModel,canopy,reserve,aadModel,canopyJumps,reservePackDate);
         
-        //Устанавливаем тип и значение которое должно хранится в колонке
+        //Getting values and format from class variables
         systemCode.setCellValueFactory(new PropertyValueFactory<>("systemCode"));
         systemModel.setCellValueFactory(new PropertyValueFactory<>("systemModel"));
         canopyModel.setCellValueFactory(new PropertyValueFactory<>("canopyModel"));    
@@ -66,43 +64,19 @@ public class StorageIndex extends Application implements NexusPlugin {
         canopyJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
         
-        //Добавили данные
+        //Adding data and create scene
         DataRelay dr = new DataRelay();
         ObservableList<SkydiveSystem> indexList = dr.getIndexList();
         indexStore.setItems(indexList);
-                
         StackPane index = new StackPane();
         index.getChildren().add(indexStore);
-        
         return index;
-    }
-    
-    
-    private ObservableList<SkydiveSystem> getUserList() {
-        
-        
-        
-        ObservableList<SkydiveSystem> list = FXCollections.observableArrayList();
-        return list;
     }
     
     @Override
     public void invoke(){
-        
+        //plugin TODO - in process
     }
-    
-    
-    /*private ObservableList<UserAccount> getUserList() {
- 
-      UserAccount user1 = new UserAccount(1L, "smith", "smith@gmail.com", //
-              "Susan", "Smith", true);
-      UserAccount user2 = new UserAccount(2L, "mcneil", "mcneil@gmail.com", //
-              "Anne", "McNeil", true);
-      UserAccount user3 = new UserAccount(3L, "white", "white@gmail.com", //
-              "Kenvin", "White", false);
- 
-      ObservableList<UserAccount> list = FXCollections.observableArrayList(user1, user2, user3);
-      return list;*/
     
     /**
      * @param args the command line arguments
@@ -110,5 +84,4 @@ public class StorageIndex extends Application implements NexusPlugin {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }

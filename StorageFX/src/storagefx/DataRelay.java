@@ -16,9 +16,6 @@ import java.sql.Statement;
 import connection.OracleConn;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -33,7 +30,6 @@ public class DataRelay {
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
-            e.printStackTrace();
         }
         return rs;
     }
