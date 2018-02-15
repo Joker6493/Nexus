@@ -12,42 +12,42 @@ package storagefx;
  */
 public class SkydiveSystem {
     //Система
-    protected int systemID;
-    protected String systemCode;
-    protected String systemModel;
-    protected String systemSN;
-    protected String systemDOM;
-    protected int systemManufacturerID;
-    protected String systemManufacturerName;
+    private int systemID;
+    private String systemCode;
+    private String systemModel;
+    private String systemSN;
+    private String systemDOM;
+    private int systemManufacturerID;
+    private String systemManufacturerName;
     //ОП
-    protected int canopyID;
-    protected String canopyModel;
-    protected int canopySize;
-    protected String canopySN;
-    protected String canopyDOM;
-    protected int canopyJumps;
-    protected int canopyManufacturerID;
-    protected String canopyManufacturerName;
+    private int canopyID;
+    private String canopyModel;
+    private int canopySize;
+    private String canopySN;
+    private String canopyDOM;
+    private int canopyJumps;
+    private int canopyManufacturerID;
+    private String canopyManufacturerName;
     //ПЗ
-    protected int reserveID;
-    protected String reserveModel;
-    protected int reserveSize;
-    protected String reserveSN;
-    protected String reserveDOM;
-    protected int reserveJumps;
-    protected String reservePackDate;
-    protected int reserveManufacturerID;
-    protected String reserveManufacturerName;
+    private int reserveID;
+    private String reserveModel;
+    private int reserveSize;
+    private String reserveSN;
+    private String reserveDOM;
+    private int reserveJumps;
+    private String reservePackDate;
+    private int reserveManufacturerID;
+    private String reserveManufacturerName;
     //AAD
-    protected int aadID;
-    protected String aadModel;
-    protected String aadSN;
-    protected String aadDOM;
-    protected int aadJumps;
-    protected String aadNextRegl;
-    protected boolean aadFired;
-    protected int aadManufacturerID;
-    protected String aadManufacturerName;
+    private int aadID;
+    private String aadModel;
+    private String aadSN;
+    private String aadDOM;
+    private int aadJumps;
+    private String aadNextRegl;
+    private boolean aadFired;
+    private int aadManufacturerID;
+    private String aadManufacturerName;
         
     //Short
     SkydiveSystem (String systemCode, String systemModel, String canopyModel, int canopySize, String reserveModel, int reserveSize, String aadModel, int canopyJumps, String reservePackDate){
@@ -62,18 +62,24 @@ public class SkydiveSystem {
         this.reservePackDate = reservePackDate;
     }
     //Full
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired){
+    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
     this.systemID = systemID;
     this.systemCode = systemCode;
     this.systemModel = systemModel;
     this.systemSN = systemSN;
     this.systemDOM = systemDOM;
+    this.systemManufacturerID = systemManufacturerID;
+    this.systemManufacturerName = systemManufacturerName;
+    //Canopy
     this.canopyID = canopyID;
     this.canopyModel = canopyModel;
     this.canopySize = canopySize;
     this.canopySN = canopySN;
     this.canopyDOM = canopyDOM;
     this.canopyJumps = canopyJumps;
+    this.canopyManufacturerID = canopyManufacturerID;
+    this.canopyManufacturerName = canopyManufacturerName;
+    //Reserve
     this.reserveID = reserveID;
     this.reserveModel = reserveModel;
     this.reserveSize = reserveSize;
@@ -81,6 +87,9 @@ public class SkydiveSystem {
     this.reserveDOM = reserveDOM;
     this.reserveJumps = reserveJumps;
     this.reservePackDate = reservePackDate;
+    this.reserveManufacturerID = reserveManufacturerID;
+    this.reserveManufacturerName = reserveManufacturerName;
+    //AAD
     this.aadID = aadID;
     this.aadModel = aadModel;
     this.aadSN = aadSN;
@@ -88,51 +97,9 @@ public class SkydiveSystem {
     this.aadJumps = aadJumps;
     this.aadNextRegl = aadNextRegl;
     this.aadFired = aadFired;
+    this.aadManufacturerID = aadManufacturerID;
+    this.aadManufacturerName = aadManufacturerName;
     }
-    
-    //For containers
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int manufacturerID, int canopyID, int reserveID, int aadID){
-        this.systemID = systemID; 
-        this.systemCode = systemCode;
-        this.systemModel = systemModel;
-        this.systemSN = systemSN;
-        this.systemDOM = systemDOM;
-        this.canopyID = canopyID;
-        this.reserveID = reserveID;
-        this.aadID = aadID;
-        }
-    //For canopy
-    SkydiveSystem (int systemID, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int manufacturerID, int canopyJumps){
-        this.systemID = systemID; 
-        this.canopyID = canopyID;
-        this.canopyModel = canopyModel;
-        this.canopySize = canopySize;
-        this.canopySN = canopySN;
-        this.canopyDOM = canopyDOM;
-        this.canopyJumps = canopyJumps;
-        }
-    //For reserve
-    SkydiveSystem (int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int manufacturerID, int reserveJumps, String reservePackDate){
-        this.systemID = systemID; 
-        this.reserveID = reserveID;
-        this.reserveModel = reserveModel;
-        this.reserveSize = reserveSize;
-        this.reserveSN = reserveSN;
-        this.reserveDOM = reserveDOM;
-        this.reserveJumps = reserveJumps;
-        this.reservePackDate = reservePackDate;
-        }
-    //For AAD
-    SkydiveSystem (int systemID, int aadID, String aadModel, String aadSN, String aadDOM, int manufacturerID, int aadJumps, String aadNextRegl, boolean aadFired){
-        this.systemID = systemID; 
-        this.aadID = aadID;
-        this.aadModel = aadModel;
-        this.aadSN = aadSN;
-        this.aadDOM = aadDOM;
-        this.aadJumps = aadJumps;
-        this.aadNextRegl = aadNextRegl;
-        this.aadFired = aadFired;
-        }    
     
     //Get methods
     public int getSystemID (){
