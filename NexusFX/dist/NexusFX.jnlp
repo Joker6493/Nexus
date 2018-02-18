@@ -9,9 +9,13 @@
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <jar href="NexusFX.jar" size="16070" download="eager" />
 =======
     <jar href="NexusFX.jar" size="13259" download="eager" />
+>>>>>>> Nexus_prealpha
+=======
+    <jar href="NexusFX.jar" size="12351" download="eager" />
 >>>>>>> Nexus_prealpha
     <jar href="lib\NexusPlugin-API.jar" size="676" download="eager" />
     <jar href="lib\ojdbc7.jar" size="3698857" download="eager" />
