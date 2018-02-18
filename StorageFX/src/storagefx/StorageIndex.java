@@ -65,7 +65,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
         //Adding data and create scene
         DataRelay dr = new DataRelay();
-        ObservableList<SkydiveSystem> indexList = dr.getIndexList();
+        ObservableList<SkydiveSystem> indexList = dr.getSystemsList();
         indexStore.setItems(indexList);
         indexStore.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {

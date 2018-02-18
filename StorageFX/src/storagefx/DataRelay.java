@@ -40,7 +40,7 @@ public class DataRelay {
         bdcon.close();
     }
     
-    protected ObservableList<SkydiveSystem> getIndexList() throws SQLException {
+    protected ObservableList<SkydiveSystem> getSystemsList() throws SQLException {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
         String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid), " +
                              "ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid), " +
