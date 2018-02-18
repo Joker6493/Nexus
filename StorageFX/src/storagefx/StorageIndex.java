@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -52,7 +53,6 @@ public class StorageIndex extends Application implements NexusPlugin {
         TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn<>("Дата переукладки");
         //Adding columns into TableView
         indexStore.getColumns().addAll(systemCode,systemModel,canopy,reserve,aadModel,canopyJumps,reservePackDate);
-        
         //Getting values and format from class variables
         systemCode.setCellValueFactory(new PropertyValueFactory<>("systemCode"));
         systemModel.setCellValueFactory(new PropertyValueFactory<>("systemModel"));
@@ -63,11 +63,18 @@ public class StorageIndex extends Application implements NexusPlugin {
         aadModel.setCellValueFactory(new PropertyValueFactory<>("aadModel"));        
         canopyJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
         reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
-        
         //Adding data and create scene
         DataRelay dr = new DataRelay();
         ObservableList<SkydiveSystem> indexList = dr.getIndexList();
         indexStore.setItems(indexList);
+        indexStore.setOnMouseClicked((MouseEvent click) -> {
+            if (click.getClickCount() == 2) {
+                //Get selected TableView SkydiveSystem object
+                SkydiveSystem currentSystem =  indexStore.getSelectionModel().getSelectedItem();
+                //TODO list
+                System.out.println("Выбрана система "+currentSystem.getSystemCode()+"!");
+            }
+        });
         StackPane index = new StackPane();
         index.getChildren().add(indexStore);
         return index;

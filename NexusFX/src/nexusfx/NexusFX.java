@@ -6,9 +6,6 @@
 package nexusfx;
 
 import java.sql.Connection;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -29,7 +26,6 @@ import utils.PluginLoader;
  * @author dboro
  */
 public class NexusFX extends Application {
-    
     String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
     PluginLoader classLoader = new PluginLoader(); 
     OracleConn oraconn = new OracleConn();
@@ -38,8 +34,6 @@ public class NexusFX extends Application {
     
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
-        
-                
         MenuBar MenuBarMain = new MenuBar();
         // --- Menu Меню и элементы
         Menu menuMain = new Menu("Меню");
@@ -53,7 +47,6 @@ public class NexusFX extends Application {
             System.exit(0);
         });
         menuMain.getItems().addAll(clear, new SeparatorMenuItem(), exit);
-        
         // --- Menu Edit
         Menu menuService = new Menu("Сервис");
         // --- Menu View
@@ -82,18 +75,15 @@ public class NexusFX extends Application {
         });
         MenuItem about = new MenuItem("О программе...");
         menuHelp.getItems().addAll(loadcalc, new SeparatorMenuItem(), about, testClass);
-        
         MenuBarMain.getMenus().addAll(menuMain, menuService, menuWindows, menuHelp);
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction((ActionEvent event) -> {
             System.out.println("Hello World!");
         });
-        
         //Панель задач
         HBox taskBar = new HBox();
         taskBar.getChildren().addAll(new Button("Scene1"),new Button("Scene2"),new Button("Scene3"));
-        
         //Строка состояния
         GridPane statusBar = new GridPane();
         ConnectionCheck connStatus = new ConnectionCheck();
@@ -105,11 +95,9 @@ public class NexusFX extends Application {
         statusBar.setConstraints(connStatus, 2, 0);
         
         ColumnConstraints columnButton = new ColumnConstraints();
-        columnButton.setPrefWidth(130.0);
         ColumnConstraints columnTask = new ColumnConstraints();
         columnTask.setPercentWidth(70);
         ColumnConstraints columnConnection = new ColumnConstraints();
-        columnConnection.setPrefWidth(200.0);
         statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
         statusBar.getChildren().addAll(menuButton,taskBar,connStatus);
@@ -122,7 +110,7 @@ public class NexusFX extends Application {
         root.setCenter(new Button("Center"));
         root.setCenter(btn);
         
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root);
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
@@ -135,5 +123,4 @@ public class NexusFX extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
