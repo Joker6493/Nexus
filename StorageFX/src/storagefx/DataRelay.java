@@ -15,12 +15,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import connection.OracleConn;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DataRelay {
     
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
@@ -53,7 +55,8 @@ public class DataRelay {
                              "where si.disable = 0";
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
-            indexList.add(new SkydiveSystem(rs.getInt("systemid"), rs.getString("system_code"), rs.getString("system_model"), rs.getString("system_sn"), rs.getString("system_dom"), rs.getInt(6), rs.getString(7), rs.getInt("canopyid"), rs.getString("canopy_model"), rs.getInt("canopy_size"), rs.getString("canopy_sn"), rs.getString("canopy_dom"), rs.getInt("canopy_jumps"), rs.getInt(14), rs.getString(15), rs.getInt("reserveid"), rs.getString("reserve_model"), rs.getInt("reserve_size"), rs.getString("reserve_sn"), rs.getString("reserve_dom"), rs.getInt("reserve_jumps"), rs.getString("reserve_packdate"),  rs.getInt(23), rs.getString(24), rs.getInt("aadid"), rs.getString("aad_model"), rs.getString("aad_sn"), rs.getString("aad_dom"), rs.getInt("aad_jumps"), rs.getString("aad_nextregl"), rs.getBoolean("aad_fired"), rs.getInt(32), rs.getString(33)));
+            indexList.add(new SkydiveSystem(rs.getInt("systemid"), rs.getString("system_code"), rs.getString("system_model"), rs.getString("system_sn"), rs.getDate("system_dom").toLocalDate(), rs.getInt(6), rs.getString(7), rs.getInt("canopyid"), rs.getString("canopy_model"), rs.getInt("canopy_size"), rs.getString("canopy_sn"), rs.getDate("canopy_dom").toLocalDate(), rs.getInt("canopy_jumps"), rs.getInt(14), rs.getString(15), rs.getInt("reserveid"), rs.getString("reserve_model"), rs.getInt("reserve_size"), rs.getString("reserve_sn"), rs.getDate("reserve_dom").toLocalDate(), rs.getInt("reserve_jumps"), rs.getDate("reserve_packdate").toLocalDate(),  rs.getInt(23), rs.getString(24), rs.getInt("aadid"), rs.getString("aad_model"), rs.getString("aad_sn"), rs.getDate("aad_dom").toLocalDate(), rs.getInt("aad_jumps"), rs.getDate("aad_nextregl").toLocalDate(), rs.getBoolean("aad_fired"), rs.getInt(32), rs.getString(33)));
+            
         }
         Statement stmt = rs.getStatement();
         Connection bdcon = stmt.getConnection();

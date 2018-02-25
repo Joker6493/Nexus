@@ -15,6 +15,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javafx.scene.control.TableCell;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -22,7 +25,8 @@ import javafx.scene.input.MouseEvent;
  * @author dboro
  */
 public class StorageIndex extends Application implements NexusPlugin {
-    
+        
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Override
     public void start(Stage primaryStage) throws SQLException {
         
@@ -33,7 +37,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    
     public StackPane StorageIndex () throws SQLException{
         
         TableView<SkydiveSystem> indexStore = new TableView<>();
@@ -50,7 +54,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         reserve.getColumns().addAll(reserveModel,reserveSize);
         TableColumn <SkydiveSystem, String> aadModel = new TableColumn<>("Модель AAD");
         TableColumn <SkydiveSystem, Integer> canopyJumps = new TableColumn<>("Прыжков на куполе");
-        TableColumn <SkydiveSystem, String> reservePackDate = new TableColumn<>("Дата переукладки");
+        TableColumn <SkydiveSystem, LocalDate> reservePackDate = new TableColumn<>("Дата переукладки");
         //Adding columns into TableView
         indexStore.getColumns().addAll(systemCode,systemModel,canopy,reserve,aadModel,canopyJumps,reservePackDate);
         //Getting values and format from class variables
@@ -62,7 +66,23 @@ public class StorageIndex extends Application implements NexusPlugin {
         reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
         aadModel.setCellValueFactory(new PropertyValueFactory<>("aadModel"));        
         canopyJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
-        reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));        
+        //reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));
+        // Custom rendering of the table cell.
+        reservePackDate.setCellFactory(column -> {
+            return new TableCell<SkydiveSystem, LocalDate>() {
+                @Override
+                protected void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        // Format date.
+                        setText(dateFormat.format(item));
+                    }
+                }
+            };
+        });
         //Adding data and create scene
         DataRelay dr = new DataRelay();
         ObservableList<SkydiveSystem> indexList = dr.getSystemsList();
@@ -70,9 +90,15 @@ public class StorageIndex extends Application implements NexusPlugin {
         indexStore.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView SkydiveSystem object
-                SkydiveSystem currentSystem =  indexStore.getSelectionModel().getSelectedItem();
+                SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбрана система "+currentSystem.getSystemCode()+"!");
+                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem());
+                Stage detailStage = new Stage();
+                //detailStage.initOwner();
+                
+                detail.start(detailStage);
+                
             }
         });
         StackPane index = new StackPane();

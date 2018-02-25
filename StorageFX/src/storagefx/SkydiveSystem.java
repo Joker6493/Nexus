@@ -1,5 +1,7 @@
 package storagefx;
 
+import java.time.LocalDate;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,7 +18,7 @@ public class SkydiveSystem {
     private String systemCode;
     private String systemModel;
     private String systemSN;
-    private String systemDOM;
+    private LocalDate systemDOM;
     private int systemManufacturerID;
     private String systemManufacturerName;
     //ОП
@@ -24,7 +26,7 @@ public class SkydiveSystem {
     private String canopyModel;
     private int canopySize;
     private String canopySN;
-    private String canopyDOM;
+    private LocalDate canopyDOM;
     private int canopyJumps;
     private int canopyManufacturerID;
     private String canopyManufacturerName;
@@ -33,36 +35,24 @@ public class SkydiveSystem {
     private String reserveModel;
     private int reserveSize;
     private String reserveSN;
-    private String reserveDOM;
+    private LocalDate reserveDOM;
     private int reserveJumps;
-    private String reservePackDate;
+    private LocalDate reservePackDate;
     private int reserveManufacturerID;
     private String reserveManufacturerName;
     //AAD
     private int aadID;
     private String aadModel;
     private String aadSN;
-    private String aadDOM;
+    private LocalDate aadDOM;
     private int aadJumps;
-    private String aadNextRegl;
+    private LocalDate aadNextRegl;
     private boolean aadFired;
     private int aadManufacturerID;
     private String aadManufacturerName;
         
-    //Short
-    SkydiveSystem (String systemCode, String systemModel, String canopyModel, int canopySize, String reserveModel, int reserveSize, String aadModel, int canopyJumps, String reservePackDate){
-        this.systemCode = systemCode;
-        this.systemModel = systemModel;
-        this.canopyModel = canopyModel;
-        this.canopySize = canopySize;
-        this.reserveModel = reserveModel;
-        this.reserveSize = reserveSize;
-        this.aadModel = aadModel;
-        this.canopyJumps = canopyJumps;
-        this.reservePackDate = reservePackDate;
-    }
     //Full
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
+    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
     this.systemID = systemID;
     this.systemCode = systemCode;
     this.systemModel = systemModel;
@@ -114,7 +104,7 @@ public class SkydiveSystem {
     public String getSystemSN (){
         return systemSN;
     }
-    public String getSystemDOM (){
+    public LocalDate getSystemDOM (){
         return systemDOM;
     }
     public int getSystemManufacturerID (){
@@ -141,7 +131,7 @@ public class SkydiveSystem {
     public String getCanopySN (){
         return canopySN;
     }
-    public String getCanopyDOM (){
+    public LocalDate getCanopyDOM (){
         return canopyDOM;
     }
     public int getCanopyJumps (){
@@ -162,13 +152,13 @@ public class SkydiveSystem {
     public String getReserveSN (){
         return reserveSN;
     }
-    public String getReserveDOM (){
+    public LocalDate getReserveDOM (){
         return reserveDOM;
     }
     public int getReserveJumps (){
         return reserveJumps;
     }
-    public String getReservePackDate () {
+    public LocalDate getReservePackDate () {
         return reservePackDate;
     }
     public int getReserveManufacturerID (){
@@ -183,13 +173,13 @@ public class SkydiveSystem {
     public String getAadSN (){
         return aadSN;
     }
-    public String getAadDOM (){
+    public LocalDate getAadDOM (){
         return aadDOM;
     }
     public int getAadJumps (){
         return aadJumps;
     }
-    public String getAadNextRegl () {
+    public LocalDate getAadNextRegl () {
         return aadNextRegl;
     }
     public boolean getAadFired (){
@@ -214,7 +204,7 @@ public class SkydiveSystem {
     public void setSystemSN (String systemSN){
         this.systemSN = systemSN;
     }
-    public void setSystemDOM (String systemDOM){
+    public void setSystemDOM (LocalDate systemDOM){
         this.systemDOM = systemDOM;
     }
     public void setCanopyID (int canopyID){
@@ -241,7 +231,7 @@ public class SkydiveSystem {
     public void setCanopySN (String canopySN){
         this.canopySN = canopySN;
     }
-    public void setCanopyDOM (String canopyDOM){
+    public void setCanopyDOM (LocalDate canopyDOM){
         this.canopyDOM = canopyDOM;
     }
     public void setCanopyJumps (int canopyJumps){
@@ -262,13 +252,13 @@ public class SkydiveSystem {
     public void setReserveSN (String reserveSN){
         this.reserveSN = reserveSN;
     }
-    public void setReserveDOM (String reserveDOM){
+    public void setReserveDOM (LocalDate reserveDOM){
         this.reserveDOM = reserveDOM;
     }
     public void setReserveJumps (int reserveJumps){
         this.reserveJumps = reserveJumps;
     }
-    public void setReservePackDate (String reservePackDate){
+    public void setReservePackDate (LocalDate reservePackDate){
         this.reservePackDate = reservePackDate;
     }
     public void setReserveManufacturerID (int reserveManufacturerID){
@@ -283,13 +273,13 @@ public class SkydiveSystem {
     public void setAadSN (String aadSN){
         this.aadSN = aadSN;
     }
-    public void setAadDOM (String aadDOM){
+    public void setAadDOM (LocalDate aadDOM){
         this.aadDOM = aadDOM;
     }
     public void setAadJumps (int aadJumps){
         this.aadJumps = aadJumps;
     }
-    public void setAadNextRegl (String aadNextRegl){
+    public void setAadNextRegl (LocalDate aadNextRegl){
         this.aadNextRegl = aadNextRegl;
     }
     public void setAadFired (boolean aadFired){

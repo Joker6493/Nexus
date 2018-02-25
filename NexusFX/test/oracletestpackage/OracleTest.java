@@ -6,6 +6,8 @@
 package oracletestpackage;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import utils.OracleConn;
 
 /**
@@ -13,8 +15,11 @@ import utils.OracleConn;
  * @author dboro
  */
 public class OracleTest {
- 
-   public static void main(String[] args) {
+   
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    LocalDate dateDOM;
+    
+    public static void main(String[] args) {
         OracleTest m = new OracleTest();
         m.testDatabase();
     }
@@ -30,7 +35,14 @@ public class OracleTest {
                 System.out.println("ID Систем и Код: ");
                 while (rs.next()) {
                     String str = rs.getString("systemid") + ":" + rs.getString(2);
+                    Date dom = rs.getDate("system_dom");
                     System.out.println("ID: " + str);
+                    System.out.println(dom);
+                    dateDOM = dom.toLocalDate();
+                    Date newDOM = dom.valueOf(dateDOM);
+                    System.out.println(dateFormat.format(dateDOM));
+                    System.out.println(newDOM);
+                    System.out.println(dateFormat.format(rs.getDate("system_dom").toLocalDate()));
                 }
                 rs.close();
                 stmt.close();
