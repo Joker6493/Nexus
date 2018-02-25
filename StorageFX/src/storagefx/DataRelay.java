@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 public class DataRelay {
     
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    
     private ResultSet getData (String Query){
         ResultSet rs = null;
         try {

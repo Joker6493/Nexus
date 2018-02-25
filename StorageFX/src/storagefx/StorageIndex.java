@@ -66,23 +66,23 @@ public class StorageIndex extends Application implements NexusPlugin {
         reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
         aadModel.setCellValueFactory(new PropertyValueFactory<>("aadModel"));        
         canopyJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
-        //reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));
+        reservePackDate.setCellValueFactory(new PropertyValueFactory<>("reservePackDate"));
         // Custom rendering of the table cell.
-        reservePackDate.setCellFactory(column -> {
-            return new TableCell<SkydiveSystem, LocalDate>() {
-                @Override
-                protected void updateItem(LocalDate item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setText(null);
-                        setStyle("");
-                    } else {
-                        // Format date.
-                        setText(dateFormat.format(item));
-                    }
-                }
-            };
-        });
+        /*reservePackDate.setCellFactory(column -> {
+        return new TableCell<SkydiveSystem, LocalDate>() {
+        @Override
+        protected void updateItem(LocalDate item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+        setText(null);
+        setStyle("");
+        } else {
+        // Format date.
+        setText(dateFormat.format(item));
+        }
+        }
+        };
+        });*/
         //Adding data and create scene
         DataRelay dr = new DataRelay();
         ObservableList<SkydiveSystem> indexList = dr.getSystemsList();
