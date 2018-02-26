@@ -8,11 +8,17 @@ package storagefx;
 import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.scene.Group;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -50,6 +56,7 @@ public class SystemDetails extends Application {
         containerGrid.setConstraints(sManufacturerNameLabel, 0, 4);
         containerGrid.setConstraints(sManufacturerName, 1, 4);
         containerGrid.getChildren().addAll(containerGridName, sModelLabel, sModel, sSNLabel, sSN, sDOMLabel, sDOM, sManufacturerNameLabel, sManufacturerName);
+        containerGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(15), new BorderWidths(1.5), new Insets(5))));        
         
         //Canopy
         GridPane canopyGrid = new GridPane();
@@ -58,15 +65,15 @@ public class SystemDetails extends Application {
         Label cModelLabel = new Label("Модель: ");
         Label cModel = new Label(selectedSystem.getCanopyModel());
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
-        Label cSize = new Label (selectedSystem.getCanopyModel());
+        Label cSize = new Label (Integer.toString(selectedSystem.getCanopySize()));
         Label cSNLabel = new Label("Серийный номер: ");
-        Label cSN = new Label(selectedSystem.getCanopyModel());
+        Label cSN = new Label(selectedSystem.getCanopySN());
         Label cDOMLabel = new Label("Дата производства: ");
-        Label cDOM = new Label(selectedSystem.getCanopyModel());
+        Label cDOM = new Label(dateFormat.format(selectedSystem.getCanopyDOM()));
         Label cManufacturerNameLabel = new Label("Производитель: ");
-        Label cManufacturerName = new Label(selectedSystem.getCanopyModel());
+        Label cManufacturerName = new Label(selectedSystem.getCanopyManufacturerName());
         Label cJumpsLabel = new Label ("Прыжков: ");
-        Label cJumps = new Label (selectedSystem.getCanopyModel());
+        Label cJumps = new Label (Integer.toString(selectedSystem.getCanopyJumps()));
         canopyGrid.setConstraints(canopyGridName, 0, 0);
         canopyGrid.setConstraints(cModelLabel, 0, 1);
         canopyGrid.setConstraints(cModel, 1, 1);
@@ -87,19 +94,19 @@ public class SystemDetails extends Application {
         //int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName
         Label reserveGridName = new Label("Запасной парашют");
         Label rModelLabel = new Label("Модель: ");
-        Label rModel = new Label(selectedSystem.getSystemModel());
+        Label rModel = new Label(selectedSystem.getReserveModel());
         Label rSizeLabel = new Label ("Размер купола, кв.фут: ");
-        Label rSize = new Label (selectedSystem.getSystemModel());
+        Label rSize = new Label (Integer.toString(selectedSystem.getReserveSize()));
         Label rSNLabel = new Label("Серийный номер: ");
-        Label rSN = new Label(selectedSystem.getSystemModel());
+        Label rSN = new Label(selectedSystem.getReserveSN());
         Label rDOMLabel = new Label("Дата производства: ");
-        Label rDOM = new Label(selectedSystem.getSystemModel());
+        Label rDOM = new Label(dateFormat.format(selectedSystem.getReserveDOM()));
         Label rManufacturerNameLabel = new Label("Производитель: ");
-        Label rManufacturerName = new Label(selectedSystem.getSystemModel());
+        Label rManufacturerName = new Label(selectedSystem.getReserveManufacturerName());
         Label rJumpsLabel = new Label ("Применений: ");
-        Label rJumps = new Label (selectedSystem.getSystemModel());
+        Label rJumps = new Label (Integer.toString(selectedSystem.getReserveJumps()));
         Label rPackDateLabel = new Label ("Дата укладки: ");
-        Label rPackDate = new Label (selectedSystem.getSystemModel());
+        Label rPackDate = new Label (dateFormat.format(selectedSystem.getReservePackDate()));
         reserveGrid.setConstraints(reserveGridName, 0, 0);
         reserveGrid.setConstraints(rModelLabel, 0, 1);
         reserveGrid.setConstraints(rModel, 1, 1);
@@ -122,17 +129,17 @@ public class SystemDetails extends Application {
         //int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName
         Label aadGridName = new Label("Страхующий прибор");
         Label aModelLabel = new Label("Модель: ");
-        Label aModel = new Label(selectedSystem.getSystemModel());
+        Label aModel = new Label(selectedSystem.getAadModel());
         Label aSNLabel = new Label("Серийный номер: ");
-        Label aSN = new Label(selectedSystem.getSystemModel());
+        Label aSN = new Label(selectedSystem.getAadSN());
         Label aDOMLabel = new Label("Дата производства: ");
-        Label aDOM = new Label(selectedSystem.getSystemModel());
+        Label aDOM = new Label(dateFormat.format(selectedSystem.getAadDOM()));
         Label aManufacturerNameLabel = new Label("Производитель: ");
-        Label aManufacturerName = new Label(selectedSystem.getSystemModel());
+        Label aManufacturerName = new Label(selectedSystem.getAadManufacturerName());
         Label aJumpsLabel = new Label ("Прыжков: ");
-        Label aJumps = new Label (selectedSystem.getSystemModel());
+        Label aJumps = new Label (Integer.toString(selectedSystem.getAadJumps()));
         Label aNextReglLabel = new Label ("Дата следующего регламента: ");
-        Label aNextRegl = new Label (selectedSystem.getSystemModel());
+        Label aNextRegl = new Label (dateFormat.format(selectedSystem.getAadNextRegl()));
         aadGrid.setConstraints(aadGridName, 0, 0);
         aadGrid.setConstraints(aModelLabel, 0, 1);
         aadGrid.setConstraints(aModel, 1, 1);
@@ -161,7 +168,7 @@ public class SystemDetails extends Application {
         details.setConstraints(containerGrid, 1, 1);
         details.setConstraints(aadGrid, 1, 2);
         details.getChildren().addAll(canopyGrid, reserveGrid, containerGrid, aadGrid);
-        details.setGridLinesVisible(true);
+        //details.setGridLinesVisible(true);
         details.setVgap(10);
         details.setHgap(10);
         
