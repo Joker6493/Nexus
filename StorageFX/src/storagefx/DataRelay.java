@@ -10,10 +10,11 @@ package storagefx;
  * @author dboro
  */
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import connection.OracleConn;
+import utils.OracleConn_test;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +28,11 @@ public class DataRelay {
     private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
-            OracleConn oraco = new OracleConn();
+            OracleConn_test oraco = new OracleConn_test();
+            Class oracl = Class.forName("utils.OracleConn");
+            //oracl.newInstance().
+            //OracleConn ora = (OracleConn) oracl.newInstance();
+            //Method conn = oracl.getMethod("connectDatabase");
             Connection bdcon = oraco.connectDatabase();
             Statement stmt = bdcon.createStatement();
             rs = stmt.executeQuery(Query);

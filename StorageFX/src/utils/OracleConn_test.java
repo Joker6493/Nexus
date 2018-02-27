@@ -4,7 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package connection;
+package utils;
 
 import java.sql.*;
 
@@ -12,7 +12,7 @@ import java.sql.*;
  *
  * @author dboro
  */
-public class OracleConn {
+public class OracleConn_test {
     private final String url = "jdbc:oracle:thin:@localhost:1521:XE";
     private final String login = "nexusdb";
     //private final String password = "St";

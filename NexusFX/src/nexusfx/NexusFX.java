@@ -90,17 +90,15 @@ public class NexusFX extends Application {
         connStatus.bindToTime();
         Label timeLabel = new Label();
         Button menuButton = new Button("Menu");
-        statusBar.setConstraints(menuButton, 0, 0);
-        statusBar.setConstraints(taskBar, 1, 0);
-        statusBar.setConstraints(connStatus, 2, 0);
+        statusBar.add(menuButton, 0, 0);
+        statusBar.add(taskBar, 1, 0);
+        statusBar.add(connStatus, 2, 0);
         
         ColumnConstraints columnButton = new ColumnConstraints();
         ColumnConstraints columnTask = new ColumnConstraints();
         columnTask.setPercentWidth(70);
         ColumnConstraints columnConnection = new ColumnConstraints();
         statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
-        
-        statusBar.getChildren().addAll(menuButton,taskBar,connStatus);
         
         BorderPane root = new BorderPane();
         root.setTop(MenuBarMain);
