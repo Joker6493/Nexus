@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import utils.OracleConn_test;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,20 +27,14 @@ public class DataRelay {
     private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
-
             //Call a method dynamically (Reflection)
-            /*Class params[] = {};
+            Class params[] = {};
             Object paramsObj[] = {};
             Class oracl = Class.forName("utils.OracleConn");
             Object oraClass = oracl.newInstance();
             Method oraConnMethod = oracl.getDeclaredMethod("connectDatabase", params);
-            System.out.println(oraConnMethod.invoke(oraClass, paramsObj).toString());
-            Connection conn = (Connection) oraConnMethod.invoke(oraClass, paramsObj);*/
-            
-            
-            OracleConn_test oraco = new OracleConn_test();
-            Connection bdcon = oraco.connectDatabase();
-            Statement stmt = bdcon.createStatement();
+            Connection conn = (Connection) oraConnMethod.invoke(oraClass, paramsObj);
+            Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());

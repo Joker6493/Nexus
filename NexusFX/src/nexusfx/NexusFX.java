@@ -5,7 +5,11 @@
  */
 package nexusfx;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -15,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.ConnectionCheck;
@@ -34,10 +39,27 @@ public class NexusFX extends Application {
     
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
+        BorderPane root = new BorderPane();
+        
         MenuBar MenuBarMain = new MenuBar();
         // --- Menu Меню и элементы
         Menu menuMain = new Menu("Меню");
-        MenuItem clear = new MenuItem("Clear");
+        MenuItem storage = new MenuItem("Склад");
+        storage.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
+        storage.setOnAction((ActionEvent t) -> {
+            Class params[] = {};
+            Object paramsObj[] = {};
+            try {
+                Class storageClass = classLoader.loadClass (pluginPath, "StorageFX", "StorageIndex");
+                Object storageObj = storageClass.newInstance();
+                Method storageMethod = storageClass.getDeclaredMethod("connectDatabase", params);
+                root.setCenter((StackPane) storageMethod.invoke(storageObj, paramsObj));
+            } catch (Exception e) {
+            System.out.println("Ошибка " + e.getMessage());
+            e.printStackTrace();
+        }
+        });
+        MenuItem clear = new MenuItem("Очистить");
         clear.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         clear.setOnAction((ActionEvent t) -> {
         });
@@ -46,7 +68,7 @@ public class NexusFX extends Application {
         exit.setOnAction((ActionEvent t) -> {
             System.exit(0);
         });
-        menuMain.getItems().addAll(clear, new SeparatorMenuItem(), exit);
+        menuMain.getItems().addAll(storage, new SeparatorMenuItem(), clear, new SeparatorMenuItem(), exit);
         // --- Menu Edit
         Menu menuService = new Menu("Сервис");
         // --- Menu View
@@ -100,13 +122,13 @@ public class NexusFX extends Application {
         ColumnConstraints columnConnection = new ColumnConstraints();
         statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
-        BorderPane root = new BorderPane();
+        
         root.setTop(MenuBarMain);
         root.setLeft(new Button("Left"));
         root.setRight(new Button("Right"));
         root.setBottom(statusBar);
-        root.setCenter(new Button("Center"));
-        root.setCenter(btn);
+        //root.setCenter(new Button("Center"));
+        //root.setCenter(btn);
         
         Scene scene = new Scene(root);
         
