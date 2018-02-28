@@ -28,11 +28,23 @@ public class DataRelay {
     private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
-            OracleConn_test oraco = new OracleConn_test();
             Class oracl = Class.forName("utils.OracleConn");
             //oracl.newInstance().
             //OracleConn ora = (OracleConn) oracl.newInstance();
             //Method conn = oracl.getMethod("connectDatabase");
+            
+            /*
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+
+            Class oracl = Class.forName("utils.OracleConn");
+            Object oraClass = thisClass.newInstance();
+            Method oraConnMethod = thisClass.getDeclaredMethod("connectDatabase", params);
+            System.out.println(oraConnMethod.invoke(oraClass, paramsObj).toString());
+            */
+            
+            OracleConn_test oraco = new OracleConn_test();
             Connection bdcon = oraco.connectDatabase();
             Statement stmt = bdcon.createStatement();
             rs = stmt.executeQuery(Query);
