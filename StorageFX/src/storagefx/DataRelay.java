@@ -38,6 +38,7 @@ public class DataRelay {
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
+//            e.printStackTrace();
         }
         return rs;
     }

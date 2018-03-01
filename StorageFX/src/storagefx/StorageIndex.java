@@ -17,8 +17,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javafx.event.EventHandler;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 
 /**
  *
@@ -39,7 +45,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     }
     
     public StackPane StorageIndex () throws SQLException{
-        
+        StackPane index = new StackPane();
         TableView<SkydiveSystem> indexStore = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -95,13 +101,22 @@ public class StorageIndex extends Application implements NexusPlugin {
                 System.out.println("Выбрана система "+currentSystem.getSystemCode()+"!");
                 SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem());
                 Stage detailStage = new Stage();
-                //detailStage.initOwner();
-                
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
                 detail.start(detailStage);
-                
             }
         });
-        StackPane index = new StackPane();
+        
+        ContextMenu storageContextMenu = new ContextMenu();
+        MenuItem refreshList = new MenuItem("Обновить список");
+        MenuItem editItem = new MenuItem("Обновить список");
+        MenuItem addItem = new MenuItem("Обновить список");
+        MenuItem deleteItem = new MenuItem("Обновить список");
+        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+//        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
+//            storageContextMenu.show(storageContextMenu, event.getScreenX(), event.getScreenY());
+//        });
+        
         index.getChildren().add(indexStore);
         return index;
     }

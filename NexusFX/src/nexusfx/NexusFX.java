@@ -56,7 +56,7 @@ public class NexusFX extends Application {
                 root.setCenter((StackPane) storageMethod.invoke(storageObj, paramsObj));
             } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         });
         MenuItem clear = new MenuItem("Очистить");
@@ -134,6 +134,7 @@ public class NexusFX extends Application {
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
