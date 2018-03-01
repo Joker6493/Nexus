@@ -39,15 +39,18 @@ public class PluginLoader {
                     ClassList.add(jc.getName().replace("/", ".").replace(".class", ""));
                 }
             });
+            System.out.println(ClassList);
             URL url = file.toURI().toURL(); 
             URL[] urls = new URL[] { url };
             for (String classes : ClassList) {
                 ClassLoader cl = new URLClassLoader(urls);
                 if (!classes.equals(className)) {
                     cl.loadClass(classes);
+                    System.out.println("Загружен класс "+classes);
                     //загружаем все классы из jar-ки
                 }else{
                     clazz = cl.loadClass(classes);
+                    System.out.println("Класс загружен");
                     //загружаем и получаем нужный нам класс
                 }
             }

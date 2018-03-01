@@ -50,9 +50,9 @@ public class NexusFX extends Application {
             Class params[] = {};
             Object paramsObj[] = {};
             try {
-                Class storageClass = classLoader.loadClass (pluginPath, "StorageFX", "StorageIndex");
+                Class storageClass = classLoader.loadClass (pluginPath, "StorageFX", "storagefx.StorageIndex");
                 Object storageObj = storageClass.newInstance();
-                Method storageMethod = storageClass.getDeclaredMethod("connectDatabase", params);
+                Method storageMethod = storageClass.getDeclaredMethod("StorageIndex", params);
                 root.setCenter((StackPane) storageMethod.invoke(storageObj, paramsObj));
             } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
