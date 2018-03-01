@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="NexusFX.jar" size="13001" download="eager" />
+    <jar href="NexusFX.jar" size="12859" download="eager" />
     <jar href="lib\NexusPlugin-API.jar" size="676" download="eager" />
     <jar href="lib\ojdbc7.jar" size="3698857" download="eager" />
     <jar href="lib\ojdbc7_g.jar" size="5875485" download="eager" />
