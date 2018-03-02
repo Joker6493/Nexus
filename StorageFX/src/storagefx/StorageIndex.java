@@ -24,6 +24,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 
 /**
@@ -36,7 +37,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     @Override
     public void start(Stage primaryStage) throws SQLException {
         
-        StackPane index = StorageIndex();
+        BorderPane index = StorageIndex();
         Scene scene = new Scene(index);
         
         primaryStage.setTitle("Hello World!");
@@ -44,8 +45,8 @@ public class StorageIndex extends Application implements NexusPlugin {
         primaryStage.show();
     }
     
-    public StackPane StorageIndex () throws SQLException{
-        StackPane index = new StackPane();
+    public BorderPane StorageIndex () throws SQLException{
+        BorderPane index = new BorderPane();
         TableView<SkydiveSystem> indexStore = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -113,11 +114,13 @@ public class StorageIndex extends Application implements NexusPlugin {
         MenuItem addItem = new MenuItem("Обновить список");
         MenuItem deleteItem = new MenuItem("Обновить список");
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
-//        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
-//            storageContextMenu.show(storageContextMenu, event.getScreenX(), event.getScreenY());
-//        });
+        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
+            storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
+        });
         
-        index.getChildren().add(indexStore);
+        
+
+        index.setCenter(indexStore);
         return index;
     }
     
