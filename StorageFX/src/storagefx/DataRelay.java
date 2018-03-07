@@ -37,7 +37,7 @@ public class DataRelay {
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
-            System.out.println("Ошибка " + e.getMessage());
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
         return rs;

@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -110,9 +111,29 @@ public class StorageIndex extends Application implements NexusPlugin {
         
         ContextMenu storageContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
-        MenuItem editItem = new MenuItem("Обновить список");
-        MenuItem addItem = new MenuItem("Обновить список");
-        MenuItem deleteItem = new MenuItem("Обновить список");
+        refreshList.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            System.out.println("Идет обновление списка");
+            //Some code here
+            System.out.println("Обновление списка завершено");
+        });
+        MenuItem editItem = new MenuItem("Редактировать");
+        editItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
+        });
+        MenuItem addItem = new MenuItem("Добавить");
+        addItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            System.out.println("Добавить систему?");
+        });
+        MenuItem deleteItem = new MenuItem("Удалить");
+        deleteItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+        });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
             storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
