@@ -7,7 +7,6 @@ package storagefx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import api.NexusPlugin;
 import javafx.collections.ObservableList;
@@ -18,7 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -139,9 +138,24 @@ public class StorageIndex extends Application implements NexusPlugin {
             storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
         });
         
-        
-
         index.setCenter(indexStore);
+        
+        Button refreshBtn = new Button();
+        refreshBtn.setText("Обновить");
+        refreshBtn.setOnAction((ActionEvent event) -> {
+            //Refreshing indexList - in process
+            System.out.println("Идет обновление списка");
+            //Some code here
+            System.out.println("Обновление списка завершено");
+        });
+        
+        Button closeBtn = new Button();
+        closeBtn.setText("Закрыть");
+        closeBtn.setOnAction((ActionEvent event) -> {
+            //Some code here
+            System.out.println("Закрыть?");
+        });
+        
         return index;
     }
     

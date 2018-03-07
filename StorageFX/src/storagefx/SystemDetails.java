@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  * @author dboro
  */
 public class SystemDetails extends Application {
-    private SkydiveSystem selectedSystem;
+    private final SkydiveSystem selectedSystem;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     SystemDetails (SkydiveSystem selectedSystem){
         this.selectedSystem = selectedSystem;
