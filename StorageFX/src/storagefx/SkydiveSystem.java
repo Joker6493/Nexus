@@ -13,7 +13,7 @@ import java.time.LocalDate;
  * @author d.borodin
  */
 public class SkydiveSystem {
-    //Система
+    //Container
     private int systemID;
     private String systemCode;
     private String systemModel;
@@ -21,7 +21,7 @@ public class SkydiveSystem {
     private LocalDate systemDOM;
     private int systemManufacturerID;
     private String systemManufacturerName;
-    //ОП
+    //Canopy
     private int canopyID;
     private String canopyModel;
     private int canopySize;
@@ -30,7 +30,7 @@ public class SkydiveSystem {
     private int canopyJumps;
     private int canopyManufacturerID;
     private String canopyManufacturerName;
-    //ПЗ
+    //Reserve
     private int reserveID;
     private String reserveModel;
     private int reserveSize;

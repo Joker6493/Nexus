@@ -42,7 +42,7 @@ public class NexusFX extends Application {
         BorderPane root = new BorderPane();
         
         MenuBar MenuBarMain = new MenuBar();
-        // --- Menu Меню и элементы
+        // --- Menu and elements
         Menu menuMain = new Menu("Меню");
         MenuItem storage = new MenuItem("Склад");
         storage.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
@@ -103,10 +103,10 @@ public class NexusFX extends Application {
         btn.setOnAction((ActionEvent event) -> {
             System.out.println("Hello World!");
         });
-        //Панель задач
+        //Task Bar
         HBox taskBar = new HBox();
         taskBar.getChildren().addAll(new Button("Scene1"),new Button("Scene2"),new Button("Scene3"));
-        //Строка состояния
+        //Status Bar
         GridPane statusBar = new GridPane();
         ConnectionCheck connStatus = new ConnectionCheck();
         connStatus.bindToTime();

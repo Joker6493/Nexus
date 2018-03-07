@@ -15,14 +15,14 @@ import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
 /**
- * Модуль загрузки плагинов
+ * Plugin Loader module
  * 
  * 
  * @author d.borodin
  */
 
 public class PluginLoader {
-    //Массивы файлов, JAR-файлов и классов
+    //Array of files and classes
     ArrayList<File> jarFileList = new ArrayList();
     ArrayList<String> ClassList = new ArrayList();
         
@@ -30,7 +30,7 @@ public class PluginLoader {
         Class<?> clazz = null;
         File file = new File (path.concat("/").concat(fileName).concat(".jar"));
         if (!file.exists()) {
-            //если файл не найден
+            //if file not exist
             System.out.println("Файл не найден");
         } else {
             JarFile jFile = new JarFile(file);
@@ -47,11 +47,11 @@ public class PluginLoader {
                 if (!classes.equals(className)) {
                     cl.loadClass(classes);
                     //System.out.println("Загружен класс "+classes);
-                    //загружаем все классы из jar-ки
+                    //Loading all classes from file
                 }else{
                     clazz = cl.loadClass(classes);
                     //System.out.println("Класс загружен");
-                    //загружаем и получаем нужный нам класс
+                    //Loading and get required class
                 }
             }
         }

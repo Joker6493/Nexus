@@ -13,7 +13,7 @@ import java.io.FileFilter;
  * @author d.borodin
  */
 public class JarFileFilter implements FileFilter {
-    // Только принимает 'pathname' как файл и имеет 'расширение' (extension) это txt.
+    // Accept 'pathname' as Fie and 'extension' .jar.
     @Override
     public boolean accept(File pathname) {
         if (!pathname.isFile()) {
