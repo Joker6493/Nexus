@@ -18,13 +18,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 
 /**
@@ -47,6 +51,7 @@ public class StorageIndex extends Application implements NexusPlugin {
     
     public BorderPane StorageIndex () throws SQLException{
         BorderPane index = new BorderPane();
+        DataRelay dr = new DataRelay();
         TableView<SkydiveSystem> indexStore = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -91,7 +96,6 @@ public class StorageIndex extends Application implements NexusPlugin {
             };
         });
         //Adding data and create scene
-        DataRelay dr = new DataRelay();
         ObservableList<SkydiveSystem> indexList = dr.getSystemsList();
         indexStore.setItems(indexList);
         indexStore.setOnMouseClicked((MouseEvent click) -> {
@@ -148,6 +152,72 @@ public class StorageIndex extends Application implements NexusPlugin {
             //Some code here
             System.out.println("Обновление списка завершено");
         });
+        
+        ComboBox <Stock> stockBox = new ComboBox<>();
+        ObservableList<Stock> stockList = dr.getStockList();
+        stockBox.setItems(stockList);
+        stockBox.setCellFactory(p -> new ListCell <Stock> () {
+            @Override
+            protected void updateItem(Stock item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getStockName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        stockBox.setButtonCell(new ListCell <Stock> () {
+            @Override
+            protected void updateItem(Stock item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getStockName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        stockBox.getSelectionModel().select(1);
+        stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            //TODO code
+            System.out.println("Склад изменился!");
+        });
+        
+        ComboBox <ElementStatus> statusBox = new ComboBox<>();
+        ObservableList<ElementStatus> statusList = dr.getStatusList();
+        statusBox.setItems(statusList);
+        statusBox.getSelectionModel().select(0);
+        statusBox.setCellFactory(p -> new ListCell <ElementStatus> () {
+            @Override
+            protected void updateItem(ElementStatus item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getStatusName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        statusBox.setButtonCell(new ListCell <ElementStatus> () {
+            @Override
+            protected void updateItem(ElementStatus item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getStatusName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            //TODO code
+            System.out.println("Статус изменился!");
+        });
+        
+        HBox storageBar = new HBox();
+        storageBar.getChildren().addAll(stockBox, new Label("Склад"), refreshBtn, statusBox, new Label("Статус системы"));
+        index.setTop(storageBar);
         
         Button closeBtn = new Button();
         closeBtn.setText("Закрыть");

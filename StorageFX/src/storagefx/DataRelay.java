@@ -21,8 +21,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DataRelay {
-    
-    private ResultSet getData (String Query){
+    private int status = 0;
+    private int stock = 0;
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public int getStock() {
+        return stock;
+    }
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+        private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
             //Call a method dynamically (Reflection)
@@ -40,7 +54,6 @@ public class DataRelay {
         }
         return rs;
     }
-    
     private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
         rs.close();
         stmt.close();
@@ -57,7 +70,8 @@ public class DataRelay {
                              "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.disable = 0 " +
                              "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.disable = 0 " +
                              "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.disable = 0 " +
-                             "where si.disable = 0";
+                             "inner join stock_info sti on si.stockid = sti.stockid and sti.disable = 0 " +
+                             "where si.disable = " + getStatus();
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
             //Container
@@ -107,6 +121,33 @@ public class DataRelay {
         Connection bdcon = stmt.getConnection();
         closeDB(bdcon, stmt, rs);
         ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
+        return list;
+    }
+    
+    protected ObservableList<Stock> getStockList() throws SQLException {
+        ArrayList<Stock> stockList = new ArrayList<>();
+        String selectQuery = "select stockid, stock_name " +
+                             "from stock_info " +
+                             "where disable = " +  + getStatus();
+        ResultSet rs = getData(selectQuery);
+        while (rs.next()) {
+            int stockID = rs.getInt("stockid");
+            String stockName = rs.getString("stock_name");
+            stockList.add(new Stock(stockID, stockName));
+        }
+        Statement stmt = rs.getStatement();
+        Connection bdcon = stmt.getConnection();
+        closeDB(bdcon, stmt, rs);
+        ObservableList<Stock> list = FXCollections.observableList(stockList);
+        return list;
+    }
+    protected ObservableList<ElementStatus> getStatusList() throws SQLException {
+        ArrayList<ElementStatus> statusList = new ArrayList<>();
+        ElementStatus active = new ElementStatus(0,"Активная");
+        statusList.add(active);
+        ElementStatus disable = new ElementStatus(1,"Удаленная");
+        statusList.add(disable);
+        ObservableList<ElementStatus> list = FXCollections.observableList(statusList);
         return list;
     }
 }
