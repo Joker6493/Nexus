@@ -21,6 +21,7 @@ public class SkydiveSystem {
     private LocalDate systemDOM;
     private int systemManufacturerID;
     private String systemManufacturerName;
+    private int stockID;
     //Canopy
     private int canopyID;
     private String canopyModel;
@@ -52,7 +53,7 @@ public class SkydiveSystem {
     private String aadManufacturerName;
         
     //Full
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
+    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
     this.systemID = systemID;
     this.systemCode = systemCode;
     this.systemModel = systemModel;
@@ -60,6 +61,7 @@ public class SkydiveSystem {
     this.systemDOM = systemDOM;
     this.systemManufacturerID = systemManufacturerID;
     this.systemManufacturerName = systemManufacturerName;
+    this.stockID = stockID;
     //Canopy
     this.canopyID = canopyID;
     this.canopyModel = canopyModel;
@@ -112,6 +114,9 @@ public class SkydiveSystem {
     }
     public String getSystemManufacturerName (){
         return systemManufacturerName;
+    }
+    public int getStockID (){
+        return stockID;
     }
     public int getCanopyID (){
         return canopyID;
@@ -216,10 +221,13 @@ public class SkydiveSystem {
     public void setAadID (int aadID){
         this.aadID = aadID;
     }
+    public void setStockID (int stockID){
+        this.stockID = stockID;
+    }
     public void setSystemManufacturerID (int systemManufacturerID){
         this.systemManufacturerID = systemManufacturerID;
     }
-    public void setSystemManufacturerID (String systemManufacturerName){
+    public void setSystemManufacturerName (String systemManufacturerName){
         this.systemManufacturerName = systemManufacturerName;
     }
     public void setCanopyModel (String canopyModel){
@@ -240,7 +248,7 @@ public class SkydiveSystem {
     public void setCanopyManufacturerID (int canopyManufacturerID){
         this.canopyManufacturerID = canopyManufacturerID;
     }
-    public void setCanopyManufacturerID (String canopyManufacturerName){
+    public void setCanopyManufacturerName (String canopyManufacturerName){
         this.canopyManufacturerName = canopyManufacturerName;
     }
     public void setReserveModel (String reserveModel){
@@ -264,7 +272,7 @@ public class SkydiveSystem {
     public void setReserveManufacturerID (int reserveManufacturerID){
         this.reserveManufacturerID = reserveManufacturerID;
     }
-    public void setReserveManufacturerID (String reserveManufacturerName){
+    public void setReserveManufacturerName (String reserveManufacturerName){
         this.reserveManufacturerName = reserveManufacturerName;
     }
     public void setAadModel (String aadModel){
@@ -288,7 +296,7 @@ public class SkydiveSystem {
     public void setAadManufacturerID (int aadManufacturerID){
         this.aadManufacturerID = aadManufacturerID;
     }
-    public void setAadManufacturerID (String aadManufacturerName){
+    public void setAadManufacturerName (String aadManufacturerName){
         this.aadManufacturerName = aadManufacturerName;
     }
 }

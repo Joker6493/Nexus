@@ -15,14 +15,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DataRelay {
-    
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     
     private ResultSet getData (String Query){
         ResultSet rs = null;
@@ -51,7 +49,7 @@ public class DataRelay {
     
     protected ObservableList<SkydiveSystem> getSystemsList() throws SQLException {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
-        String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid), " +
+        String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid), si.stockid, " +
                              "ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid), " +
                              "ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid), " +
                              "ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_fired, ai.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) " +
@@ -62,7 +60,48 @@ public class DataRelay {
                              "where si.disable = 0";
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
-            indexList.add(new SkydiveSystem(rs.getInt("systemid"), rs.getString("system_code"), rs.getString("system_model"), rs.getString("system_sn"), rs.getDate("system_dom").toLocalDate(), rs.getInt(6), rs.getString(7), rs.getInt("canopyid"), rs.getString("canopy_model"), rs.getInt("canopy_size"), rs.getString("canopy_sn"), rs.getDate("canopy_dom").toLocalDate(), rs.getInt("canopy_jumps"), rs.getInt(14), rs.getString(15), rs.getInt("reserveid"), rs.getString("reserve_model"), rs.getInt("reserve_size"), rs.getString("reserve_sn"), rs.getDate("reserve_dom").toLocalDate(), rs.getInt("reserve_jumps"), rs.getDate("reserve_packdate").toLocalDate(),  rs.getInt(23), rs.getString(24), rs.getInt("aadid"), rs.getString("aad_model"), rs.getString("aad_sn"), rs.getDate("aad_dom").toLocalDate(), rs.getInt("aad_jumps"), rs.getDate("aad_nextregl").toLocalDate(), rs.getBoolean("aad_fired"), rs.getInt(32), rs.getString(33)));
+            //Container
+            int systemID = rs.getInt("systemid");
+            String systemCode = rs.getString("system_code");
+            String systemModel = rs.getString("system_model");
+            String systemSN = rs.getString("system_sn");
+            LocalDate systemDOM = rs.getDate("system_dom").toLocalDate();
+            int systemManufacturerID = rs.getInt(6);
+            String systemManufacturerName = rs.getString(7);
+            int stockID = rs.getInt("stockid");
+            //Canopy
+            int canopyID = rs.getInt("canopyid");
+            String canopyModel = rs.getString("canopy_model");
+            int canopySize = rs.getInt("canopy_size");
+            String canopySN = rs.getString("canopy_sn");
+            LocalDate canopyDOM = rs.getDate("canopy_dom").toLocalDate();
+            int canopyJumps = rs.getInt("canopy_jumps");
+            int canopyManufacturerID = rs.getInt(14);
+            String canopyManufacturerName = rs.getString(15);
+            //Reserve
+            int reserveID = rs.getInt("reserveid");
+            String reserveModel = rs.getString("reserve_model");
+            int reserveSize = rs.getInt("reserve_size");
+            String reserveSN = rs.getString("reserve_sn");
+            LocalDate reserveDOM = rs.getDate("reserve_dom").toLocalDate();
+            int reserveJumps = rs.getInt("reserve_jumps");
+            LocalDate reservePackDate = rs.getDate("reserve_packdate").toLocalDate();
+            int reserveManufacturerID = rs.getInt(24);
+            String reserveManufacturerName = rs.getString(25);
+            //AAD
+            int aadID = rs.getInt("aadid");
+            String aadModel = rs.getString("aad_model");
+            String aadSN = rs.getString("aad_sn");
+            LocalDate aadDOM = rs.getDate("aad_dom").toLocalDate();
+            int aadJumps = rs.getInt("aad_jumps");
+            LocalDate aadNextRegl = rs.getDate("aad_nextregl").toLocalDate();
+            boolean aadFired = false;
+            if (rs.getString("aad_fired").equalsIgnoreCase("Y")){
+                aadFired = true;
+            }
+            int aadManufacturerID = rs.getInt(33);
+            String aadManufacturerName = rs.getString(34);
+            indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadFired, aadManufacturerID, aadManufacturerName));
         }
         Statement stmt = rs.getStatement();
         Connection bdcon = stmt.getConnection();

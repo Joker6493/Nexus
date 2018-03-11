@@ -11,4 +11,22 @@ package storagefx;
  */
 public class Stock {
     //Class for keeping info about stock
+    private int stockID;
+    private String stockName;
+    public Stock(int stockID, String stockName) {
+        this.stockID = stockID;
+        this.stockName = stockName;
+    }
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public String getStockName() {
+        return stockName;
+    }
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
+    }
 }
