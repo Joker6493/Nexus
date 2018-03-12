@@ -181,7 +181,8 @@ public class StorageIndex extends Application implements NexusPlugin {
         stockBox.getSelectionModel().select(1);
         stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            System.out.println("Склад изменился!");
+            dr.setStock(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
         ComboBox <ElementStatus> statusBox = new ComboBox<>();
@@ -212,7 +213,8 @@ public class StorageIndex extends Application implements NexusPlugin {
         });
         statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            System.out.println("Статус изменился!");
+            dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
+            System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
         
         HBox storageBar = new HBox();

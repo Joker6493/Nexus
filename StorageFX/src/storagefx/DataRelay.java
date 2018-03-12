@@ -22,7 +22,7 @@ import javafx.collections.ObservableList;
 
 public class DataRelay {
     private int status = 0;
-    private int stock = 0;
+    private int stock = 2;
     public int getStatus() {
         return status;
     }
