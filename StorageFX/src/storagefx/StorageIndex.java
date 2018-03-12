@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -150,6 +151,7 @@ public class StorageIndex extends Application implements NexusPlugin {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             //Some code here
+            //indexStore.refresh();
             System.out.println("Обновление списка завершено");
         });
         
@@ -218,7 +220,8 @@ public class StorageIndex extends Application implements NexusPlugin {
         });
         
         HBox storageBar = new HBox();
-        storageBar.getChildren().addAll(stockBox, new Label("Склад"), refreshBtn, statusBox, new Label("Статус системы"));
+        storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
+        storageBar.setPadding(new Insets(10));
         index.setTop(storageBar);
         
         Button closeBtn = new Button();
