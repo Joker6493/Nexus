@@ -90,8 +90,8 @@ public class DataRelay {
             String canopySN = rs.getString("canopy_sn");
             LocalDate canopyDOM = rs.getDate("canopy_dom").toLocalDate();
             int canopyJumps = rs.getInt("canopy_jumps");
-            int canopyManufacturerID = rs.getInt(14);
-            String canopyManufacturerName = rs.getString(15);
+            int canopyManufacturerID = rs.getInt(15);
+            String canopyManufacturerName = rs.getString(16);
             //Reserve
             int reserveID = rs.getInt("reserveid");
             String reserveModel = rs.getString("reserve_model");
