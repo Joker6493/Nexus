@@ -150,4 +150,52 @@ public class DataRelay {
         ObservableList<ElementStatus> list = FXCollections.observableList(statusList);
         return list;
     }
+    
+    protected void addSkydiveSystem(SkydiveSystem ss) {
+        //some code here in the future
+    }
+    
+    protected void addCanopy(Canopy c) {
+        //some code here in the future
+    }
+    
+    protected void addReserve(Reserve r) {
+        //some code here in the future
+    }
+    
+    protected void addAAD(AAD aad) {
+        //some code here in the future
+    }
+    
+    protected void editSkydiveSystem(SkydiveSystem ss) {
+        //some code here in the future
+    }
+    
+    protected void editCanopy(Canopy c) {
+        //some code here in the future
+    }
+    
+    protected void editReserve(Reserve r) {
+        //some code here in the future
+    }
+    
+    protected void editAAD(AAD aad) {
+        //some code here in the future
+    }
+    
+    protected void deleteSkydiveSystem(SkydiveSystem ss) {
+        //some code here in the future
+    }
+    
+    protected void deleteCanopy(Canopy c) {
+        //some code here in the future
+    }
+    
+    protected void deleteReserve(Reserve r) {
+        //some code here in the future
+    }
+    
+    protected void deleteAAD(AAD aad) {
+        //some code here in the future
+    }
 }
