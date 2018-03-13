@@ -7,6 +7,7 @@ package storagefx;
 
 import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -36,6 +38,7 @@ public class SystemDetails extends Application {
     @Override
     public void start(Stage detailStage) {
         //SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName)
+        GridPane details = new GridPane();
         //Container
         GridPane containerGrid = new GridPane();
         //String systemModel, String systemSN, String systemDOM, String systemManufacturerName
@@ -62,6 +65,7 @@ public class SystemDetails extends Application {
         containerGrid.add(sManufacturerNameLabel, 0, 4);
         containerGrid.add(sManufacturerName, 1, 4);
         containerGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        containerGrid.setPadding(new Insets(20));
         
         //Canopy
         GridPane canopyGrid = new GridPane();
@@ -72,6 +76,11 @@ public class SystemDetails extends Application {
         cModel.setEditable(editStatus);
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField cSize = new TextField (Integer.toString(selectedSystem.getCanopySize()));
+        cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
+                cSize.setText(oldValue);
+            }
+        });
         cSize.setEditable(editStatus);
         Label cSNLabel = new Label("Серийный номер: ");
         TextField cSN = new TextField(selectedSystem.getCanopySN());
@@ -99,6 +108,7 @@ public class SystemDetails extends Application {
         canopyGrid.add(cJumpsLabel, 0, 6);
         canopyGrid.add(cJumps, 1, 6);
         canopyGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        canopyGrid.setPadding(new Insets(20));
         
         //Reserve
         GridPane reserveGrid = new GridPane();
@@ -141,6 +151,7 @@ public class SystemDetails extends Application {
         reserveGrid.add(rPackDateLabel, 0, 7);
         reserveGrid.add(rPackDate, 1, 7);
         reserveGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        reserveGrid.setPadding(new Insets(20));
         
         //AAD
         GridPane aadGrid = new GridPane();
@@ -178,19 +189,86 @@ public class SystemDetails extends Application {
         aadGrid.add(aNextReglLabel, 0, 6);
         aadGrid.add(aNextRegl, 1, 6);
         aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        aadGrid.setPadding(new Insets(20));
         
-        
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction((ActionEvent event) -> {
-            System.out.println("Hello World!");
-            StorageIndex.launch();
+        Button editBtn = new Button("Редактировать");
+        Button cancelBtn = new Button("Отменить");
+        cancelBtn.setVisible(false);
+        cancelBtn.setOnAction((ActionEvent event) -> {
+            //some code here, rollback any changes
         });
-        GridPane details = new GridPane();
+        editBtn.setOnAction((ActionEvent event) -> {
+            //Allow editing, commiting next
+            if (editStatus==false){
+                editStatus = true;
+                editBtn.setText("Сохранить");
+                cancelBtn.setVisible(true);
+                sModel.setEditable(editStatus);
+                sSN.setEditable(editStatus);
+                sDOM.setEditable(editStatus);
+                sManufacturerName.setEditable(editStatus);
+                cModel.setEditable(editStatus);
+                cSize.setEditable(editStatus);
+                cSN.setEditable(editStatus);
+                cDOM.setEditable(editStatus);
+                cManufacturerName.setEditable(editStatus);
+                cJumps.setEditable(editStatus);
+                rModel.setEditable(editStatus);
+                rSize.setEditable(editStatus);
+                rSN.setEditable(editStatus);
+                rDOM.setEditable(editStatus);
+                rManufacturerName.setEditable(editStatus);
+                rJumps.setEditable(editStatus);
+                rPackDate.setEditable(editStatus);
+                aModel.setEditable(editStatus);
+                aSN.setEditable(editStatus);
+                aDOM.setEditable(editStatus);
+                aManufacturerName.setEditable(editStatus);
+                aJumps.setEditable(editStatus);
+                aNextRegl.setEditable(editStatus);
+            }else{
+                editStatus = false;
+                sModel.setEditable(editStatus);
+                sSN.setEditable(editStatus);
+                sDOM.setEditable(editStatus);
+                sManufacturerName.setEditable(editStatus);
+                cModel.setEditable(editStatus);
+                cSize.setEditable(editStatus);
+                cSN.setEditable(editStatus);
+                cDOM.setEditable(editStatus);
+                cManufacturerName.setEditable(editStatus);
+                cJumps.setEditable(editStatus);
+                rModel.setEditable(editStatus);
+                rSize.setEditable(editStatus);
+                rSN.setEditable(editStatus);
+                rDOM.setEditable(editStatus);
+                rManufacturerName.setEditable(editStatus);
+                rJumps.setEditable(editStatus);
+                rPackDate.setEditable(editStatus);
+                aModel.setEditable(editStatus);
+                aSN.setEditable(editStatus);
+                aDOM.setEditable(editStatus);
+                aManufacturerName.setEditable(editStatus);
+                aJumps.setEditable(editStatus);
+                aNextRegl.setEditable(editStatus);
+                editBtn.setText("Редактировать");
+                cancelBtn.setVisible(false);
+            }             
+        });
+        Button closeBtn = new Button("Закрыть");
+        closeBtn.setOnAction((ActionEvent event) -> {
+            //some code here, if there are some changes, ask for save them, then close window, if not - close window
+        });
+        
+        HBox buttonPane = new HBox();
+        buttonPane.getChildren().addAll(editBtn, cancelBtn);
+        
         details.add(canopyGrid, 0, 1);
         details.add(reserveGrid, 0, 2);
         details.add(containerGrid, 1, 1);
         details.add(aadGrid, 1, 2);
+        details.add(buttonPane, 0, 3);
+        details.add(closeBtn, 1, 3);
         details.setVgap(5);
         details.setHgap(5);
         
@@ -198,7 +276,10 @@ public class SystemDetails extends Application {
         detailStage.setTitle("Система "+selectedSystem.getSystemCode());
         detailStage.setScene(scene);
         detailStage.show(); 
+
+        
     }
+   
     /**
      * @param args the command line arguments
      */
