@@ -105,7 +105,7 @@ public class StorageIndex extends Application implements NexusPlugin {
                 SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбрана система "+currentSystem.getSystemCode()+"!");
-                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem());
+                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), false);
                 Stage detailStage = new Stage();
                 detailStage.initModality(Modality.WINDOW_MODAL);
                 detailStage.initOwner(index.getScene().getWindow());
@@ -126,8 +126,7 @@ public class StorageIndex extends Application implements NexusPlugin {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
-            SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem());
-            detail.setEditStatus(true);
+            SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

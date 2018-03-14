@@ -31,23 +31,20 @@ import javafx.stage.Stage;
  */
 public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
-    private boolean editStatus = false;
+    private boolean editStatus;
     private String stageTitle;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    SystemDetails (SkydiveSystem selectedSystem){
+    SystemDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
+        this.editStatus = editStatus;
     }
     
     SystemDetails (){
         this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), false, 0, "");
         this.stageTitle = "Добавление новой системы";
     }
-    
-    public void setEditStatus(boolean editStatus) {
-        this.editStatus = editStatus;
-    }
-    
+        
     @Override
     public void start(Stage detailStage) {
         //SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName)
@@ -206,7 +203,6 @@ public class SystemDetails extends Application {
         
         Button editBtn = new Button("Редактировать");
         Button cancelBtn = new Button("Отменить");
-        cancelBtn.setVisible(false);
         cancelBtn.setOnAction((ActionEvent event) -> {
             //some code here, rollback any changes
         });
@@ -273,13 +269,16 @@ public class SystemDetails extends Application {
             //some code here, if there are some changes, ask for save them, then close window, if not - close window
         });
         
+        HBox buttonPane = new HBox();
+        buttonPane.getChildren().addAll(editBtn, cancelBtn);
+        
         if (editStatus = true){
             editBtn.setText("Сохранить");
             cancelBtn.setVisible(true);
+        }else{
+            cancelBtn.setVisible(false);
+            editBtn.setText("Редактировать");
         }
-        
-        HBox buttonPane = new HBox();
-        buttonPane.getChildren().addAll(editBtn, cancelBtn);
         
         details.add(canopyGrid, 0, 1);
         details.add(reserveGrid, 0, 2);
