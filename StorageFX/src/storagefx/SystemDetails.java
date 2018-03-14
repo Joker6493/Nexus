@@ -5,6 +5,7 @@
  */
 package storagefx;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -31,10 +32,22 @@ import javafx.stage.Stage;
 public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
     private boolean editStatus = false;
+    private String stageTitle;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     SystemDetails (SkydiveSystem selectedSystem){
         this.selectedSystem = selectedSystem;
+        this.stageTitle = "Система "+selectedSystem.getSystemCode();
     }
+    
+    SystemDetails (){
+        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), false, 0, "");
+        this.stageTitle = "Добавление новой системы";
+    }
+    
+    public void setEditStatus(boolean editStatus) {
+        this.editStatus = editStatus;
+    }
+    
     @Override
     public void start(Stage detailStage) {
         //SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName)
@@ -260,6 +273,11 @@ public class SystemDetails extends Application {
             //some code here, if there are some changes, ask for save them, then close window, if not - close window
         });
         
+        if (editStatus = true){
+            editBtn.setText("Сохранить");
+            cancelBtn.setVisible(true);
+        }
+        
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(editBtn, cancelBtn);
         
@@ -273,7 +291,7 @@ public class SystemDetails extends Application {
         details.setHgap(5);
         
         Scene scene = new Scene(details);
-        detailStage.setTitle("Система "+selectedSystem.getSystemCode());
+        detailStage.setTitle(stageTitle);
         detailStage.setScene(scene);
         detailStage.show(); 
 

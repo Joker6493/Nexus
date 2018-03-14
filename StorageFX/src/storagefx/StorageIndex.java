@@ -126,11 +126,22 @@ public class StorageIndex extends Application implements NexusPlugin {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
+            SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem());
+            detail.setEditStatus(true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить систему?");
+            SystemDetails detail = new SystemDetails();
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
