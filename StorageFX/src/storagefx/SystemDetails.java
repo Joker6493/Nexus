@@ -77,7 +77,7 @@ public class SystemDetails extends Application {
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField cSize = new TextField (Integer.toString(selectedSystem.getCanopySize()));
         cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
+            if (!newValue.matches("\\d{0,4}")) {
                 cSize.setText(oldValue);
             }
         });
