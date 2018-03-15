@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -201,17 +202,20 @@ public class SystemDetails extends Application {
         aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
         aadGrid.setPadding(new Insets(20));
         
-        Button editBtn = new Button("Редактировать");
+        Button saveBtn = new Button("Сохранить");
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setOnAction((ActionEvent event) -> {
             //some code here, rollback any changes
         });
+        saveBtn.setOnAction((ActionEvent event) -> {
+            //some code here, rollback any changes
+        });
+        ToggleButton editBtn = new ToggleButton ("Редактировать");
+        editBtn.setSelected(editStatus);
         editBtn.setOnAction((ActionEvent event) -> {
             //Allow editing, commiting next
             if (editStatus==false){
                 editStatus = true;
-                editBtn.setText("Сохранить");
-                cancelBtn.setVisible(true);
                 sModel.setEditable(editStatus);
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
@@ -260,8 +264,6 @@ public class SystemDetails extends Application {
                 aManufacturerName.setEditable(editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
-                editBtn.setText("Редактировать");
-                cancelBtn.setVisible(false);
             }             
         });
         Button closeBtn = new Button("Закрыть");
@@ -270,16 +272,9 @@ public class SystemDetails extends Application {
         });
         
         HBox buttonPane = new HBox();
-        buttonPane.getChildren().addAll(editBtn, cancelBtn);
+        buttonPane.getChildren().addAll(saveBtn, cancelBtn);
         
-        if (editStatus = true){
-            editBtn.setText("Сохранить");
-            cancelBtn.setVisible(true);
-        }else{
-            cancelBtn.setVisible(false);
-            editBtn.setText("Редактировать");
-        }
-        
+        details.add(editBtn, 1, 0);
         details.add(canopyGrid, 0, 1);
         details.add(reserveGrid, 0, 2);
         details.add(containerGrid, 1, 1);
