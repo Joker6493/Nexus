@@ -48,12 +48,12 @@ public class SkydiveSystem {
     private LocalDate aadDOM;
     private int aadJumps;
     private LocalDate aadNextRegl;
-    private boolean aadFired;
+    private int aadFired;
     private int aadManufacturerID;
     private String aadManufacturerName;
         
     //Full
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName){
+    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadFired, int aadManufacturerID, String aadManufacturerName){
     this.systemID = systemID;
     this.systemCode = systemCode;
     this.systemModel = systemModel;
@@ -187,7 +187,7 @@ public class SkydiveSystem {
     public LocalDate getAadNextRegl () {
         return aadNextRegl;
     }
-    public boolean getAadFired (){
+    public int getAadFired (){
         return aadFired;
     }
     public int getAadManufacturerID (){
@@ -290,7 +290,7 @@ public class SkydiveSystem {
     public void setAadNextRegl (LocalDate aadNextRegl){
         this.aadNextRegl = aadNextRegl;
     }
-    public void setAadFired (boolean aadFired){
+    public void setAadFired (int aadFired){
         this.aadFired = aadFired;
     }
     public void setAadManufacturerID (int aadManufacturerID){

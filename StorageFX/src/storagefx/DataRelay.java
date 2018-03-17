@@ -109,10 +109,7 @@ public class DataRelay {
             LocalDate aadDOM = rs.getDate("aad_dom").toLocalDate();
             int aadJumps = rs.getInt("aad_jumps");
             LocalDate aadNextRegl = rs.getDate("aad_nextregl").toLocalDate();
-            boolean aadFired = false;
-            if (rs.getString("aad_fired").equalsIgnoreCase("Y")){
-                aadFired = true;
-            }
+            int aadFired = rs.getInt("aad_fired");
             int aadManufacturerID = rs.getInt(33);
             String aadManufacturerName = rs.getString(34);
             indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadFired, aadManufacturerID, aadManufacturerName));

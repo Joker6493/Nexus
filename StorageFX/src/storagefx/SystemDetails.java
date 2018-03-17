@@ -42,8 +42,9 @@ public class SystemDetails extends Application {
     }
     
     SystemDetails (){
-        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), false, 0, "");
+        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
         this.stageTitle = "Добавление новой системы";
+        this.editStatus = true;
     }
         
     @Override
@@ -76,7 +77,7 @@ public class SystemDetails extends Application {
         containerGrid.add(sManufacturerNameLabel, 0, 4);
         containerGrid.add(sManufacturerName, 1, 4);
         containerGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
-        containerGrid.setPadding(new Insets(20));
+        containerGrid.setPadding(new Insets(5));
         
         //Canopy
         GridPane canopyGrid = new GridPane();
@@ -119,7 +120,7 @@ public class SystemDetails extends Application {
         canopyGrid.add(cJumpsLabel, 0, 6);
         canopyGrid.add(cJumps, 1, 6);
         canopyGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
-        canopyGrid.setPadding(new Insets(20));
+        canopyGrid.setPadding(new Insets(5));
         
         //Reserve
         GridPane reserveGrid = new GridPane();
@@ -162,7 +163,7 @@ public class SystemDetails extends Application {
         reserveGrid.add(rPackDateLabel, 0, 7);
         reserveGrid.add(rPackDate, 1, 7);
         reserveGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
-        reserveGrid.setPadding(new Insets(20));
+        reserveGrid.setPadding(new Insets(5));
         
         //AAD
         GridPane aadGrid = new GridPane();
@@ -186,6 +187,9 @@ public class SystemDetails extends Application {
         Label aNextReglLabel = new Label ("Дата следующего регламента: ");
         TextField aNextRegl = new TextField (dateFormat.format(selectedSystem.getAadNextRegl()));
         aNextRegl.setEditable(editStatus);
+        Label aFiredLabel = new Label ("Количество применений: ");
+        TextField aFired = new TextField (Integer.toString(selectedSystem.getAadFired()));
+        aFired.setEditable(editStatus);
         aadGrid.add(aadGridName, 0, 0);
         aadGrid.add(aModelLabel, 0, 1);
         aadGrid.add(aModel, 1, 1);
@@ -199,8 +203,10 @@ public class SystemDetails extends Application {
         aadGrid.add(aJumps, 1, 5);
         aadGrid.add(aNextReglLabel, 0, 6);
         aadGrid.add(aNextRegl, 1, 6);
+        aadGrid.add(aFiredLabel, 0, 7);
+        aadGrid.add(aFired, 1, 7);
         aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
-        aadGrid.setPadding(new Insets(20));
+        aadGrid.setPadding(new Insets(5));
         
         Button saveBtn = new Button("Сохранить");
         Button cancelBtn = new Button("Отменить");
@@ -239,6 +245,7 @@ public class SystemDetails extends Application {
                 aManufacturerName.setEditable(editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
+                aFired.setEditable(editStatus);
             }else{
                 editStatus = false;
                 sModel.setEditable(editStatus);
@@ -264,6 +271,7 @@ public class SystemDetails extends Application {
                 aManufacturerName.setEditable(editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
+                aFired.setEditable(editStatus);
             }             
         });
         Button closeBtn = new Button("Закрыть");
@@ -289,7 +297,6 @@ public class SystemDetails extends Application {
         detailStage.setScene(scene);
         detailStage.show(); 
 
-        
     }
    
     /**
