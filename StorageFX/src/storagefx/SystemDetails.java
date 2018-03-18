@@ -13,9 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -51,23 +53,53 @@ public class SystemDetails extends Application {
     public void start(Stage detailStage) {
         //SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, String systemDOM, int systemManufacturerID, String systemManufacturerName, int canopyID, String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName)
         GridPane details = new GridPane();
-        //Container
+    //Container
         GridPane containerGrid = new GridPane();
         //String systemModel, String systemSN, String systemDOM, String systemManufacturerName
         Label containerGridName = new Label("Ранец и подвесная система");
+        TextField sCode = new TextField(selectedSystem.getSystemCode());
+        sCode.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>6) {
+                sCode.setText(oldValue);
+            }
+        });
+        sCode.setEditable(editStatus);
         Label sModelLabel = new Label("Модель: ");
         TextField sModel = new TextField(selectedSystem.getSystemModel());
+        sModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                sModel.setText(oldValue);
+            }
+        });
         sModel.setEditable(editStatus);
         Label sSNLabel = new Label("Серийный номер: ");
         TextField sSN = new TextField(selectedSystem.getSystemSN());
+        sSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                sSN.setText(oldValue);
+            }
+        });
         sSN.setEditable(editStatus);
         Label sDOMLabel = new Label("Дата производства: ");
-        TextField sDOM = new TextField(dateFormat.format(selectedSystem.getSystemDOM()));
+        DatePicker sDOM = new DatePicker(selectedSystem.getSystemDOM());
+        sDOM.setShowWeekNumbers(true);
         sDOM.setEditable(editStatus);
+        sDOM.setOnMouseClicked(e -> {
+            if(!sDOM.isEditable()){
+                sDOM.hide();
+            }
+        });
+        
         Label sManufacturerNameLabel = new Label("Производитель: ");
         TextField sManufacturerName = new TextField(selectedSystem.getSystemManufacturerName());
+        sManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>100) {
+                sManufacturerName.setText(oldValue);
+            }
+        });
         sManufacturerName.setEditable(editStatus);
         containerGrid.add(containerGridName, 0, 0);
+        containerGrid.add(sCode, 1, 0);
         containerGrid.add(sModelLabel, 0, 1);
         containerGrid.add(sModel, 1, 1);
         containerGrid.add(sSNLabel, 0, 2);
@@ -76,35 +108,70 @@ public class SystemDetails extends Application {
         containerGrid.add(sDOM, 1, 3);
         containerGrid.add(sManufacturerNameLabel, 0, 4);
         containerGrid.add(sManufacturerName, 1, 4);
-        containerGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        containerGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(1))));        
         containerGrid.setPadding(new Insets(5));
         
-        //Canopy
+    //Canopy
         GridPane canopyGrid = new GridPane();
         //String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, String canopyManufacturerName
         Label canopyGridName = new Label("Основной парашют");
         Label cModelLabel = new Label("Модель: ");
         TextField cModel = new TextField(selectedSystem.getCanopyModel());
+        cModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                cModel.setText(oldValue);
+            }
+        });
         cModel.setEditable(editStatus);
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField cSize = new TextField (Integer.toString(selectedSystem.getCanopySize()));
         cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d{0,4}")) {
+            if (!newValue.matches("\\d{0,3}")) {
                 cSize.setText(oldValue);
             }
         });
         cSize.setEditable(editStatus);
         Label cSNLabel = new Label("Серийный номер: ");
         TextField cSN = new TextField(selectedSystem.getCanopySN());
+        cSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>20) {
+                cSN.setText(oldValue);
+            }
+        });
         cSN.setEditable(editStatus);
         Label cDOMLabel = new Label("Дата производства: ");
-        TextField cDOM = new TextField(dateFormat.format(selectedSystem.getCanopyDOM()));
+        DatePicker cDOM = new DatePicker(selectedSystem.getCanopyDOM());
+        cDOM.setShowWeekNumbers(true);
         cDOM.setEditable(editStatus);
+        cDOM.setOnMouseClicked(e -> {
+            if(!cDOM.isEditable()){
+                cDOM.hide();
+            }
+        });
+        
         Label cManufacturerNameLabel = new Label("Производитель: ");
         TextField cManufacturerName = new TextField(selectedSystem.getCanopyManufacturerName());
+        cManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>100) {
+                cManufacturerName.setText(oldValue);
+            }
+        });
         cManufacturerName.setEditable(editStatus);
         Label cJumpsLabel = new Label ("Прыжков: ");
         TextField cJumps = new TextField (Integer.toString(selectedSystem.getCanopyJumps()));
+        cJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,4}")) {
+                cJumps.setText(oldValue);
+            }
+        });
+        
+        Button cChoose = new Button ("...");
+        cChoose.setTooltip(new Tooltip("Выберите купол основного парашюта"));
+        cChoose.setDisable(!editStatus);
+        cChoose.setOnAction((ActionEvent event) -> {
+            //some code here
+        });
+        
         cJumps.setEditable(editStatus);
         canopyGrid.add(canopyGridName, 0, 0);
         canopyGrid.add(cModelLabel, 0, 1);
@@ -119,34 +186,80 @@ public class SystemDetails extends Application {
         canopyGrid.add(cManufacturerName, 1, 5);
         canopyGrid.add(cJumpsLabel, 0, 6);
         canopyGrid.add(cJumps, 1, 6);
-        canopyGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        canopyGrid.add(cChoose, 1, 7);
+        canopyGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(1))));        
         canopyGrid.setPadding(new Insets(5));
         
-        //Reserve
+    //Reserve
         GridPane reserveGrid = new GridPane();
         //int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName
         Label reserveGridName = new Label("Запасной парашют");
         Label rModelLabel = new Label("Модель: ");
         TextField rModel = new TextField(selectedSystem.getReserveModel());
+        rModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                rModel.setText(oldValue);
+            }
+        });
         rModel.setEditable(editStatus);
         Label rSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField rSize = new TextField (Integer.toString(selectedSystem.getReserveSize()));
+        rSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,3}")) {
+                rSize.setText(oldValue);
+            }
+        });
         rSize.setEditable(editStatus);
         Label rSNLabel = new Label("Серийный номер: ");
         TextField rSN = new TextField(selectedSystem.getReserveSN());
+        rSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>20) {
+                rSN.setText(oldValue);
+            }
+        });
         rSN.setEditable(editStatus);
         Label rDOMLabel = new Label("Дата производства: ");
-        TextField rDOM = new TextField(dateFormat.format(selectedSystem.getReserveDOM()));
+        DatePicker rDOM = new DatePicker(selectedSystem.getReserveDOM());
+        rDOM.setShowWeekNumbers(true);
         rDOM.setEditable(editStatus);
+        rDOM.setOnMouseClicked(e -> {
+            if(!rDOM.isEditable()){
+                rDOM.hide();
+            }
+        });
+        
         Label rManufacturerNameLabel = new Label("Производитель: ");
         TextField rManufacturerName = new TextField(selectedSystem.getReserveManufacturerName());
+        rManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>100) {
+                rManufacturerName.setText(oldValue);
+            }
+        });
         rManufacturerName.setEditable(editStatus);
         Label rJumpsLabel = new Label ("Применений: ");
         TextField rJumps = new TextField (Integer.toString(selectedSystem.getReserveJumps()));
+        rJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,4}")) {
+                rJumps.setText(oldValue);
+            }
+        });
         rJumps.setEditable(editStatus);
         Label rPackDateLabel = new Label ("Дата укладки: ");
-        TextField rPackDate = new TextField (dateFormat.format(selectedSystem.getReservePackDate()));
+        DatePicker rPackDate = new DatePicker(selectedSystem.getReservePackDate());
+        rPackDate.setShowWeekNumbers(true);
         rPackDate.setEditable(editStatus);
+        rPackDate.setOnMouseClicked(e -> {
+            if(!rPackDate.isEditable()){
+                rPackDate.hide();
+            }
+        });
+        Button rChoose = new Button ("...");
+        rChoose.setTooltip(new Tooltip("Выберите купол запасного парашюта"));
+        rChoose.setDisable(!editStatus);
+        rChoose.setOnAction((ActionEvent event) -> {
+            //some code here
+        });
+        
         reserveGrid.add(reserveGridName, 0, 0);
         reserveGrid.add(rModelLabel, 0, 1);
         reserveGrid.add(rModel, 1, 1);
@@ -162,33 +275,80 @@ public class SystemDetails extends Application {
         reserveGrid.add(rJumps, 1, 6);
         reserveGrid.add(rPackDateLabel, 0, 7);
         reserveGrid.add(rPackDate, 1, 7);
-        reserveGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        reserveGrid.add(rChoose, 1, 8);
+        reserveGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(1))));        
         reserveGrid.setPadding(new Insets(5));
         
-        //AAD
+    //AAD
         GridPane aadGrid = new GridPane();
         //int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName
         Label aadGridName = new Label("Страхующий прибор");
         Label aModelLabel = new Label("Модель: ");
         TextField aModel = new TextField(selectedSystem.getAadModel());
+        aModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                aModel.setText(oldValue);
+            }
+        });
         aModel.setEditable(editStatus);
         Label aSNLabel = new Label("Серийный номер: ");
         TextField aSN = new TextField(selectedSystem.getAadSN());
+        aSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>20) {
+                aSN.setText(oldValue);
+            }
+        });
         aSN.setEditable(editStatus);
         Label aDOMLabel = new Label("Дата производства: ");
-        TextField aDOM = new TextField(dateFormat.format(selectedSystem.getAadDOM()));
+        DatePicker aDOM = new DatePicker(selectedSystem.getAadDOM());
+        aDOM.setShowWeekNumbers(true);
         aDOM.setEditable(editStatus);
+        aDOM.setOnMouseClicked(e -> {
+            if(!aDOM.isEditable()){
+                aDOM.hide();
+            }
+        });
+        
         Label aManufacturerNameLabel = new Label("Производитель: ");
         TextField aManufacturerName = new TextField(selectedSystem.getAadManufacturerName());
+        aManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>100) {
+                aManufacturerName.setText(oldValue);
+            }
+        });
         aManufacturerName.setEditable(editStatus);
         Label aJumpsLabel = new Label ("Прыжков: ");
         TextField aJumps = new TextField (Integer.toString(selectedSystem.getAadJumps()));
+        aJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,4}")) {
+                aJumps.setText(oldValue);
+            }
+        });
         aJumps.setEditable(editStatus);
         Label aNextReglLabel = new Label ("Дата следующего регламента: ");
-        TextField aNextRegl = new TextField (dateFormat.format(selectedSystem.getAadNextRegl()));
+        DatePicker aNextRegl = new DatePicker(selectedSystem.getAadNextRegl());
+        aNextRegl.setShowWeekNumbers(true);
         aNextRegl.setEditable(editStatus);
+        aNextRegl.setOnMouseClicked(e -> {
+            if(!aNextRegl.isEditable()){
+                aNextRegl.hide();
+            }
+        });
+        
         Label aFiredLabel = new Label ("Количество применений: ");
         TextField aFired = new TextField (Integer.toString(selectedSystem.getAadFired()));
+        aFired.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d{0,4}")) {
+                aFired.setText(oldValue);
+            }
+        });
+        Button aChoose = new Button ("...");
+        aChoose.setTooltip(new Tooltip("Выберите купол запасного парашюта"));
+        aChoose.setDisable(!editStatus);
+        aChoose.setOnAction((ActionEvent event) -> {
+            //some code here
+        });
+        
         aFired.setEditable(editStatus);
         aadGrid.add(aadGridName, 0, 0);
         aadGrid.add(aModelLabel, 0, 1);
@@ -205,11 +365,14 @@ public class SystemDetails extends Application {
         aadGrid.add(aNextRegl, 1, 6);
         aadGrid.add(aFiredLabel, 0, 7);
         aadGrid.add(aFired, 1, 7);
-        aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(5))));        
+        aadGrid.add(aChoose, 1, 8);
+        aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(1))));        
         aadGrid.setPadding(new Insets(5));
         
         Button saveBtn = new Button("Сохранить");
+        saveBtn.setDisable(!editStatus);
         Button cancelBtn = new Button("Отменить");
+        cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
             //some code here, rollback any changes
         });
@@ -246,6 +409,11 @@ public class SystemDetails extends Application {
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
                 aFired.setEditable(editStatus);
+                cChoose.setDisable(!editStatus);
+                rChoose.setDisable(!editStatus);
+                aChoose.setDisable(!editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
             }else{
                 editStatus = false;
                 sModel.setEditable(editStatus);
@@ -272,25 +440,33 @@ public class SystemDetails extends Application {
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
                 aFired.setEditable(editStatus);
+                cChoose.setDisable(!editStatus);
+                rChoose.setDisable(!editStatus);
+                aChoose.setDisable(!editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
             }             
         });
         Button closeBtn = new Button("Закрыть");
+        closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             //some code here, if there are some changes, ask for save them, then close window, if not - close window
+            details.getScene().getWindow().hide();
         });
         
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, cancelBtn);
         
         details.add(editBtn, 1, 0);
-        details.add(canopyGrid, 0, 1);
-        details.add(reserveGrid, 0, 2);
-        details.add(containerGrid, 1, 1);
-        details.add(aadGrid, 1, 2);
+        details.add(containerGrid, 0, 1);
+        details.add(canopyGrid, 1, 1);
+        details.add(aadGrid, 0, 2);
+        details.add(reserveGrid, 1, 2);
         details.add(buttonPane, 0, 3);
         details.add(closeBtn, 1, 3);
-        details.setVgap(5);
-        details.setHgap(5);
+        details.setVgap(2);
+        details.setHgap(2);
+        details.setPadding(new Insets(5));
         
         Scene scene = new Scene(details);
         detailStage.setTitle(stageTitle);
