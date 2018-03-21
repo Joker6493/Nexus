@@ -21,7 +21,6 @@ public class Logger {
     private ArrayList<String> logLevel = new ArrayList<>();
     
     
-    
     public static void main(String[] args) {
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
