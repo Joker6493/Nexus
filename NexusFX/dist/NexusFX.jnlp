@@ -8,10 +8,10 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="NexusFX.jar" size="16619" download="eager" />
+    <jar href="NexusFX.jar" size="16625" download="eager" />
     <jar href="lib\NexusPlugin-API.jar" size="676" download="eager" />
-    <jar href="lib\ojdbc7.jar" size="3698857" download="eager" />
-    <jar href="lib\ojdbc7_g.jar" size="5875485" download="eager" />
+    <jar href="lib\mysql-connector-java-5.1.46-bin.jar" size="1004840" download="eager" />
+    <jar href="lib\mysql-connector-java-5.1.46.jar" size="1004838" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="NexusFX" >
     <param name="requiredFXVersion" value="8.0+"/>

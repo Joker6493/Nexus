@@ -23,7 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import utils.ConnectionCheck;
-import utils.OracleConn;
+import utils.SAMConn;
 import utils.PluginLoader;
 
 /**
@@ -33,8 +33,8 @@ import utils.PluginLoader;
 public class NexusFX extends Application {
     String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
     PluginLoader classLoader = new PluginLoader(); 
-    OracleConn oraconn = new OracleConn();
-    Connection dbconn = oraconn.connectDatabase();
+    SAMConn mysqlconn = new SAMConn();
+    Connection dbconn = mysqlconn.connectDatabase();
     String statusConn = null;
     
     @Override

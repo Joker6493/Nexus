@@ -335,11 +335,11 @@ public class SystemDetails extends Application {
             }
         });
         
-        Label aFiredLabel = new Label ("Количество применений: ");
-        TextField aFired = new TextField (Integer.toString(selectedSystem.getAadFired()));
-        aFired.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+        Label aSavedLabel = new Label ("Количество применений: ");
+        TextField aSaved = new TextField (Integer.toString(selectedSystem.getAadSaved()));
+        aSaved.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,4}")) {
-                aFired.setText(oldValue);
+                aSaved.setText(oldValue);
             }
         });
         Button aChoose = new Button ("...");
@@ -349,7 +349,7 @@ public class SystemDetails extends Application {
             //some code here
         });
         
-        aFired.setEditable(editStatus);
+        aSaved.setEditable(editStatus);
         aadGrid.add(aadGridName, 0, 0);
         aadGrid.add(aModelLabel, 0, 1);
         aadGrid.add(aModel, 1, 1);
@@ -363,8 +363,8 @@ public class SystemDetails extends Application {
         aadGrid.add(aJumps, 1, 5);
         aadGrid.add(aNextReglLabel, 0, 6);
         aadGrid.add(aNextRegl, 1, 6);
-        aadGrid.add(aFiredLabel, 0, 7);
-        aadGrid.add(aFired, 1, 7);
+        aadGrid.add(aSavedLabel, 0, 7);
+        aadGrid.add(aSaved, 1, 7);
         aadGrid.add(aChoose, 1, 8);
         aadGrid.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, new CornerRadii(10), new BorderWidths(1.5), new Insets(1))));        
         aadGrid.setPadding(new Insets(5));
@@ -408,7 +408,7 @@ public class SystemDetails extends Application {
                 aManufacturerName.setEditable(editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
-                aFired.setEditable(editStatus);
+                aSaved.setEditable(editStatus);
                 cChoose.setDisable(!editStatus);
                 rChoose.setDisable(!editStatus);
                 aChoose.setDisable(!editStatus);
@@ -439,7 +439,7 @@ public class SystemDetails extends Application {
                 aManufacturerName.setEditable(editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
-                aFired.setEditable(editStatus);
+                aSaved.setEditable(editStatus);
                 cChoose.setDisable(!editStatus);
                 rChoose.setDisable(!editStatus);
                 aChoose.setDisable(!editStatus);

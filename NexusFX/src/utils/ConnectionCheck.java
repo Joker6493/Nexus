@@ -22,7 +22,7 @@ import javafx.scene.control.Label;
  */
 public class ConnectionCheck extends Label {
     private static String statusConn = "Off-line";
-    OracleConn db = new OracleConn();
+    SAMConn db = new SAMConn();
     Connection dbconn =db.connectDatabase();
     public ConnectionCheck()
     {

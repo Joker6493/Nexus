@@ -21,11 +21,11 @@ public class AAD {
     private LocalDate aadDOM;
     private int aadJumps;
     private LocalDate aadNextRegl;
-    private int aadFired;
+    private int aadSaved;
     private int aadManufacturerID;
     private String aadManufacturerName;
 
-    public AAD(int systemID, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadFired, int aadManufacturerID, String aadManufacturerName) {
+    public AAD(int systemID, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName) {
         this.systemID = systemID;
         this.aadID = aadID;
         this.aadModel = aadModel;
@@ -33,7 +33,7 @@ public class AAD {
         this.aadDOM = aadDOM;
         this.aadJumps = aadJumps;
         this.aadNextRegl = aadNextRegl;
-        this.aadFired = aadFired;
+        this.aadSaved = aadSaved;
         this.aadManufacturerID = aadManufacturerID;
         this.aadManufacturerName = aadManufacturerName;
     }
@@ -79,11 +79,11 @@ public class AAD {
     public void setAadNextRegl(LocalDate aadNextRegl) {
         this.aadNextRegl = aadNextRegl;
     }
-    public int isAadFired() {
-        return aadFired;
+    public int getAadSaved() {
+        return aadSaved;
     }
-    public void setAadFired(int aadFired) {
-        this.aadFired = aadFired;
+    public void setAadSaved(int aadSaved) {
+        this.aadSaved = aadSaved;
     }
     public int getAadManufacturerID() {
         return aadManufacturerID;

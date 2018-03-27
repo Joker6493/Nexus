@@ -42,10 +42,10 @@ public class DataRelay {
             //Call a method dynamically (Reflection)
             Class params[] = {};
             Object paramsObj[] = {};
-            Class oracl = Class.forName("utils.OracleConn");
-            Object oraClass = oracl.newInstance();
-            Method oraConnMethod = oracl.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) oraConnMethod.invoke(oraClass, paramsObj);
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
@@ -62,16 +62,15 @@ public class DataRelay {
     
     protected ObservableList<SkydiveSystem> getSystemsList() throws SQLException {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
-        String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid), si.stockid, " +
-                             "ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid), " +
-                             "ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid), " +
-                             "ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_fired, ai.manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) " +
+        String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid as system_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid) as system_manufacturer_name, " +
+                             "ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name, " +
+                             "ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name, " + 
+                             "ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_saved, ai.manufacturerid as aad_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) as aad_manufacturer_name " +
                              "from system_info si " +
-                             "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.disable = 0 " +
-                             "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.disable = 0 " +
-                             "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.disable = 0 " +
-                             "inner join stock_info sti on si.stockid = sti.stockid and sti.disable = 0 " +
-                             "where si.disable = " + getStatus();
+                             "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.status = si.status and ci.stockid = si.stockid " +
+                             "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.status = si.status and ri.stockid = si.stockid " +
+                             "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.status = si.status and ai.stockid = si.stockid " +
+                             "where si.status = "+ getStatus() +" and si.stockid = "+ getStock() +";";
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
             //Container
@@ -80,9 +79,9 @@ public class DataRelay {
             String systemModel = rs.getString("system_model");
             String systemSN = rs.getString("system_sn");
             LocalDate systemDOM = rs.getDate("system_dom").toLocalDate();
-            int systemManufacturerID = rs.getInt(6);
-            String systemManufacturerName = rs.getString(7);
-            int stockID = rs.getInt("stockid");
+            int systemManufacturerID = rs.getInt("system_manufacturerid");
+            String systemManufacturerName = rs.getString("system_manufacturer_name");
+            int stockID = getStock();
             //Canopy
             int canopyID = rs.getInt("canopyid");
             String canopyModel = rs.getString("canopy_model");
@@ -90,8 +89,8 @@ public class DataRelay {
             String canopySN = rs.getString("canopy_sn");
             LocalDate canopyDOM = rs.getDate("canopy_dom").toLocalDate();
             int canopyJumps = rs.getInt("canopy_jumps");
-            int canopyManufacturerID = rs.getInt(15);
-            String canopyManufacturerName = rs.getString(16);
+            int canopyManufacturerID = rs.getInt("canopy_manufacturerid");
+            String canopyManufacturerName = rs.getString("canopy_manufacturer_name");
             //Reserve
             int reserveID = rs.getInt("reserveid");
             String reserveModel = rs.getString("reserve_model");
@@ -100,8 +99,8 @@ public class DataRelay {
             LocalDate reserveDOM = rs.getDate("reserve_dom").toLocalDate();
             int reserveJumps = rs.getInt("reserve_jumps");
             LocalDate reservePackDate = rs.getDate("reserve_packdate").toLocalDate();
-            int reserveManufacturerID = rs.getInt(24);
-            String reserveManufacturerName = rs.getString(25);
+            int reserveManufacturerID = rs.getInt("reserve_manufacturerid");
+            String reserveManufacturerName = rs.getString("reserve_manufacturer_name");
             //AAD
             int aadID = rs.getInt("aadid");
             String aadModel = rs.getString("aad_model");
@@ -109,10 +108,10 @@ public class DataRelay {
             LocalDate aadDOM = rs.getDate("aad_dom").toLocalDate();
             int aadJumps = rs.getInt("aad_jumps");
             LocalDate aadNextRegl = rs.getDate("aad_nextregl").toLocalDate();
-            int aadFired = rs.getInt("aad_fired");
-            int aadManufacturerID = rs.getInt(33);
-            String aadManufacturerName = rs.getString(34);
-            indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadFired, aadManufacturerID, aadManufacturerName));
+            int aadSaved = rs.getInt("aad_saved");
+            int aadManufacturerID = rs.getInt("aad_manufacturerid");
+            String aadManufacturerName = rs.getString("aad_manufacturer_name");
+            indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName));
         }
         Statement stmt = rs.getStatement();
         Connection bdcon = stmt.getConnection();
@@ -125,7 +124,7 @@ public class DataRelay {
         ArrayList<Stock> stockList = new ArrayList<>();
         String selectQuery = "select stockid, stock_name " +
                              "from stock_info " +
-                             "where disable = " +  + getStatus();
+                             "where status = " +  + getStatus();
         ResultSet rs = getData(selectQuery);
         while (rs.next()) {
             int stockID = rs.getInt("stockid");
