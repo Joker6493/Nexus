@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.RandomAccessFile;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -44,9 +45,17 @@ public class Logger {
     }
     public void readLog() throws Exception{
         File logFile = new File(logDir.concat("\\log.txt"));
-        FileReader readLogFile = new FileReader (logFile);
-        Scanner scan = new Scanner(readLogFile);
-        
+//        FileReader readLogFile = new FileReader (logFile);
+//        Scanner scan = new Scanner(readLogFile);
+        int lastLines = 100;
+        int logLineCount=0;
+        RandomAccessFile accessLog = new RandomAccessFile(logFile, "r");
+        while (!accessLog.readLine().isEmpty()){
+            //some code for extract last log records
+            logLineCount++;
+        }
+        accessLog.close();
+
     }
     
     public static void main(String[] args) {
