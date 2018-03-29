@@ -41,31 +41,29 @@ public class Logger {
         if (!logFile.exists()){
             logFile.createNewFile();
         }
-        FileWriter logger = new FileWriter(logFile,true);
-        logger.write(logRecord);
-        logger.write(System.lineSeparator());
-        logger.close();
+        try (FileWriter logger = new FileWriter(logFile,true)) {
+            logger.write(logRecord);
+            logger.write(System.lineSeparator());
+        }
         lastLogRecord=logRecord;
     }
     public ArrayList<String> readLog() throws Exception{
         ArrayList <String> logRecordListFull = new ArrayList<>();
         ArrayList <String> logRecordList = new ArrayList<>();
         File logFile = new File(logDir.concat("\\log.txt"));
-        FileReader readLogFile = new FileReader (logFile);
-        BufferedReader buffReader = new BufferedReader(readLogFile);
-        while (buffReader.readLine()!=null){
-            logRecordListFull.add(buffReader.readLine());
-        }
-        int lastLines = 10;
-        if (logRecordListFull.size()<lastLines){
-            logRecordList=logRecordListFull;
-        }else{
-            while (0<lastLines){
-            logRecordList.add(logRecordListFull.get(logRecordListFull.size()-lastLines--));
+        try (FileReader readLogFile = new FileReader (logFile); BufferedReader buffReader = new BufferedReader(readLogFile)) {
+            while (buffReader.readLine()!=null){
+                logRecordListFull.add(buffReader.readLine());
+            }
+            int lastLines = 10;
+            if (logRecordListFull.size()<lastLines){
+                logRecordList=logRecordListFull;
+            }else{
+                while (0<lastLines){
+                    logRecordList.add(logRecordListFull.get(logRecordListFull.size()-lastLines--));
+                }
             }
         }
-        buffReader.close();
-        readLogFile.close();
         return logRecordList;
     }
     //Main method for class tests
