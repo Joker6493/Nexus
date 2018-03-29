@@ -5,6 +5,7 @@
  */
 package logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileReader;
@@ -12,6 +13,7 @@ import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -24,6 +26,7 @@ public class Logger {
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
+//    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
     private String lastLogRecord;
     private String logRecord;
     
@@ -38,32 +41,49 @@ public class Logger {
         if (!logFile.exists()){
             logFile.createNewFile();
         }
-        FileWriter logger = new FileWriter(logFile);
-        logger.write(logRecord.concat("/n"));
+        FileWriter logger = new FileWriter(logFile,true);
+        logger.write(logRecord);
+        logger.write(System.lineSeparator());
         logger.close();
         lastLogRecord=logRecord;
     }
-    public void readLog() throws Exception{
+    public ArrayList<String> readLog() throws Exception{
+        ArrayList <String> logRecordListFull = new ArrayList<>();
+        ArrayList <String> logRecordList = new ArrayList<>();
         File logFile = new File(logDir.concat("\\log.txt"));
-//        FileReader readLogFile = new FileReader (logFile);
-//        Scanner scan = new Scanner(readLogFile);
-        int lastLines = 100;
-        int logLineCount=0;
-        RandomAccessFile accessLog = new RandomAccessFile(logFile, "r");
-        while (!accessLog.readLine().isEmpty()){
-            //some code for extract last log records
-            logLineCount++;
+        FileReader readLogFile = new FileReader (logFile);
+        BufferedReader buffReader = new BufferedReader(readLogFile);
+        while (buffReader.readLine()!=null){
+            logRecordListFull.add(buffReader.readLine());
         }
-        accessLog.close();
-
+        int lastLines = 10;
+        if (logRecordListFull.size()<lastLines){
+            logRecordList=logRecordListFull;
+        }else{
+            while (0<lastLines){
+            logRecordList.add(logRecordListFull.get(logRecordListFull.size()-lastLines--));
+            }
+        }
+        buffReader.close();
+        readLogFile.close();
+        return logRecordList;
     }
-    
-    public static void main(String[] args) {
+    //Main method for class tests
+    public static void main(String[] args) throws IOException, Exception {
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
         System.out.println(dateTimeFormat.format(ZonedDateTime.now()));
         System.out.println(zoneDateTimeFormat.format(ZonedDateTime.now()));
-
+        Logger log = new Logger();
+        log.writeLog(Level.FATAL,"This is FATAL log record example");
+        log.writeLog(Level.SEVERE, "This is SEVERE log record example");
+        log.writeLog(Level.WARNING, "This is WARNING log record example");
+        log.writeLog(Level.INFO, "This is INFO log record example");
+        log.writeLog(Level.CONFIG, "This is CONFIG log record example");
+        log.writeLog(Level.SUCCESS, "This is SUCCESS log record example");
+        log.writeLog(Level.DEBUG, "This is DEBUG log record example");
+        for (int i=0;i<log.readLog().size();i++){
+            System.out.println(log.readLog().get(i));
+        }
     }
-    
 }

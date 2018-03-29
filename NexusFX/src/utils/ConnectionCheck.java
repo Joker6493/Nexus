@@ -7,8 +7,6 @@ package utils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Duration;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
