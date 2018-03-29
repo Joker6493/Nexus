@@ -25,8 +25,8 @@ public class Logger {
     private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss ");
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
-    private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
-//    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
+//    private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
+    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
     private String lastLogRecord;
     private String logRecord;
     
@@ -42,8 +42,7 @@ public class Logger {
             logFile.createNewFile();
         }
         try (FileWriter logger = new FileWriter(logFile,true)) {
-            logger.write(logRecord);
-            logger.write(System.lineSeparator());
+            logger.write(logRecord.concat(System.lineSeparator()));
         }
         lastLogRecord=logRecord;
     }
@@ -52,14 +51,14 @@ public class Logger {
         ArrayList <String> logRecordList = new ArrayList<>();
         File logFile = new File(logDir.concat("\\log.txt"));
         try (FileReader readLogFile = new FileReader (logFile); BufferedReader buffReader = new BufferedReader(readLogFile)) {
-            while (buffReader.readLine()!=null){
+            while (buffReader.readLine() != null){
                 logRecordListFull.add(buffReader.readLine());
             }
             int lastLines = 10;
             if (logRecordListFull.size()<lastLines){
                 logRecordList=logRecordListFull;
             }else{
-                while (0<lastLines){
+                while (lastLines>0){
                     logRecordList.add(logRecordListFull.get(logRecordListFull.size()-lastLines--));
                 }
             }
@@ -80,8 +79,9 @@ public class Logger {
         log.writeLog(Level.CONFIG, "This is CONFIG log record example");
         log.writeLog(Level.SUCCESS, "This is SUCCESS log record example");
         log.writeLog(Level.DEBUG, "This is DEBUG log record example");
-        for (int i=0;i<log.readLog().size();i++){
-            System.out.println(log.readLog().get(i));
+        ArrayList <String> list = log.readLog();
+        for (int i=0;i<list.size();){
+            System.out.println(list.get(i++));
         }
     }
 }
