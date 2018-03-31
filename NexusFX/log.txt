@@ -68,3 +68,17 @@
 31.03.2018 16:27:38 +0400 Config log: This is CONFIG log record example
 31.03.2018 16:27:38 +0400 Success log: This is SUCCESS log record example
 31.03.2018 16:27:38 +0400 Debug log: This is DEBUG log record example
+31.03.2018 16:52:19 +0400 Fatal error: This is FATAL log record example
+31.03.2018 16:52:19 +0400 Severe error: This is SEVERE log record example
+31.03.2018 16:52:19 +0400 Warning log: This is WARNING log record example
+31.03.2018 16:52:19 +0400 Info log: This is INFO log record example
+31.03.2018 16:52:19 +0400 Config log: This is CONFIG log record example
+31.03.2018 16:52:19 +0400 Success log: This is SUCCESS log record example
+31.03.2018 16:52:19 +0400 Debug log: This is DEBUG log record example
+31.03.2018 16:54:05 +0400 Fatal error: This is FATAL log record example
+31.03.2018 16:54:05 +0400 Severe error: This is SEVERE log record example
+31.03.2018 16:54:05 +0400 Warning log: This is WARNING log record example
+31.03.2018 16:54:05 +0400 Info log: This is INFO log record example
+31.03.2018 16:54:05 +0400 Config log: This is CONFIG log record example
+31.03.2018 16:54:05 +0400 Success log: This is SUCCESS log record example
+31.03.2018 16:54:05 +0400 Debug log: This is DEBUG log record example

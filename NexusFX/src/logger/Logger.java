@@ -10,12 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.RandomAccessFile;
-import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  *
@@ -26,8 +23,7 @@ public class Logger {
     private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss ");
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
-    private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
-//    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
+    private final String logDir=System.getProperty("user.dir");
     private String lastLogRecord;
     private String logRecord;
     

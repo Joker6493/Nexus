@@ -31,7 +31,7 @@ import utils.PluginLoader;
  * @author dboro
  */
 public class NexusFX extends Application {
-    String pluginPath = "C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX\\plugins";
+    String pluginPath = System.getProperty("user.dir").concat("\\plugins");
     PluginLoader classLoader = new PluginLoader(); 
     SAMConn mysqlconn = new SAMConn();
     Connection dbconn = mysqlconn.connectDatabase();
@@ -53,7 +53,7 @@ public class NexusFX extends Application {
                 Class storageClass = classLoader.loadClass (pluginPath, "StorageFX", "storagefx.StorageIndex");
                 Object storageObj = storageClass.newInstance();
                 Method storageMethod = storageClass.getDeclaredMethod("StorageIndex", params);
-                root.setCenter((StackPane) storageMethod.invoke(storageObj, paramsObj));
+                root.setCenter((BorderPane) storageMethod.invoke(storageObj, paramsObj));
             } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
             //e.printStackTrace();
