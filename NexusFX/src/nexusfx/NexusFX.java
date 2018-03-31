@@ -8,9 +8,8 @@ package nexusfx;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,9 +18,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import logger.Level;
+import logger.Logger;
 import utils.ConnectionCheck;
 import utils.SAMConn;
 import utils.PluginLoader;
@@ -32,7 +32,8 @@ import utils.PluginLoader;
  */
 public class NexusFX extends Application {
     String pluginPath = System.getProperty("user.dir").concat("\\plugins");
-    PluginLoader classLoader = new PluginLoader(); 
+    PluginLoader classLoader = new PluginLoader();
+    Logger logger = new Logger();
     SAMConn mysqlconn = new SAMConn();
     Connection dbconn = mysqlconn.connectDatabase();
     String statusConn = null;
@@ -102,6 +103,7 @@ public class NexusFX extends Application {
         btn.setText("Say 'Hello World'");
         btn.setOnAction((ActionEvent event) -> {
             System.out.println("Hello World!");
+            logger.writeLog(Level.SUCCESS, "Hello World!");
         });
         //Task Bar
         HBox taskBar = new HBox();
@@ -110,11 +112,17 @@ public class NexusFX extends Application {
         GridPane statusBar = new GridPane();
         ConnectionCheck connStatus = new ConnectionCheck();
         connStatus.bindToTime();
-        Label timeLabel = new Label();
+        Label statusLabel = new Label(logger.getLastLogRecord());
+        statusLabel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!logger.getLastLogRecord().equalsIgnoreCase(oldValue)) {
+                statusLabel.setText(logger.getLastLogRecord());
+            }
+        });
         Button menuButton = new Button("Menu");
         statusBar.add(menuButton, 0, 0);
         statusBar.add(taskBar, 1, 0);
-        statusBar.add(connStatus, 2, 0);
+        statusBar.add(statusLabel, 2, 0);
+        statusBar.add(connStatus, 3, 0);
         
         ColumnConstraints columnButton = new ColumnConstraints();
         ColumnConstraints columnTask = new ColumnConstraints();
@@ -124,7 +132,7 @@ public class NexusFX extends Application {
         
         
         root.setTop(MenuBarMain);
-        root.setLeft(new Button("Left"));
+        root.setLeft(/*new Button("Left")*/btn);
         root.setRight(new Button("Right"));
         root.setBottom(statusBar);
         //root.setCenter(new Button("Center"));

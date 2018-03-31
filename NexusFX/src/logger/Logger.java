@@ -30,17 +30,21 @@ public class Logger {
     public String getLastLogRecord() {
         return lastLogRecord;
     }
-    public void writeLog(Level level, String logText) throws IOException{
+    public void writeLog(Level level, String logText){
         //Date Time Level:Text
         logRecord=zoneDateTimeFormat.format(ZonedDateTime.now()).concat(" ").concat(level.getLevelName()).concat(": ").concat(logText);
         File logFile = new File(logDir.concat("\\log.txt"));
-        if (!logFile.exists()){
-            logFile.createNewFile();
-        }
-        try (FileWriter logger = new FileWriter(logFile,true)) {
+        try{
+            if (!logFile.exists()){
+                logFile.createNewFile();
+             }
+        FileWriter logger = new FileWriter(logFile,true);
             logger.write(logRecord.concat(System.lineSeparator()));
             logger.flush();
             logger.close();
+        
+        }catch (IOException ex){
+            System.out.println(ex.getMessage());
         }
         lastLogRecord=logRecord;
     }
