@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
+import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,15 +26,14 @@ public class Logger {
     private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss ");
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
-//    private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
-    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
+    private final String logDir="C:\\Users\\dboro\\Desktop\\Nexus\\NexusFX";
+//    private final String logDir="C:\\Users\\d.borodin\\Desktop\\Nexus\\NexusFX";
     private String lastLogRecord;
     private String logRecord;
     
     public String getLastLogRecord() {
         return lastLogRecord;
     }
-    
     public void writeLog(Level level, String logText) throws IOException{
         //Date Time Level:Text
         logRecord=zoneDateTimeFormat.format(ZonedDateTime.now()).concat(" ").concat(level.getLevelName()).concat(": ").concat(logText);
@@ -43,27 +43,39 @@ public class Logger {
         }
         try (FileWriter logger = new FileWriter(logFile,true)) {
             logger.write(logRecord.concat(System.lineSeparator()));
+            logger.flush();
+            logger.close();
         }
         lastLogRecord=logRecord;
     }
-    public ArrayList<String> readLog() throws Exception{
-        ArrayList <String> logRecordListFull = new ArrayList<>();
-        ArrayList <String> logRecordList = new ArrayList<>();
+    public String readLastLog() throws Exception{
+        String logs;
+        String logRecord = null;
         File logFile = new File(logDir.concat("\\log.txt"));
         try (FileReader readLogFile = new FileReader (logFile); BufferedReader buffReader = new BufferedReader(readLogFile)) {
-            while (buffReader.readLine() != null){
-                logRecordListFull.add(buffReader.readLine());
+            while ((logs = buffReader.readLine())!= null){
+                logRecord = logs;
             }
-            int lastLines = 10;
-            if (logRecordListFull.size()<lastLines){
-                logRecordList=logRecordListFull;
-            }else{
-                while (lastLines>0){
-                    logRecordList.add(logRecordListFull.get(logRecordListFull.size()-lastLines--));
-                }
-            }
+        buffReader.close();
+        readLogFile.close();
         }
-        return logRecordList;
+        return logRecord;
+    }
+    public String readNLog(int n) throws Exception{
+        ArrayList <String> logRecordListFull = new ArrayList<>();
+        String logs;
+        String logRecordN = null;
+        File logFile = new File(logDir.concat("\\log.txt"));
+        try (FileReader readLogFile = new FileReader (logFile); BufferedReader buffReader = new BufferedReader(readLogFile)) {
+            while ((logs = buffReader.readLine()) != null){
+                logRecordListFull.add(logs);
+            }
+            buffReader.close();
+            readLogFile.close();
+            logRecordN = logRecordListFull.get(logRecordListFull.size()-n-1);
+//            System.out.println(logRecordListFull.get(logRecordListFull.size()-n-1));
+            }
+        return logRecordN;
     }
     //Main method for class tests
     public static void main(String[] args) throws IOException, Exception {
@@ -79,9 +91,9 @@ public class Logger {
         log.writeLog(Level.CONFIG, "This is CONFIG log record example");
         log.writeLog(Level.SUCCESS, "This is SUCCESS log record example");
         log.writeLog(Level.DEBUG, "This is DEBUG log record example");
-        ArrayList <String> list = log.readLog();
-        for (int i=0;i<list.size();){
-            System.out.println(list.get(i++));
+        System.out.println(log.readLastLog());
+        for (int i=10; i>0; i--){
+            System.out.println(log.readNLog(i));
         }
     }
 }

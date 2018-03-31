@@ -16,8 +16,8 @@ import utils.SAMConn;
 
 public class TestClass { 
     public static void main(String[] args) {
-        SAMConn orc = new SAMConn();
-        orc.connectDatabase();
+        SAMConn mysql = new SAMConn();
+        mysql.connectDatabase();
         
     }
 }
