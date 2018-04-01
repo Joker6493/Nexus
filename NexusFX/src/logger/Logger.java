@@ -24,7 +24,7 @@ public class Logger {
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final DateTimeFormatter zoneDateTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss Z");
     private final String logDir=System.getProperty("user.dir");
-    private String lastLogRecord;
+    private String lastLogRecord =null;
     private String logRecord;
     
     public String getLastLogRecord() {
@@ -48,7 +48,7 @@ public class Logger {
         }
         lastLogRecord=logRecord;
     }
-    public String readLastLog() throws Exception{
+    public String readLastLog(){
         String logs;
         String logRecord = null;
         File logFile = new File(logDir.concat("\\log.txt"));
@@ -58,10 +58,12 @@ public class Logger {
             }
         buffReader.close();
         readLogFile.close();
+        }catch (IOException ex){
+            System.out.println(ex.getMessage());
         }
         return logRecord;
     }
-    public String readNLog(int n) throws Exception{
+    public String readNLog(int n){
         ArrayList <String> logRecordListFull = new ArrayList<>();
         String logs;
         String logRecordN = null;
@@ -74,7 +76,9 @@ public class Logger {
             readLogFile.close();
             logRecordN = logRecordListFull.get(logRecordListFull.size()-n-1);
 //            System.out.println(logRecordListFull.get(logRecordListFull.size()-n-1));
-            }
+            }catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
         return logRecordN;
     }
     //Main method for class tests

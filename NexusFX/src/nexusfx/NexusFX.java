@@ -112,10 +112,10 @@ public class NexusFX extends Application {
         GridPane statusBar = new GridPane();
         ConnectionCheck connStatus = new ConnectionCheck();
         connStatus.bindToTime();
-        Label statusLabel = new Label(logger.getLastLogRecord());
+        Label statusLabel = new Label(logger.readLastLog());
         statusLabel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!logger.getLastLogRecord().equalsIgnoreCase(oldValue)) {
-                statusLabel.setText(logger.getLastLogRecord());
+            if (!logger.readLastLog().equalsIgnoreCase(oldValue)) {
+                statusLabel.setText(logger.readLastLog());
             }
         });
         Button menuButton = new Button("Menu");
