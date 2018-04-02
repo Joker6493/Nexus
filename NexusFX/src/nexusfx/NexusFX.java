@@ -5,7 +5,6 @@
  */
 package nexusfx;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import javafx.application.Application;
@@ -36,7 +35,7 @@ public class NexusFX extends Application {
     Logger logger = new Logger();
     SAMConn mysqlconn = new SAMConn();
     Connection dbconn = mysqlconn.connectDatabase();
-    String statusConn = null;
+    String status = logger.readLastLog();
     
     @Override
     public void start(Stage primaryStage) throws InterruptedException {

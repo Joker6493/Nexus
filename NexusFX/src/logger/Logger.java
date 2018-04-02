@@ -38,11 +38,16 @@ public class Logger {
             if (!logFile.exists()){
                 logFile.createNewFile();
              }
-        FileWriter logger = new FileWriter(logFile,true);
-            logger.write(logRecord.concat(System.lineSeparator()));
-            logger.flush();
-            logger.close();
-        
+            FileWriter logger = new FileWriter(logFile,true);
+            if(readLastLog()!=null){
+                logger.write(System.lineSeparator().concat(logRecord));
+                logger.flush();
+                logger.close();
+            }else{
+                logger.write(logRecord);
+                logger.flush();
+                logger.close();
+            }
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }
@@ -74,9 +79,13 @@ public class Logger {
             }
             buffReader.close();
             readLogFile.close();
-            logRecordN = logRecordListFull.get(logRecordListFull.size()-n-1);
-//            System.out.println(logRecordListFull.get(logRecordListFull.size()-n-1));
-            }catch (IOException ex){
+            if (logRecordListFull.size()>n){
+                logRecordN = logRecordListFull.get(logRecordListFull.size()-n-1);
+            }else{
+                n=logRecordListFull.size();
+                logRecordN = logRecordListFull.get(logRecordListFull.size()-n);
+            }
+        }catch (IOException ex){
             System.out.println(ex.getMessage());
         }
         return logRecordN;
