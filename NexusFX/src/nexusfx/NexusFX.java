@@ -8,6 +8,7 @@ package nexusfx;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -113,8 +114,10 @@ public class NexusFX extends Application {
         connStatus.bindToTime();
         Label statusLabel = new Label(logger.readLastLog());
         statusLabel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!logger.readLastLog().equalsIgnoreCase(oldValue)) {
-                statusLabel.setText(logger.readLastLog());
+            if (oldValue.equalsIgnoreCase(logger.readLastLog())){
+                statusLabel.setText(oldValue);
+            }else{
+                statusLabel.setText(newValue); 
             }
         });
         Button menuButton = new Button("Menu");

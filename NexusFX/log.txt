@@ -1,7 +1,7 @@
-02.04.2018 14:27:03 +0400 Fatal error: This is FATAL log record example
-02.04.2018 14:27:03 +0400 Severe error: This is SEVERE log record example
-02.04.2018 14:27:03 +0400 Warning log: This is WARNING log record example
-02.04.2018 14:27:03 +0400 Info log: This is INFO log record example
-02.04.2018 14:27:03 +0400 Config log: This is CONFIG log record example
-02.04.2018 14:27:03 +0400 Success log: This is SUCCESS log record example
-02.04.2018 14:27:03 +0400 Debug log: This is DEBUG log record example
+02.04.2018 14:35:17 +0400 Fatal error: This is FATAL log record example
+02.04.2018 14:35:17 +0400 Severe error: This is SEVERE log record example
+02.04.2018 14:35:17 +0400 Warning log: This is WARNING log record example
+02.04.2018 14:35:17 +0400 Info log: This is INFO log record example
+02.04.2018 14:35:17 +0400 Config log: This is CONFIG log record example
+02.04.2018 14:35:17 +0400 Success log: This is SUCCESS log record example
+02.04.2018 14:35:17 +0400 Debug log: This is DEBUG log record example

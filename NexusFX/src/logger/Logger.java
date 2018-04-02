@@ -64,7 +64,7 @@ public class Logger {
         buffReader.close();
         readLogFile.close();
         }catch (IOException ex){
-            System.out.println(ex.getMessage());
+            logRecord = "Nothing to show";
         }
         return logRecord;
     }
@@ -82,11 +82,10 @@ public class Logger {
             if (logRecordListFull.size()>n){
                 logRecordN = logRecordListFull.get(logRecordListFull.size()-n-1);
             }else{
-                n=logRecordListFull.size();
-                logRecordN = logRecordListFull.get(logRecordListFull.size()-n);
+                logRecordN = "";
             }
         }catch (IOException ex){
-            System.out.println(ex.getMessage());
+            logRecordN = "Nothing to show";
         }
         return logRecordN;
     }
