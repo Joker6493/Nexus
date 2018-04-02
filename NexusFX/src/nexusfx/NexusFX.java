@@ -8,7 +8,6 @@ package nexusfx;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -94,7 +93,6 @@ public class NexusFX extends Application {
             testStage.initModality(Modality.WINDOW_MODAL);
             testStage.initOwner(primaryStage);
             clazz.start(testStage);*/
-            
         });
         MenuItem about = new MenuItem("О программе...");
         menuHelp.getItems().addAll(loadcalc, new SeparatorMenuItem(), about, testClass);
