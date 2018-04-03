@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oracletestpackage;
+package mysqltestpackage;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -52,7 +52,6 @@ public class MySQLTest {
             }
         } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
-            e.printStackTrace();
         }
     }
     
