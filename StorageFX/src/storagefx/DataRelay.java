@@ -149,49 +149,132 @@ public class DataRelay {
     
     protected void addSkydiveSystem(SkydiveSystem ss) {
         //some code here in the future
+        /*Insert into SYSTEM_INFO (SYSTEMID,SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);
+Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);*/
     }
     
     protected void addCanopy(Canopy c) {
         //some code here in the future
+        /*Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);*/
     }
     
     protected void addReserve(Reserve r) {
         //some code here in the future
+        /*Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);*/
     }
     
     protected void addAAD(AAD aad) {
         //some code here in the future
+        /*Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);*/
     }
     
     protected void editSkydiveSystem(SkydiveSystem ss) {
         //some code here in the future
+        /**/
     }
     
     protected void editCanopy(Canopy c) {
         //some code here in the future
+        /**/
     }
     
     protected void editReserve(Reserve r) {
         //some code here in the future
+        /**/
     }
     
     protected void editAAD(AAD aad) {
         //some code here in the future
+        /**/
     }
     
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
         //some code here in the future
+        /*update system_info
+set STATUS=1
+where systemid=[systemid]
+update canopy_info
+set STATUS=1
+where systemid=[systemid]
+update reserve_info
+set STATUS=1
+where systemid=[systemid]
+update aad_info
+set STATUS=1
+where systemid=[systemid]*/
     }
     
     protected void deleteCanopy(Canopy c) {
         //some code here in the future
+        /*update [table_name]
+set STATUS=1
+where [element]id=[elementid]*/
     }
     
     protected void deleteReserve(Reserve r) {
         //some code here in the future
+        /*update [table_name]
+set STATUS=1
+where [element]id=[elementid]*/
     }
     
     protected void deleteAAD(AAD aad) {
         //some code here in the future
+        /*update [table_name]
+set STATUS=1
+where [element]id=[elementid]*/
     }
 }
+
+/*--creating new system - full
+Insert into SYSTEM_INFO (SYSTEMID,SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);
+Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);
+--creating new system 
+Insert into SYSTEM_INFO (SYSTEMID,SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+--creating new canopy
+Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);
+--creating new reserve
+Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
+--creating new aad
+Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);
+--creating new stock
+Insert into STOCK_INFO (STOCKID,STOCK_NAME,STATUS) values (?,?,?);
+--creating new manufacturer
+Insert into MANUFACTURER_INFO (MANUFACTURERID,MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?,?);
+--deleting system - full
+update system_info
+set STATUS=1
+where systemid=[systemid]
+update canopy_info
+set STATUS=1
+where systemid=[systemid]
+update reserve_info
+set STATUS=1
+where systemid=[systemid]
+update aad_info
+set STATUS=1
+where systemid=[systemid]
+--deleting system - container only, other elements removing
+update system_info
+set STATUS=1, canopyid = 0, reserveid = 0, aadid = 0
+where systemid=[systemid]
+--deleting single element
+update [table_name]
+set STATUS=1
+where [element]id=[elementid]
+--changing element
+update [table_name]
+set [set_of_changed_variables]
+where [element]id=[elementid]
+--replacing elements 
+UPDATE [table_name] t1 JOIN [table_name] t2
+    ON t1.[element]id = [elementid_old] AND t2.[element]id = [elementid_new]
+   SET t1.systemid = 0,
+       t2.systemid = [systemid];
+update system_info
+set [element]id=[elementid_new]
+where [element]id=[elementid_old]*/
