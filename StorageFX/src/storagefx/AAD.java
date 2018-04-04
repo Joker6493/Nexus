@@ -37,6 +37,17 @@ public class AAD {
         this.aadManufacturerID = aadManufacturerID;
         this.aadManufacturerName = aadManufacturerName;
     }
+    public AAD(int systemID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName) {
+        this.systemID = systemID;
+        this.aadModel = aadModel;
+        this.aadSN = aadSN;
+        this.aadDOM = aadDOM;
+        this.aadJumps = aadJumps;
+        this.aadNextRegl = aadNextRegl;
+        this.aadSaved = aadSaved;
+        this.aadManufacturerID = aadManufacturerID;
+        this.aadManufacturerName = aadManufacturerName;
+    }
     public int getSystemID() {
         return systemID;
     }

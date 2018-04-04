@@ -97,8 +97,7 @@ public class SkydiveSystem {
     }
     
     //System only
-    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID){
-    this.systemID = systemID;
+    SkydiveSystem (String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID){
     this.systemCode = systemCode;
     this.systemModel = systemModel;
     this.systemSN = systemSN;

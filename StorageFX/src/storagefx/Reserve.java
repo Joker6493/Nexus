@@ -37,6 +37,17 @@ public class Reserve {
         this.reserveManufacturerID = reserveManufacturerID;
         this.reserveManufacturerName = reserveManufacturerName;
     }
+    public Reserve(int systemID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName) {
+        this.systemID = systemID;
+        this.reserveModel = reserveModel;
+        this.reserveSize = reserveSize;
+        this.reserveSN = reserveSN;
+        this.reserveDOM = reserveDOM;
+        this.reserveJumps = reserveJumps;
+        this.reservePackDate = reservePackDate;
+        this.reserveManufacturerID = reserveManufacturerID;
+        this.reserveManufacturerName = reserveManufacturerName;
+    }
     public int getSystemID() {
         return systemID;
     }

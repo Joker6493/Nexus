@@ -37,6 +37,17 @@ public class Canopy {
         this.canopyManufacturerID = canopyManufacturerID;
         this.canopyManufacturerName = canopyManufacturerName;
     }
+    public Canopy(int systemID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName) {
+        //Canopy
+        this.systemID = systemID;
+        this.canopyModel = canopyModel;
+        this.canopySize = canopySize;
+        this.canopySN = canopySN;
+        this.canopyDOM = canopyDOM;
+        this.canopyJumps = canopyJumps;
+        this.canopyManufacturerID = canopyManufacturerID;
+        this.canopyManufacturerName = canopyManufacturerName;
+    }
     public int getSystemID() {
         return systemID;
     }

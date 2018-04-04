@@ -12,6 +12,8 @@ package storagefx;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -54,6 +56,7 @@ public class DataRelay {
         }
         return rs;
     }
+        
     private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
         rs.close();
         stmt.close();
@@ -143,16 +146,52 @@ public class DataRelay {
         statusList.add(active);
         ElementStatus disable = new ElementStatus(1,"Удаленная");
         statusList.add(disable);
+        ElementStatus repair = new ElementStatus(2,"В ремонте");
+        statusList.add(repair);
         ObservableList<ElementStatus> list = FXCollections.observableList(statusList);
         return list;
     }
     
     protected void addSkydiveSystem(SkydiveSystem ss) {
         //some code here in the future
-        /*Insert into SYSTEM_INFO (SYSTEMID,SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
-Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);
-Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);
-Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);*/
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            //insert system only
+            PreparedStatement stmt = conn.prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)");
+            stmt.setString(1, ss.getSystemCode());
+            stmt.setInt(2, ss.getSystemManufacturerID());
+            stmt.setString(3, ss.getSystemModel());
+            stmt.setString(4, ss.getSystemSN());
+            stmt.setDate(5, Date.valueOf(ss.getSystemDOM()));
+            stmt.setInt(6, ss.getCanopyID());
+            stmt.setInt(7, ss.getReserveID());
+            stmt.setInt(8, ss.getAadID());
+            stmt.setInt(9, 0);
+            stmt.setInt(9, ss.getStockID());
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();
+            //if added also new elements - insert them
+            if (ss.getCanopyID()!=0){
+                addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName()));
+            }
+            if (ss.getReserveID()!=0){
+                addReserve(new Reserve(ss.getSystemID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName()));
+            }
+            if (ss.getAadID()!=0){
+                addAAD(new AAD(ss.getSystemID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName()));
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
     }
     
     protected void addCanopy(Canopy c) {

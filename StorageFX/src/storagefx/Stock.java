@@ -17,6 +17,9 @@ public class Stock {
         this.stockID = stockID;
         this.stockName = stockName;
     }
+    public Stock(String stockName) {
+        this.stockName = stockName;
+    }
     public int getStockID() {
         return stockID;
     }

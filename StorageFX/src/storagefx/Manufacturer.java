@@ -16,7 +16,14 @@ public class Manufacturer {
     protected String manufacturerTelephone;
     protected String manufacturerEmail;
             
-Manufacturer (int manufacturerID, String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail){
+    public Manufacturer (int manufacturerID, String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail){
+        this.manufacturerID = manufacturerID;
+        this.manufacturerName = manufacturerName;
+        this.manufacturerCountry = manufacturerCountry;
+        this.manufacturerTelephone = manufacturerTelephone;
+        this.manufacturerEmail = manufacturerEmail;
+    }
+    public Manufacturer (String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail){
         this.manufacturerName = manufacturerName;
         this.manufacturerCountry = manufacturerCountry;
         this.manufacturerTelephone = manufacturerTelephone;
