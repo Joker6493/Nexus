@@ -153,7 +153,6 @@ public class DataRelay {
     }
     
     protected void addSkydiveSystem(SkydiveSystem ss) {
-        //some code here in the future
         try {
             //Call a method dynamically (Reflection)
             Class params[] = {};
@@ -173,20 +172,20 @@ public class DataRelay {
             stmt.setInt(7, ss.getReserveID());
             stmt.setInt(8, ss.getAadID());
             stmt.setInt(9, 0);
-            stmt.setInt(9, ss.getStockID());
+            stmt.setInt(10, ss.getStockID());
             stmt.execute();
             Connection bdcon = stmt.getConnection();
             stmt.close();
             bdcon.close();
             //if added also new elements - insert them
             if (ss.getCanopyID()!=0){
-                addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName()));
+                addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
             }
             if (ss.getReserveID()!=0){
-                addReserve(new Reserve(ss.getSystemID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName()));
+                addReserve(new Reserve(ss.getSystemID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID()));
             }
             if (ss.getAadID()!=0){
-                addAAD(new AAD(ss.getSystemID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName()));
+                addAAD(new AAD(ss.getSystemID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID()));
             }
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
@@ -195,18 +194,92 @@ public class DataRelay {
     }
     
     protected void addCanopy(Canopy c) {
-        //some code here in the future
-        /*Insert into CANOPY_INFO (CANOPYID,SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?);*/
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            PreparedStatement stmt = conn.prepareStatement("Insert into CANOPY_INFO (SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, c.getSystemID());
+            stmt.setInt(2, c.getCanopyManufacturerID());
+            stmt.setString(3, c.getCanopyModel());
+            stmt.setInt(4, c.getCanopySize());
+            stmt.setString(5, c.getCanopySN());
+            stmt.setDate(6, Date.valueOf(c.getCanopyDOM()));
+            stmt.setInt(7, c.getCanopyJumps());
+            stmt.setInt(8, 0);
+            stmt.setInt(9, c.getStockID());
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();           
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
     }
     
     protected void addReserve(Reserve r) {
-        //some code here in the future
-        /*Insert into RESERVE_INFO (RESERVEID,SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?,?);*/
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            PreparedStatement stmt = conn.prepareStatement("Insert into RESERVE_INFO (SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, r.getSystemID());
+            stmt.setInt(2, r.getReserveManufacturerID());
+            stmt.setString(3, r.getReserveModel());
+            stmt.setInt(4, r.getReserveSize());
+            stmt.setString(5, r.getReserveSN());
+            stmt.setDate(6, Date.valueOf(r.getReserveDOM()));
+            stmt.setInt(7, r.getReserveJumps());
+            stmt.setDate(8, Date.valueOf(r.getReservePackDate()));
+            stmt.setInt(9, 0);
+            stmt.setInt(10, r.getStockID());
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();           
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
     }
     
     protected void addAAD(AAD aad) {
-        //some code here in the future
-        /*Insert into AAD_INFO (AADID,SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?,?);*/
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            PreparedStatement stmt = conn.prepareStatement("Insert into AAD_INFO (SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, aad.getSystemID());
+            stmt.setInt(2, aad.getAadManufacturerID());
+            stmt.setString(3, aad.getAadModel());
+            stmt.setString(4, aad.getAadSN());
+            stmt.setDate(5, Date.valueOf(aad.getAadDOM()));
+            stmt.setInt(6, aad.getAadJumps());
+            stmt.setDate(7, Date.valueOf(aad.getAadNextRegl()));
+            stmt.setInt(8, 0);
+            stmt.setInt(9, aad.getStockID());
+            stmt.setInt(10, aad.getAadSaved());
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();           
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
     }
     
     protected void editSkydiveSystem(SkydiveSystem ss) {

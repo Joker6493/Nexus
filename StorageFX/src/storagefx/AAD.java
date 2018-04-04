@@ -13,8 +13,10 @@ import java.time.LocalDate;
  * @author d.borodin
  */
 public class AAD {
-    //AAD
+    //Container
     private int systemID;
+    private int stockID;
+    //AAD
     private int aadID;
     private String aadModel;
     private String aadSN;
@@ -25,8 +27,9 @@ public class AAD {
     private int aadManufacturerID;
     private String aadManufacturerName;
 
-    public AAD(int systemID, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName) {
+    public AAD(int systemID, int aadID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName, int stockID) {
         this.systemID = systemID;
+        this.stockID = stockID;
         this.aadID = aadID;
         this.aadModel = aadModel;
         this.aadSN = aadSN;
@@ -37,8 +40,9 @@ public class AAD {
         this.aadManufacturerID = aadManufacturerID;
         this.aadManufacturerName = aadManufacturerName;
     }
-    public AAD(int systemID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName) {
+    public AAD(int systemID, String aadModel, String aadSN, LocalDate aadDOM, int aadJumps, LocalDate aadNextRegl, int aadSaved, int aadManufacturerID, String aadManufacturerName, int stockID) {
         this.systemID = systemID;
+        this.stockID = stockID;
         this.aadModel = aadModel;
         this.aadSN = aadSN;
         this.aadDOM = aadDOM;
@@ -53,6 +57,12 @@ public class AAD {
     }
     public void setSystemID(int systemID) {
         this.systemID = systemID;
+    }
+    public int getStockID (){
+        return stockID;
+    }
+    public void setStockID (int stockID){
+        this.stockID = stockID;
     }
     public int getAadID() {
         return aadID;

@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class Canopy {
     //Container
     private int systemID;
+    private int stockID;
     //Canopy
     private int canopyID;
     private String canopyModel;
@@ -25,9 +26,10 @@ public class Canopy {
     private int canopyManufacturerID;
     private String canopyManufacturerName;
 
-    public Canopy(int systemID, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName) {
+    public Canopy(int systemID, int canopyID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int stockID) {
         //Canopy
         this.systemID = systemID;
+        this.stockID = stockID;
         this.canopyID = canopyID;
         this.canopyModel = canopyModel;
         this.canopySize = canopySize;
@@ -37,9 +39,10 @@ public class Canopy {
         this.canopyManufacturerID = canopyManufacturerID;
         this.canopyManufacturerName = canopyManufacturerName;
     }
-    public Canopy(int systemID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName) {
+    public Canopy(int systemID, String canopyModel, int canopySize, String canopySN, LocalDate canopyDOM, int canopyJumps, int canopyManufacturerID, String canopyManufacturerName, int stockID) {
         //Canopy
         this.systemID = systemID;
+        this.stockID = stockID;
         this.canopyModel = canopyModel;
         this.canopySize = canopySize;
         this.canopySN = canopySN;
@@ -53,6 +56,12 @@ public class Canopy {
     }
     public void setSystemID(int systemID) {
         this.systemID = systemID;
+    }
+    public int getStockID (){
+        return stockID;
+    }
+    public void setStockID (int stockID){
+        this.stockID = stockID;
     }
     public int getCanopyID() {
         return canopyID;

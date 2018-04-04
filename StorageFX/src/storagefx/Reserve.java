@@ -13,8 +13,10 @@ import java.time.LocalDate;
  * @author d.borodin
  */
 public class Reserve {
-    //Reserve
+    //Container
     private int systemID;
+    private int stockID;
+    //Reserve
     private int reserveID;
     private String reserveModel;
     private int reserveSize;
@@ -25,8 +27,9 @@ public class Reserve {
     private int reserveManufacturerID;
     private String reserveManufacturerName;
 
-    public Reserve(int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName) {
+    public Reserve(int systemID, int reserveID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int stockID) {
         this.systemID = systemID;
+        this.stockID = stockID;
         this.reserveID = reserveID;
         this.reserveModel = reserveModel;
         this.reserveSize = reserveSize;
@@ -37,8 +40,9 @@ public class Reserve {
         this.reserveManufacturerID = reserveManufacturerID;
         this.reserveManufacturerName = reserveManufacturerName;
     }
-    public Reserve(int systemID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName) {
+    public Reserve(int systemID, String reserveModel, int reserveSize, String reserveSN, LocalDate reserveDOM, int reserveJumps, LocalDate reservePackDate, int reserveManufacturerID, String reserveManufacturerName, int stockID) {
         this.systemID = systemID;
+        this.stockID = stockID;
         this.reserveModel = reserveModel;
         this.reserveSize = reserveSize;
         this.reserveSN = reserveSN;
@@ -53,6 +57,12 @@ public class Reserve {
     }
     public void setSystemID(int systemID) {
         this.systemID = systemID;
+    }
+    public int getStockID (){
+        return stockID;
+    }
+    public void setStockID (int stockID){
+        this.stockID = stockID;
     }
     public int getReserveID() {
         return reserveID;
