@@ -127,7 +127,7 @@ public class DataRelay {
         return list;
     }
     
-    protected ObservableList<SkydiveSystem> getContaineersList() {
+    protected ObservableList<SkydiveSystem> getContainersList() {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
         try{
             String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid as system_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid) as system_manufacturer_name " +
