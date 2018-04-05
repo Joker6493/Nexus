@@ -8,12 +8,10 @@ package storagefx;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import api.NexusPlugin;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.event.ActionEvent;
@@ -36,11 +34,11 @@ import javafx.stage.Modality;
  *
  * @author dboro
  */
-public class StorageIndex extends Application implements NexusPlugin {
+public class StorageIndex extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Override
-    public void start(Stage primaryStage) throws SQLException {
+    public void start(Stage primaryStage) {
         
         BorderPane index = StorageIndex();
         Scene scene = new Scene(index);
@@ -50,7 +48,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         primaryStage.show();
     }
     
-    public BorderPane StorageIndex () throws SQLException{
+    public BorderPane StorageIndex () {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
         TableView<SkydiveSystem> indexStore = new TableView<>();
@@ -243,12 +241,7 @@ public class StorageIndex extends Application implements NexusPlugin {
         
         return index;
     }
-    
-    @Override
-    public void invoke(){
-        //plugin TODO - in process
-    }
-    
+        
     /**
      * @param args the command line arguments
      */

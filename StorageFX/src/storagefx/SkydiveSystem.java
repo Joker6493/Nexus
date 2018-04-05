@@ -96,8 +96,49 @@ public class SkydiveSystem {
     this.aadManufacturerName = aadManufacturerName;
     }
     
-    //System only
+    //System only - short
     SkydiveSystem (String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID){
+    this.systemCode = systemCode;
+    this.systemModel = systemModel;
+    this.systemSN = systemSN;
+    this.systemDOM = systemDOM;
+    this.systemManufacturerID = systemManufacturerID;
+    this.systemManufacturerName = systemManufacturerName;
+    this.stockID = stockID;
+    //Canopy
+    this.canopyID = 0;
+    this.canopyModel = "";
+    this.canopySize = 0;
+    this.canopySN = "";
+    this.canopyDOM = LocalDate.of(1990, Month.JANUARY, 01);
+    this.canopyJumps = 0;
+    this.canopyManufacturerID = 0;
+    this.canopyManufacturerName = "";
+    //Reserve
+    this.reserveID = 0;
+    this.reserveModel = "";
+    this.reserveSize = 0;
+    this.reserveSN = "";
+    this.reserveDOM = LocalDate.of(1990, Month.JANUARY, 01);
+    this.reserveJumps = 0;
+    this.reservePackDate = LocalDate.of(1990, Month.JANUARY, 01);
+    this.reserveManufacturerID = 0;
+    this.reserveManufacturerName = "";
+    //AAD
+    this.aadID = 0;
+    this.aadModel = "";
+    this.aadSN = "";
+    this.aadDOM = LocalDate.of(1990, Month.JANUARY, 01);
+    this.aadJumps = 0;
+    this.aadNextRegl = LocalDate.of(1990, Month.JANUARY, 01);
+    this.aadSaved = 0;
+    this.aadManufacturerID = 0;
+    this.aadManufacturerName = "";
+    }
+    
+    //System only - full
+    SkydiveSystem (int systemID, String systemCode, String systemModel, String systemSN, LocalDate systemDOM, int systemManufacturerID, String systemManufacturerName, int stockID){
+    this.systemID = systemID;
     this.systemCode = systemCode;
     this.systemModel = systemModel;
     this.systemSN = systemSN;
