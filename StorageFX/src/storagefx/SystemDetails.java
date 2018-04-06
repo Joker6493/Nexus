@@ -343,7 +343,7 @@ public class SystemDetails extends Application {
             }
         });
         Button aChoose = new Button ("...");
-        aChoose.setTooltip(new Tooltip("Выберите купол запасного парашюта"));
+        aChoose.setTooltip(new Tooltip("Выберите страхующий прибор"));
         aChoose.setDisable(!editStatus);
         aChoose.setOnAction((ActionEvent event) -> {
             //some code here
