@@ -37,6 +37,8 @@ import javafx.stage.Modality;
 public class StorageIndex extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private int stockID;
+    private int status;
     @Override
     public void start(Stage primaryStage) {
         
@@ -111,48 +113,6 @@ public class StorageIndex extends Application {
             }
         });
         
-        ContextMenu storageContextMenu = new ContextMenu();
-        MenuItem refreshList = new MenuItem("Обновить список");
-        refreshList.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
-            System.out.println("Идет обновление списка");
-            //Some code here
-            System.out.println("Обновление списка завершено");
-        });
-        MenuItem editItem = new MenuItem("Редактировать");
-        editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
-            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
-            SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
-        });
-        MenuItem addItem = new MenuItem("Добавить");
-        addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
-            System.out.println("Добавить систему?");
-            SystemDetails detail = new SystemDetails();
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
-        });
-        MenuItem deleteItem = new MenuItem("Удалить");
-        deleteItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
-            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
-        });
-        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
-        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
-        });
-        
-        index.setCenter(indexStore);
-        
         Button refreshBtn = new Button();
         refreshBtn.setText("Обновить");
         refreshBtn.setOnAction((ActionEvent event) -> {
@@ -189,9 +149,11 @@ public class StorageIndex extends Application {
             }
         });
         stockBox.getSelectionModel().select(1);
+        stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
         stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
             dr.setStock(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
@@ -199,6 +161,7 @@ public class StorageIndex extends Application {
         ObservableList<Status> statusList = dr.getStatusList();
         statusBox.setItems(statusList);
         statusBox.getSelectionModel().select(0);
+        status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
         statusBox.setCellFactory(p -> new ListCell <Status> () {
             @Override
             protected void updateItem(Status item, boolean empty) {
@@ -224,6 +187,7 @@ public class StorageIndex extends Application {
         statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
             dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
+            status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
         
@@ -231,6 +195,48 @@ public class StorageIndex extends Application {
         storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
         storageBar.setPadding(new Insets(10));
         index.setTop(storageBar);
+        
+        ContextMenu storageContextMenu = new ContextMenu();
+        MenuItem refreshList = new MenuItem("Обновить список");
+        refreshList.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            System.out.println("Идет обновление списка");
+            //Some code here
+            System.out.println("Обновление списка завершено");
+        });
+        MenuItem editItem = new MenuItem("Редактировать");
+        editItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
+            SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
+        });
+        MenuItem addItem = new MenuItem("Добавить");
+        addItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            System.out.println("Добавить систему?");
+            SystemDetails detail = new SystemDetails(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
+        });
+        MenuItem deleteItem = new MenuItem("Удалить");
+        deleteItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+        });
+        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
+            storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
+        });
+        
+        index.setCenter(indexStore);
         
         Button closeBtn = new Button();
         closeBtn.setText("Закрыть");

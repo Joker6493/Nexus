@@ -40,6 +40,8 @@ import javafx.stage.Modality;
 public class ElementsIndex extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private int stockID;
+    private int status;
     @Override
     public void start(Stage primaryStage) throws SQLException {
         
@@ -100,9 +102,11 @@ public class ElementsIndex extends Application {
             }
         });
         stockBox.getSelectionModel().select(1);
+        stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
         stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
             dr.setStock(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
@@ -110,6 +114,7 @@ public class ElementsIndex extends Application {
         ObservableList<Status> statusList = dr.getStatusList();
         statusBox.setItems(statusList);
         statusBox.getSelectionModel().select(0);
+        status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
         statusBox.setCellFactory(p -> new ListCell <Status> () {
             @Override
             protected void updateItem(Status item, boolean empty) {
@@ -135,6 +140,7 @@ public class ElementsIndex extends Application {
         statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
             dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
+            status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
         topMenu.getChildren().addAll(elementsBox, new Label("Элементы системы"), stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
@@ -230,7 +236,7 @@ public class ElementsIndex extends Application {
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить систему?");
-            SystemDetails detail = new SystemDetails();
+            SystemDetails detail = new SystemDetails(stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -326,7 +332,7 @@ public class ElementsIndex extends Application {
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
-            SystemDetails detail = new SystemDetails();
+            SystemDetails detail = new SystemDetails(stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -423,7 +429,7 @@ public class ElementsIndex extends Application {
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
-            SystemDetails detail = new SystemDetails();
+            SystemDetails detail = new SystemDetails(stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -535,7 +541,7 @@ public class ElementsIndex extends Application {
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить прибор?");
-            SystemDetails detail = new SystemDetails();
+            SystemDetails detail = new SystemDetails(stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
