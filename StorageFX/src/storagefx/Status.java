@@ -9,10 +9,10 @@ package storagefx;
  *
  * @author dboro
  */
-public class ElementStatus {
+public class Status {
     private int statusID;
     private String statusName;
-    public ElementStatus(int statusID, String statusName) {
+    public Status(int statusID, String statusName) {
         this.statusID = statusID;
         this.statusName = statusName;
     }

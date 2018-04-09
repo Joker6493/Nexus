@@ -195,13 +195,13 @@ public class StorageIndex extends Application {
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
-        ComboBox <ElementStatus> statusBox = new ComboBox<>();
-        ObservableList<ElementStatus> statusList = dr.getStatusList();
+        ComboBox <Status> statusBox = new ComboBox<>();
+        ObservableList<Status> statusList = dr.getStatusList();
         statusBox.setItems(statusList);
         statusBox.getSelectionModel().select(0);
-        statusBox.setCellFactory(p -> new ListCell <ElementStatus> () {
+        statusBox.setCellFactory(p -> new ListCell <Status> () {
             @Override
-            protected void updateItem(ElementStatus item, boolean empty) {
+            protected void updateItem(Status item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null && !empty) {
                     setText(item.getStatusName());
@@ -210,9 +210,9 @@ public class StorageIndex extends Application {
                 }
             }
         });
-        statusBox.setButtonCell(new ListCell <ElementStatus> () {
+        statusBox.setButtonCell(new ListCell <Status> () {
             @Override
-            protected void updateItem(ElementStatus item, boolean empty) {
+            protected void updateItem(Status item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null && !empty) {
                     setText(item.getStatusName());

@@ -33,17 +33,55 @@ import javafx.stage.Stage;
  * @author dboro
  */
 public class ElementsDetails extends Application {
-    private final SkydiveSystem selectedSystem;
+    private SkydiveSystem selectedSystem;
+    private Canopy selectedCanopy;
+    private Reserve selectedReserve;
+    private AAD selectedAAD;
+    private String elementType;
     private boolean editStatus;
     private String stageTitle;
+    private Scene scene;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     ElementsDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
     }
-    
-    ElementsDetails (){
+    ElementsDetails (Canopy selectedCanopy, boolean editStatus){
+        this.selectedCanopy = selectedCanopy;
+        this.stageTitle = "Основной парашют "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize();
+        this.editStatus = editStatus;
+    }
+    ElementsDetails (Reserve selectedReserve, boolean editStatus){
+        this.selectedReserve = selectedReserve;
+        this.stageTitle = "Запасной парашют "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize();
+        this.editStatus = editStatus;
+    }
+    ElementsDetails (AAD selectedAAD, boolean editStatus){
+        this.selectedAAD = selectedAAD;
+        this.stageTitle = "Страхующий прибор "+selectedAAD.getAadModel()+" "+selectedAAD.getAadSN();
+        this.editStatus = editStatus;
+    }
+    ElementsDetails (String elementType){
+        this.elementType = elementType;
+        switch (elementType) {
+            case "container":
+//                index.setCenter(ContainerTable());
+//                this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
+                break;
+            case "canopy":
+//                index.setCenter(CanopyTable());
+//                this.selectedCanopy = new Canopy(0, 0, "", 0, "", LocalDate.now(), 0, 0, "", stockID);
+                break;
+            case "reserve":
+//                index.setCenter(ReserveTable());
+//                this.selectedReserve = new Reserve(0, 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", stockID);
+                break;
+            case "aad": 
+//                this.selectedAAD = new AAD(0, 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "", stockID);
+//                index.setCenter(AADTable());
+                break;
+        }
         this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
         this.stageTitle = "Добавление новой системы";
         this.editStatus = true;

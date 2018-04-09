@@ -25,6 +25,8 @@ import javafx.collections.ObservableList;
 public class DataRelay {
     private int status = 0;
     private int stock = 2;
+    private Stock myStock;
+    private Status myStatus;
     public int getStatus() {
         return status;
     }
@@ -293,15 +295,15 @@ public class DataRelay {
         ObservableList<Stock> list = FXCollections.observableList(stockList);
         return list;
     }
-    protected ObservableList<ElementStatus> getStatusList() {
-        ArrayList<ElementStatus> statusList = new ArrayList<>();
-        ElementStatus active = new ElementStatus(0,"Активная");
+    protected ObservableList<Status> getStatusList() {
+        ArrayList<Status> statusList = new ArrayList<>();
+        Status active = new Status(0,"Активная");
         statusList.add(active);
-        ElementStatus disable = new ElementStatus(1,"Удаленная");
+        Status disable = new Status(1,"Удаленная");
         statusList.add(disable);
-        ElementStatus repair = new ElementStatus(2,"В ремонте");
+        Status repair = new Status(2,"В ремонте");
         statusList.add(repair);
-        ObservableList<ElementStatus> list = FXCollections.observableList(statusList);
+        ObservableList<Status> list = FXCollections.observableList(statusList);
         return list;
     }
     

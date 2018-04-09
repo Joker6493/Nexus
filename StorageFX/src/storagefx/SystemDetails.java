@@ -36,17 +36,20 @@ public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
     private boolean editStatus;
     private String stageTitle;
+    private Stock stock;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     SystemDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
+//        this.stock = stock;
     }
     
     SystemDetails (){
         this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
         this.stageTitle = "Добавление новой системы";
         this.editStatus = true;
+//        this.stock = stock;
     }
         
     @Override
