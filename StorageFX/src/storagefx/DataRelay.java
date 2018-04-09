@@ -25,8 +25,7 @@ import javafx.collections.ObservableList;
 public class DataRelay {
     private int status = 0;
     private int stock = 2;
-    private Stock myStock;
-    private Status myStatus;
+        
     public int getStatus() {
         return status;
     }
