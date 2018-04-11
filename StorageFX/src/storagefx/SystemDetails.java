@@ -44,8 +44,8 @@ public class SystemDetails extends Application {
         this.editStatus = editStatus;
     }
     
-    SystemDetails (int stock){
-        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stock, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
+    SystemDetails (int stockID){
+        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
         this.stageTitle = "Добавление новой системы";
         this.editStatus = true;
     }

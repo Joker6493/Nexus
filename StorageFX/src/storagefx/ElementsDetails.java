@@ -46,44 +46,50 @@ public class ElementsDetails extends Application {
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
+        this.scene = new Scene(containerDetail(selectedSystem));
     }
     ElementsDetails (Canopy selectedCanopy, boolean editStatus){
         this.selectedCanopy = selectedCanopy;
         this.stageTitle = "Основной парашют "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize();
         this.editStatus = editStatus;
+        this.scene = new Scene(canopyDetail(selectedCanopy));
     }
     ElementsDetails (Reserve selectedReserve, boolean editStatus){
         this.selectedReserve = selectedReserve;
         this.stageTitle = "Запасной парашют "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize();
         this.editStatus = editStatus;
+        this.scene = new Scene(reserveDetail(selectedReserve));
     }
     ElementsDetails (AAD selectedAAD, boolean editStatus){
         this.selectedAAD = selectedAAD;
         this.stageTitle = "Страхующий прибор "+selectedAAD.getAadModel()+" "+selectedAAD.getAadSN();
         this.editStatus = editStatus;
+        this.scene = new Scene(aadDetail(selectedAAD));
     }
-    ElementsDetails (String elementType){
+    ElementsDetails (String elementType, int stockID){
         this.elementType = elementType;
         switch (elementType) {
             case "container":
-//                index.setCenter(ContainerTable());
-//                this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
+                this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
+                this.stageTitle = "Добавление нового ранца";
+                this.scene = new Scene(containerDetail(selectedSystem));
                 break;
             case "canopy":
-//                index.setCenter(CanopyTable());
-//                this.selectedCanopy = new Canopy(0, 0, "", 0, "", LocalDate.now(), 0, 0, "", stockID);
+                this.selectedCanopy = new Canopy(0, 0, "", 0, "", LocalDate.now(), 0, 0, "", stockID);
+                this.stageTitle = "Добавление нового основного парашюта";
+                this.scene = new Scene(canopyDetail(selectedCanopy));
                 break;
             case "reserve":
-//                index.setCenter(ReserveTable());
-//                this.selectedReserve = new Reserve(0, 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", stockID);
+                this.selectedReserve = new Reserve(0, 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", stockID);
+                this.stageTitle = "Добавление нового запасного парашюта";
+                this.scene = new Scene(reserveDetail(selectedReserve));
                 break;
             case "aad": 
-//                this.selectedAAD = new AAD(0, 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "", stockID);
-//                index.setCenter(AADTable());
+                this.selectedAAD = new AAD(0, 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "", stockID);
+                this.stageTitle = "Добавление нового страхующего прибора";
+                this.scene = new Scene(aadDetail(selectedAAD));
                 break;
         }
-        this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", 0, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
-        this.stageTitle = "Добавление новой системы";
         this.editStatus = true;
     }
         

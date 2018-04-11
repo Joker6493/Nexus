@@ -41,13 +41,12 @@ public class ElementsIndex extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
-    private int status;
+    private StackPane table;
+    private DataRelay dr;
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        
         BorderPane index = ElementsIndex();
         Scene scene = new Scene(index);
-        
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -56,7 +55,7 @@ public class ElementsIndex extends Application {
     public BorderPane ElementsIndex(){
         BorderPane index = new BorderPane();
         HBox topMenu = new HBox();
-        DataRelay dr = new DataRelay();
+        dr = new DataRelay();
         ComboBox <String> elementsBox = new ComboBox<>();
         ArrayList<String> indexList = new ArrayList<>();
         indexList.add("Ранцы");
@@ -147,25 +146,24 @@ public class ElementsIndex extends Application {
         index.setTop(topMenu);
         switch (elementsBox.getSelectionModel().getSelectedItem()){
             case "Ранцы":
-                index.setCenter(ContainerTable());
+                table = ContainerTable();
                 break;
             case "Основные парашюты":
-                index.setCenter(CanopyTable());
+                table = CanopyTable();
                 break;
             case "Запасные парашюты":
-                index.setCenter(ReserveTable());
+                table = ReserveTable();
                 break;
             case "Страхующие приборы": 
-                index.setCenter(AADTable());
+                table = AADTable();
                 break;
         }
-        
+        index.setCenter(table);
         return index;
     }
     
     public StackPane ContainerTable(){
         StackPane index = new StackPane();
-        DataRelay dr = new DataRelay();
         TableView<SkydiveSystem> containerTable = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -252,12 +250,12 @@ public class ElementsIndex extends Application {
         containerTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             containerContextMenu.show(containerTable, event.getScreenX(), event.getScreenY());
         });
+        index.getChildren().add(containerTable);
         return index;
     }
     
     public StackPane CanopyTable(){
         StackPane index = new StackPane();
-        DataRelay dr = new DataRelay();
         TableView<Canopy> canopyTable = new TableView<>();
         //Columns
         TableColumn <Canopy, String> canopy = new TableColumn<>("Основной парашют");
@@ -348,12 +346,12 @@ public class ElementsIndex extends Application {
         canopyTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             canopyContextMenu.show(canopyTable, event.getScreenX(), event.getScreenY());
         });
+        index.getChildren().add(canopyTable);
         return index;
     }
     
     public StackPane ReserveTable(){
         StackPane index = new StackPane();
-        DataRelay dr = new DataRelay();
         TableView<Reserve> reserveTable = new TableView<>();
         //Columns
         //Reserve(systemID, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, stockID)
@@ -445,12 +443,12 @@ public class ElementsIndex extends Application {
         reserveTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             reserveContextMenu.show(reserveTable, event.getScreenX(), event.getScreenY());
         });
+        index.getChildren().add(reserveTable);
         return index;
     }
     
     public StackPane AADTable(){
         StackPane index = new StackPane();
-        DataRelay dr = new DataRelay();
         TableView<AAD> aadTable = new TableView<>();
         //Columns
         //AAD(systemID, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID)
@@ -557,6 +555,7 @@ public class ElementsIndex extends Application {
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             aadContextMenu.show(aadTable, event.getScreenX(), event.getScreenY());
         });
+        index.getChildren().add(aadTable);
         return index;
     }
     
