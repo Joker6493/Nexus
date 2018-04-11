@@ -12,12 +12,12 @@ package testpackage;
  * @author dboro
  */
 import java.sql.*;
-import utils.OracleConn;
+import utils.SAMConn;
 
 public class TestClass { 
     public static void main(String[] args) {
-        OracleConn orc = new OracleConn();
-        orc.connectDatabase();
+        SAMConn mysql = new SAMConn();
+        mysql.connectDatabase();
         
     }
 }

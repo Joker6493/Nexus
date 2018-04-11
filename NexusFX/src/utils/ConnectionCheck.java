@@ -7,8 +7,6 @@ package utils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Duration;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -22,7 +20,7 @@ import javafx.scene.control.Label;
  */
 public class ConnectionCheck extends Label {
     private static String statusConn = "Off-line";
-    OracleConn db = new OracleConn();
+    SAMConn db = new SAMConn();
     Connection dbconn =db.connectDatabase();
     public ConnectionCheck()
     {

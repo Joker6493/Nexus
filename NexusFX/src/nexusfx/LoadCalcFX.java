@@ -88,18 +88,17 @@ public class LoadCalcFX extends Application {
         GridPane root = new GridPane();
         root.setPadding(new Insets(10, 10, 10, 10));
         root.setGridLinesVisible(false);
-        root.setConstraints(WeightWEqLabel, 0, 0);
-        root.setConstraints(WeightSysLabel, 0, 1);
-        root.setConstraints(CanopySizeLabel, 0, 2);
-        root.setConstraints(calcLoad, 0, 3);
-        root.setConstraints(WeightWEq, 1, 0);
-        root.setConstraints(WeightSys, 1, 1);
-        root.setConstraints(CanopySize, 1, 2);
-        root.setConstraints(CanopyLoad, 1, 3);
-        root.setConstraints(clear, 0, 4);
+        root.add(WeightWEqLabel, 0, 0);
+        root.add(WeightSysLabel, 0, 1);
+        root.add(CanopySizeLabel, 0, 2);
+        root.add(calcLoad, 0, 3);
+        root.add(WeightWEq, 1, 0);
+        root.add(WeightSys, 1, 1);
+        root.add(CanopySize, 1, 2);
+        root.add(CanopyLoad, 1, 3);
+        root.add(clear, 0, 4);
         root.setHalignment(clear, HPos.RIGHT);
-        root.setConstraints(close, 1, 4);
-        root.getChildren().addAll(WeightWEqLabel, WeightSysLabel, CanopySizeLabel, calcLoad, WeightWEq, WeightSys, CanopySize, CanopyLoad, clear, close);
+        root.add(close, 1, 4);
         root.setVgap(5);
         root.setHgap(10);
         
