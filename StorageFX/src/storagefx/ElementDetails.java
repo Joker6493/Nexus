@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  *
  * @author dboro
  */
-public class ElementsDetails extends Application {
+public class ElementDetails extends Application {
     private SkydiveSystem selectedSystem;
     private Canopy selectedCanopy;
     private Reserve selectedReserve;
@@ -42,31 +42,31 @@ public class ElementsDetails extends Application {
     private String stageTitle;
     private Scene scene;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    ElementsDetails (SkydiveSystem selectedSystem, boolean editStatus){
+    ElementDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
         this.scene = new Scene(containerDetail(selectedSystem));
     }
-    ElementsDetails (Canopy selectedCanopy, boolean editStatus){
+    ElementDetails (Canopy selectedCanopy, boolean editStatus){
         this.selectedCanopy = selectedCanopy;
         this.stageTitle = "Основной парашют "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize();
         this.editStatus = editStatus;
         this.scene = new Scene(canopyDetail(selectedCanopy));
     }
-    ElementsDetails (Reserve selectedReserve, boolean editStatus){
+    ElementDetails (Reserve selectedReserve, boolean editStatus){
         this.selectedReserve = selectedReserve;
         this.stageTitle = "Запасной парашют "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize();
         this.editStatus = editStatus;
         this.scene = new Scene(reserveDetail(selectedReserve));
     }
-    ElementsDetails (AAD selectedAAD, boolean editStatus){
+    ElementDetails (AAD selectedAAD, boolean editStatus){
         this.selectedAAD = selectedAAD;
         this.stageTitle = "Страхующий прибор "+selectedAAD.getAadModel()+" "+selectedAAD.getAadSN();
         this.editStatus = editStatus;
         this.scene = new Scene(aadDetail(selectedAAD));
     }
-    ElementsDetails (String elementType, int stockID){
+    ElementDetails (String elementType, int stockID){
         this.elementType = elementType;
         switch (elementType) {
             case "container":
