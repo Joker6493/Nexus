@@ -377,12 +377,12 @@ public class ElementsIndex extends Application {
         //Adding columns into TableView
         reserveTable.getColumns().addAll(reserve,reserveModel,reserveSN,reserveJumps,reserveManufacturerName);
         //Getting values and format from class variables
-        reserveModel.setCellValueFactory(new PropertyValueFactory<>("canopyModel"));    
-        reserveSize.setCellValueFactory(new PropertyValueFactory<>("canopySize"));
-        reserveSN.setCellValueFactory(new PropertyValueFactory<>("canopySN"));
-        reserveDOM.setCellValueFactory(new PropertyValueFactory<>("canopyDOM"));      
-        reserveJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
-        reserveManufacturerName.setCellValueFactory(new PropertyValueFactory<>("canopyManufacturerName"));
+        reserveModel.setCellValueFactory(new PropertyValueFactory<>("reserveModel"));    
+        reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
+        reserveSN.setCellValueFactory(new PropertyValueFactory<>("reserveSN"));
+        reserveDOM.setCellValueFactory(new PropertyValueFactory<>("reserveDOM"));      
+        reserveJumps.setCellValueFactory(new PropertyValueFactory<>("reserveJumps"));        
+        reserveManufacturerName.setCellValueFactory(new PropertyValueFactory<>("reserveManufacturerName"));
         //Rendering date cell
         reserveDOM.setCellFactory(column -> {
             return new TableCell<Reserve, LocalDate>() {

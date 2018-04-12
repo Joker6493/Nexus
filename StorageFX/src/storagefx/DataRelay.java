@@ -162,7 +162,7 @@ public class DataRelay {
         try{
             String selectQuery = "select ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name " +
                                  "from canopy_info ci " +
-                                 "where ci.systemid = 0 and ci.status = "+ getStatus() +"and ci.stockid = "+ getStock() +";";
+                                 "where ci.systemid = 0 and ci.status = "+ getStatus() +" and ci.stockid = "+ getStock();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int systemID = 0;
@@ -192,7 +192,7 @@ public class DataRelay {
         try{
             String selectQuery = "select ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name " +
                                  "from reserve_info ri " +
-                                 "where ri.systemid = 0 and ri.status = "+ getStatus() +" and ri.stockid = "+ getStock() +";";
+                                 "where ri.systemid = 0 and ri.status = "+ getStatus() +" and ri.stockid = "+ getStock();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int systemID = 0;
