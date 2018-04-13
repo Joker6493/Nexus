@@ -375,7 +375,7 @@ public class ElementsIndex extends Application {
         TableColumn <Reserve, Integer> reserveJumps = new TableColumn<>("Прыжков на куполе");
         TableColumn <Reserve, String> reserveManufacturerName = new TableColumn<>("Производитель");
         //Adding columns into TableView
-        reserveTable.getColumns().addAll(reserve,reserveModel,reserveSN,reserveJumps,reserveManufacturerName);
+        reserveTable.getColumns().addAll(reserve,reserveSN,reserveDOM,reserveJumps,reserveManufacturerName);
         //Getting values and format from class variables
         reserveModel.setCellValueFactory(new PropertyValueFactory<>("reserveModel"));    
         reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
