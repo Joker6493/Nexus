@@ -41,12 +41,14 @@ public class ElementDetails extends Application {
     private boolean editStatus;
     private String stageTitle;
     private Scene scene;
+    private boolean assemble = false;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     ElementDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
         this.scene = new Scene(containerDetail(selectedSystem));
+        this.assemble = true;
     }
     ElementDetails (Canopy selectedCanopy, boolean editStatus){
         this.selectedCanopy = selectedCanopy;
@@ -73,6 +75,7 @@ public class ElementDetails extends Application {
                 this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
                 this.stageTitle = "Добавление нового ранца";
                 this.scene = new Scene(containerDetail(selectedSystem));
+                this.assemble = true;
                 break;
             case "canopy":
                 this.selectedCanopy = new Canopy(0, 0, "", 0, "", LocalDate.now(), 0, 0, "", stockID);
@@ -93,7 +96,7 @@ public class ElementDetails extends Application {
         this.editStatus = true;
     }
         
-    public GridPane containerDetail(SkydiveSystem ss){
+    private GridPane containerDetail(SkydiveSystem ss){
         GridPane details = new GridPane();
         
         Label containerGridName = new Label("Ранец и подвесная система");
@@ -148,10 +151,12 @@ public class ElementDetails extends Application {
         details.add(sDOM, 1, 3);
         details.add(sManufacturerNameLabel, 0, 4);
         details.add(sManufacturerName, 1, 4);
-        details.setPadding(new Insets(5));/*
+        details.setPadding(new Insets(5));
         
         Button saveBtn = new Button("Сохранить");
         saveBtn.setDisable(!editStatus);
+        Button assembleBtn = new Button ("Собрать систему");
+        assembleBtn.setDisable(!assemble);
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
@@ -170,29 +175,6 @@ public class ElementDetails extends Application {
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
                 sManufacturerName.setEditable(editStatus);
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setEditable(editStatus);
-                cJumps.setEditable(editStatus);
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setEditable(editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setEditable(editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                cChoose.setDisable(!editStatus);
-                rChoose.setDisable(!editStatus);
-                aChoose.setDisable(!editStatus);
                 saveBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
             }else{
@@ -201,29 +183,6 @@ public class ElementDetails extends Application {
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
                 sManufacturerName.setEditable(editStatus);
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setEditable(editStatus);
-                cJumps.setEditable(editStatus);
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setEditable(editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setEditable(editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                cChoose.setDisable(!editStatus);
-                rChoose.setDisable(!editStatus);
-                aChoose.setDisable(!editStatus);
                 saveBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
             }             
@@ -238,12 +197,10 @@ public class ElementDetails extends Application {
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, cancelBtn);
         
-        */
-        
         return details;
     }
     
-    public GridPane canopyDetail(Canopy c){
+    private GridPane canopyDetail(Canopy c){
         GridPane details = new GridPane();
         
         /*Label canopyGridName = new Label("Основной парашют");
@@ -415,7 +372,7 @@ public class ElementDetails extends Application {
         return details;
     }
     
-    public GridPane reserveDetail(Reserve r){
+    private GridPane reserveDetail(Reserve r){
         GridPane details = new GridPane();
         
         /*Label reserveGridName = new Label("Запасной парашют");
@@ -597,7 +554,7 @@ public class ElementDetails extends Application {
         return details;
     }
     
-    public GridPane aadDetail(AAD a){
+    private GridPane aadDetail(AAD a){
         GridPane details = new GridPane();
         
         /*Label aadGridName = new Label("Страхующий прибор");
