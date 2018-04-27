@@ -378,7 +378,43 @@ public class SystemDetails extends Application {
             //some code here, rollback any changes
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+            //check fields for changing, creating update query
+            String updFields;
+            
+        //Container
+            if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                
+            }
+//            sModel = (selectedSystem.getSystemModel());
+//            sSN = (selectedSystem.getSystemSN());
+//            sDOM = (selectedSystem.getSystemDOM());
+//            sManufacturerName = (selectedSystem.getSystemManufacturerName());
+//
+//        //Canopy
+//            cModel = (selectedSystem.getCanopyModel());
+//            cSize = (Integer.toString(selectedSystem.getCanopySize()));
+//            cSN = (selectedSystem.getCanopySN());
+//            cDOM = (selectedSystem.getCanopyDOM());
+//            cManufacturerName = (selectedSystem.getCanopyManufacturerName());
+//            cJumps = (Integer.toString(selectedSystem.getCanopyJumps()));
+//
+//        //Reserve
+//            rModel = (selectedSystem.getReserveModel());
+//            rSize = (Integer.toString(selectedSystem.getReserveSize()));
+//            rSN = (selectedSystem.getReserveSN());
+//            rDOM = (selectedSystem.getReserveDOM());
+//            rManufacturerName = (selectedSystem.getReserveManufacturerName());
+//            rJumps = (Integer.toString(selectedSystem.getReserveJumps()));DatePicker rPackDate = new DatePicker(selectedSystem.getReservePackDate());
+//
+//        //AAD
+//            aModel = (selectedSystem.getAadModel());
+//            aSN = (selectedSystem.getAadSN());
+//            aDOM = (selectedSystem.getAadDOM());
+//            aManufacturerName = (selectedSystem.getAadManufacturerName());
+//            aJumps = (Integer.toString(selectedSystem.getAadJumps()));
+//            DatePicker aNextRegl = (selectedSystem.getAadNextRegl());
+//            aSaved = (Integer.toString(selectedSystem.getAadSaved()));
+
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
         editBtn.setSelected(editStatus);
