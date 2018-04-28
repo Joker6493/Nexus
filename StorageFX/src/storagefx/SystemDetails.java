@@ -7,6 +7,7 @@ package storagefx;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -382,38 +383,91 @@ public class SystemDetails extends Application {
             String updFields;
             
         //Container
+            ArrayList <String> systemNewParams = new ArrayList<>();
             if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                
+                systemNewParams.add("system_code = "+sCode.getText());
             }
-//            sModel = (selectedSystem.getSystemModel());
-//            sSN = (selectedSystem.getSystemSN());
-//            sDOM = (selectedSystem.getSystemDOM());
-//            sManufacturerName = (selectedSystem.getSystemManufacturerName());
-//
-//        //Canopy
-//            cModel = (selectedSystem.getCanopyModel());
-//            cSize = (Integer.toString(selectedSystem.getCanopySize()));
-//            cSN = (selectedSystem.getCanopySN());
-//            cDOM = (selectedSystem.getCanopyDOM());
-//            cManufacturerName = (selectedSystem.getCanopyManufacturerName());
-//            cJumps = (Integer.toString(selectedSystem.getCanopyJumps()));
-//
-//        //Reserve
-//            rModel = (selectedSystem.getReserveModel());
-//            rSize = (Integer.toString(selectedSystem.getReserveSize()));
-//            rSN = (selectedSystem.getReserveSN());
-//            rDOM = (selectedSystem.getReserveDOM());
-//            rManufacturerName = (selectedSystem.getReserveManufacturerName());
-//            rJumps = (Integer.toString(selectedSystem.getReserveJumps()));DatePicker rPackDate = new DatePicker(selectedSystem.getReservePackDate());
-//
-//        //AAD
-//            aModel = (selectedSystem.getAadModel());
-//            aSN = (selectedSystem.getAadSN());
-//            aDOM = (selectedSystem.getAadDOM());
-//            aManufacturerName = (selectedSystem.getAadManufacturerName());
-//            aJumps = (Integer.toString(selectedSystem.getAadJumps()));
-//            DatePicker aNextRegl = (selectedSystem.getAadNextRegl());
-//            aSaved = (Integer.toString(selectedSystem.getAadSaved()));
+            if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                systemNewParams.add("system_model = "+sModel.getText());
+            }
+            if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                systemNewParams.add("system_sn = "+sSN.getText());
+            }
+            if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                systemNewParams.add("system_dom = "+sDOM.getValue());
+            }
+//            if (!sManufacturerName.getText().equals(selectedSystem.getSystemManufacturerName())){
+//                updateParamsList.add("system_code = "+sManufacturerName.getText());
+//            }
+
+        //Canopy
+            ArrayList <String> canopyNewParams = new ArrayList<>();
+            if (!cModel.getText().equals(selectedSystem.getCanopyModel())){
+                canopyNewParams.add("canopy_model = "+cModel.getText());
+            }
+            if (!cSize.getText().equals(Integer.toString(selectedSystem.getCanopySize()))){
+                canopyNewParams.add("canopy_size = "+cSize.getText());
+            }
+            if (!cSN.getText().equals(selectedSystem.getCanopySN())){
+                canopyNewParams.add("canopy_sn = "+cSN.getText());
+            }
+            if (!cDOM.getValue().equals(selectedSystem.getCanopyDOM())){
+                canopyNewParams.add("canopy_dom = "+cDOM.getValue());
+            }
+//            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
+//                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
+//            }
+            if (!cJumps.getText().equals(Integer.toString(selectedSystem.getCanopyJumps()))){
+                canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+            }
+
+        //Reserve
+            ArrayList <String> reserveNewParams = new ArrayList<>();
+            if (!rModel.getText().equals(selectedSystem.getReserveModel())){
+                reserveNewParams.add("reserve_model = "+rModel.getText());
+            }
+            if (!rSize.getText().equals(Integer.toString(selectedSystem.getReserveSize()))){
+                reserveNewParams.add("reserve_size = "+rSize.getText());
+            }
+            if (!rSN.getText().equals(selectedSystem.getReserveSN())){
+                reserveNewParams.add("reserve_sn = "+rSN.getText());
+            }
+            if (!rDOM.getValue().equals(selectedSystem.getReserveDOM())){
+                reserveNewParams.add("reserve_dom = "+rDOM.getValue());
+            }
+//            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
+//                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
+//            }
+            if (!rJumps.getText().equals(Integer.toString(selectedSystem.getReserveJumps()))){
+                reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+            }
+            if (!rPackDate.getValue().equals(selectedSystem.getReservePackDate())){
+                reserveNewParams.add("reserve_packdate = "+rPackDate.getValue());
+            }
+
+        //AAD
+            ArrayList <String> aadNewParams = new ArrayList<>();
+            if (!aModel.getText().equals(selectedSystem.getAadModel())){
+                aadNewParams.add("aad_model = "+aModel.getText());
+            }
+            if (!aSN.getText().equals(selectedSystem.getAadSN())){
+                aadNewParams.add("aad_sn = "+aSN.getText());
+            }
+            if (!aDOM.getValue().equals(selectedSystem.getAadDOM())){
+                aadNewParams.add("aad_dom = "+aDOM.getValue());
+            }
+//            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
+//                updateParamsList.add("aad_code = "+sCode.getText());
+//            }
+            if (!aJumps.getText().equals(Integer.toString(selectedSystem.getAadJumps()))){
+                aadNewParams.add("aad_jumps = "+aJumps.getText());
+            }
+            if (!aNextRegl.getValue().equals(selectedSystem.getAadNextRegl())){
+                aadNewParams.add("aad_nextregl = "+aNextRegl.getValue());
+            }
+            if (!aSaved.getText().equals(Integer.toString(selectedSystem.getAadSaved()))){
+                aadNewParams.add("aad_saved = "+aSaved.getText());
+            }
 
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
