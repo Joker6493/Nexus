@@ -38,7 +38,17 @@ public class SystemDetails extends Application {
     private boolean editStatus;
     private String stageTitle;
     private int stock;
+    private String updParams;
+    private DataRelay dr = new DataRelay();
+    public String getUpdParams() {
+        return updParams;
+    }
+
+    public void setUpdParams(String updParams) {
+        this.updParams = updParams;
+    }
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    DateTimeFormatter mySQLFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     SystemDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
@@ -380,39 +390,51 @@ public class SystemDetails extends Application {
         });
         saveBtn.setOnAction((ActionEvent event) -> {
             //check fields for changing, creating update query
-            String updFields;
             
         //Container
             ArrayList <String> systemNewParams = new ArrayList<>();
             if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                systemNewParams.add("system_code = "+sCode.getText());
+                systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
             }
             if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                systemNewParams.add("system_model = "+sModel.getText());
+                systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
             }
             if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                systemNewParams.add("system_sn = "+sSN.getText());
+                systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
             }
             if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                systemNewParams.add("system_dom = "+sDOM.getValue());
+                systemNewParams.add("system_dom = "+"\""+mySQLFormat.format(sDOM.getValue())+"\"");
             }
 //            if (!sManufacturerName.getText().equals(selectedSystem.getSystemManufacturerName())){
 //                updateParamsList.add("system_code = "+sManufacturerName.getText());
 //            }
-
+        //Apply changes    
+            if (systemNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = systemNewParams.get(0);
+                int i = systemNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
+                }
+                dr.editSkydiveSystem(selectedSystem, updParams);
+            }
+            
+            systemNewParams.clear();
+            
         //Canopy
             ArrayList <String> canopyNewParams = new ArrayList<>();
             if (!cModel.getText().equals(selectedSystem.getCanopyModel())){
-                canopyNewParams.add("canopy_model = "+cModel.getText());
+                canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
             }
             if (!cSize.getText().equals(Integer.toString(selectedSystem.getCanopySize()))){
                 canopyNewParams.add("canopy_size = "+cSize.getText());
             }
             if (!cSN.getText().equals(selectedSystem.getCanopySN())){
-                canopyNewParams.add("canopy_sn = "+cSN.getText());
+                canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
             }
             if (!cDOM.getValue().equals(selectedSystem.getCanopyDOM())){
-                canopyNewParams.add("canopy_dom = "+cDOM.getValue());
+                canopyNewParams.add("canopy_dom = "+"\""+mySQLFormat.format(cDOM.getValue())+"\"");
             }
 //            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
 //                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
@@ -420,20 +442,32 @@ public class SystemDetails extends Application {
             if (!cJumps.getText().equals(Integer.toString(selectedSystem.getCanopyJumps()))){
                 canopyNewParams.add("canopy_jumps = "+cJumps.getText());
             }
-
+        //Apply changes    
+            if (canopyNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = canopyNewParams.get(0);
+                int i = canopyNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
+                }
+                dr.editCanopy(new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID()), updParams);
+            }
+            
+            canopyNewParams.clear();
         //Reserve
             ArrayList <String> reserveNewParams = new ArrayList<>();
             if (!rModel.getText().equals(selectedSystem.getReserveModel())){
-                reserveNewParams.add("reserve_model = "+rModel.getText());
+                reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
             }
             if (!rSize.getText().equals(Integer.toString(selectedSystem.getReserveSize()))){
                 reserveNewParams.add("reserve_size = "+rSize.getText());
             }
             if (!rSN.getText().equals(selectedSystem.getReserveSN())){
-                reserveNewParams.add("reserve_sn = "+rSN.getText());
+                reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
             }
             if (!rDOM.getValue().equals(selectedSystem.getReserveDOM())){
-                reserveNewParams.add("reserve_dom = "+rDOM.getValue());
+                reserveNewParams.add("reserve_dom = "+"\""+mySQLFormat.format(rDOM.getValue())+"\"");
             }
 //            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
 //                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
@@ -442,19 +476,31 @@ public class SystemDetails extends Application {
                 reserveNewParams.add("reserve_jumps = "+rJumps.getText());
             }
             if (!rPackDate.getValue().equals(selectedSystem.getReservePackDate())){
-                reserveNewParams.add("reserve_packdate = "+rPackDate.getValue());
+                reserveNewParams.add("reserve_packdate = "+"\""+mySQLFormat.format(rPackDate.getValue())+"\"");
             }
-
+        //Apply changes    
+            if (reserveNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = reserveNewParams.get(0);
+                int i = reserveNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
+                }
+                dr.editReserve(new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID()), updParams);
+            }
+            
+            reserveNewParams.clear();
         //AAD
             ArrayList <String> aadNewParams = new ArrayList<>();
             if (!aModel.getText().equals(selectedSystem.getAadModel())){
-                aadNewParams.add("aad_model = "+aModel.getText());
+                aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
             }
             if (!aSN.getText().equals(selectedSystem.getAadSN())){
-                aadNewParams.add("aad_sn = "+aSN.getText());
+                aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
             }
             if (!aDOM.getValue().equals(selectedSystem.getAadDOM())){
-                aadNewParams.add("aad_dom = "+aDOM.getValue());
+                aadNewParams.add("aad_dom = "+"\""+mySQLFormat.format(aDOM.getValue())+"\"");
             }
 //            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
 //                updateParamsList.add("aad_code = "+sCode.getText());
@@ -463,11 +509,24 @@ public class SystemDetails extends Application {
                 aadNewParams.add("aad_jumps = "+aJumps.getText());
             }
             if (!aNextRegl.getValue().equals(selectedSystem.getAadNextRegl())){
-                aadNewParams.add("aad_nextregl = "+aNextRegl.getValue());
+                aadNewParams.add("aad_nextregl = "+"\""+mySQLFormat.format(aNextRegl.getValue())+"\"");
             }
             if (!aSaved.getText().equals(Integer.toString(selectedSystem.getAadSaved()))){
                 aadNewParams.add("aad_saved = "+aSaved.getText());
             }
+        //Apply changes    
+            if (aadNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = aadNewParams.get(0);
+                int i = aadNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                }
+                dr.editAAD(new AAD(selectedSystem.getSystemID(), selectedSystem.getAadID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID()), updParams);
+            }
+            
+            aadNewParams.clear();
 
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
