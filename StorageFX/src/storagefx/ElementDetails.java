@@ -180,7 +180,7 @@ public class ElementDetails extends Application {
                 systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
             }
             if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                systemNewParams.add("system_dom = "+"\""+mySQLFormat.format(sDOM.getValue())+"\"");
+                systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
             }
 //            if (!sManufacturerName.getText().equals(selectedSystem.getSystemManufacturerName())){
 //                updateParamsList.add("system_code = "+sManufacturerName.getText());
@@ -328,7 +328,7 @@ public class ElementDetails extends Application {
                 canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
             }
             if (!cDOM.getValue().equals(selectedSystem.getCanopyDOM())){
-                canopyNewParams.add("canopy_dom = "+"\""+mySQLFormat.format(cDOM.getValue())+"\"");
+                canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
             }
 //            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
 //                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
@@ -492,7 +492,7 @@ public class ElementDetails extends Application {
                 reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
             }
             if (!rDOM.getValue().equals(selectedSystem.getReserveDOM())){
-                reserveNewParams.add("reserve_dom = "+"\""+mySQLFormat.format(rDOM.getValue())+"\"");
+                reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
             }
 //            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
 //                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
@@ -501,7 +501,7 @@ public class ElementDetails extends Application {
                 reserveNewParams.add("reserve_jumps = "+rJumps.getText());
             }
             if (!rPackDate.getValue().equals(selectedSystem.getReservePackDate())){
-                reserveNewParams.add("reserve_packdate = "+"\""+mySQLFormat.format(rPackDate.getValue())+"\"");
+                reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
             }
         //Apply changes    
             if (reserveNewParams.isEmpty()) {
@@ -659,7 +659,7 @@ public class ElementDetails extends Application {
                 aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
             }
             if (!aDOM.getValue().equals(selectedSystem.getAadDOM())){
-                aadNewParams.add("aad_dom = "+"\""+mySQLFormat.format(aDOM.getValue())+"\"");
+                aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
             }
 //            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
 //                updateParamsList.add("aad_code = "+sCode.getText());
@@ -668,7 +668,7 @@ public class ElementDetails extends Application {
                 aadNewParams.add("aad_jumps = "+aJumps.getText());
             }
             if (!aNextRegl.getValue().equals(selectedSystem.getAadNextRegl())){
-                aadNewParams.add("aad_nextregl = "+"\""+mySQLFormat.format(aNextRegl.getValue())+"\"");
+                aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
             }
             if (!aSaved.getText().equals(Integer.toString(selectedSystem.getAadSaved()))){
                 aadNewParams.add("aad_saved = "+aSaved.getText());
