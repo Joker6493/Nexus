@@ -138,7 +138,7 @@ public class SystemDetails extends Application {
                 }
             }
         });
-        sMN.getSelectionModel().select(1);
+        sMN.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
         containerGrid.add(containerGridName, 0, 0);
         containerGrid.add(sCode, 1, 0);
         containerGrid.add(sModelLabel, 0, 1);
