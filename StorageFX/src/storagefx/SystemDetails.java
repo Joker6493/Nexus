@@ -10,12 +10,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -109,7 +112,33 @@ public class SystemDetails extends Application {
                 sManufacturerName.setText(oldValue);
             }
         });
-        sManufacturerName.setEditable(editStatus);
+        sManufacturerName.setEditable(false);
+        ComboBox <Manufacturer> sMN = new ComboBox<>();
+        ObservableList<Manufacturer> stockList = dr.getManufactirerList();
+        sMN.setItems(stockList);
+        sMN.setCellFactory(p -> new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        sMN.setButtonCell(new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        sMN.getSelectionModel().select(1);
         containerGrid.add(containerGridName, 0, 0);
         containerGrid.add(sCode, 1, 0);
         containerGrid.add(sModelLabel, 0, 1);
@@ -538,7 +567,7 @@ public class SystemDetails extends Application {
                 sModel.setEditable(editStatus);
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
-                sManufacturerName.setEditable(editStatus);
+//                sManufacturerName.setEditable(editStatus);
                 cModel.setEditable(editStatus);
                 cSize.setEditable(editStatus);
                 cSN.setEditable(editStatus);
@@ -569,7 +598,7 @@ public class SystemDetails extends Application {
                 sModel.setEditable(editStatus);
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
-                sManufacturerName.setEditable(editStatus);
+//                sManufacturerName.setEditable(editStatus);
                 cModel.setEditable(editStatus);
                 cSize.setEditable(editStatus);
                 cSN.setEditable(editStatus);
