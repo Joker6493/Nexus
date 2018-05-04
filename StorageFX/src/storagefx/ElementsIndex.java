@@ -8,7 +8,6 @@ package storagefx;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,6 +40,7 @@ public class ElementsIndex extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
+    private int status;
     private StackPane table;
     private DataRelay dr;
     @Override
@@ -62,8 +62,7 @@ public class ElementsIndex extends Application {
         indexList.add("Основные парашюты");
         indexList.add("Запасные парашюты");
         indexList.add("Страхующие приборы");
-        ObservableList<String> elementsList = FXCollections.observableList(indexList);
-        elementsBox.setItems(elementsList);
+        elementsBox.setItems(FXCollections.observableList(indexList));
         elementsBox.getSelectionModel().select(0);
         Button refreshBtn = new Button();
         refreshBtn.setText("Обновить");
@@ -71,13 +70,27 @@ public class ElementsIndex extends Application {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             //Some code here
-            //indexStore.refresh();
+            table.getChildren().clear();
+            switch (elementsBox.getSelectionModel().getSelectedItem()){
+                case "Ранцы":
+                    table = ContainerTable();
+                    break;
+                case "Основные парашюты":
+                    table = CanopyTable();
+                    break;
+                case "Запасные парашюты":
+                    table = ReserveTable();
+                    break;
+                case "Страхующие приборы": 
+                    table = AADTable();
+                    break;
+            }
+            index.setCenter(table);
             System.out.println("Обновление списка завершено");
         });
         
         ComboBox <Stock> stockBox = new ComboBox<>();
-        ObservableList<Stock> stockList = dr.getStockList();
-        stockBox.setItems(stockList);
+        stockBox.setItems(dr.getStockList());
         stockBox.setCellFactory(p -> new ListCell <Stock> () {
             @Override
             protected void updateItem(Stock item, boolean empty) {
@@ -110,8 +123,7 @@ public class ElementsIndex extends Application {
         });
         
         ComboBox <Status> statusBox = new ComboBox<>();
-        ObservableList<Status> statusList = dr.getStatusList();
-        statusBox.setItems(statusList);
+        statusBox.setItems(dr.getStatusList());
         statusBox.getSelectionModel().select(0);
         status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
         statusBox.setCellFactory(p -> new ListCell <Status> () {
@@ -196,19 +208,18 @@ public class ElementsIndex extends Application {
             };
         });
         //Adding data and create scene
-        ObservableList<SkydiveSystem> indexList = dr.getContainersList();
-        containerTable.setItems(indexList);
+        containerTable.setItems(dr.getContainersList());
         containerTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView SkydiveSystem object
                 SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
                 //TODO list
-//                System.out.println("Выбрана система "+currentSystem.getSystemCode()+"!");
-//                SystemDetails detail = new SystemDetails(containerTable.getSelectionModel().getSelectedItem(), false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                System.out.println("Выбран ранец "+currentSystem.getSystemCode()+"!");
+                ElementDetails detail = new ElementDetails(currentSystem, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
             }
         });
         ContextMenu containerContextMenu = new ContextMenu();
@@ -217,14 +228,16 @@ public class ElementsIndex extends Application {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             //Some code here
+            containerTable.getItems().clear();
+            containerTable.setItems(dr.getContainersList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
-            SystemDetails detail = new SystemDetails(containerTable.getSelectionModel().getSelectedItem(), true);
+            System.out.println("Редактируем ранец "+currentSystem.getSystemCode()+"?");
+            ElementDetails detail = new ElementDetails(currentSystem, true);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -233,8 +246,8 @@ public class ElementsIndex extends Application {
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            System.out.println("Добавить систему?");
-            SystemDetails detail = new SystemDetails(stockID);
+            System.out.println("Добавить ранец?");
+            ElementDetails detail = new ElementDetails("container",stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -244,7 +257,7 @@ public class ElementsIndex extends Application {
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+            System.out.println("Удалить ранец "+currentSystem.getSystemCode()+"?");
         });
         containerContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         containerTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
@@ -292,19 +305,17 @@ public class ElementsIndex extends Application {
             };
         });
         //Adding data and create scene
-        ObservableList<Canopy> indexList = dr.getCanopyList();
-        canopyTable.setItems(indexList);
+        canopyTable.setItems(dr.getCanopyList());
         canopyTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView Canopy object
                 Canopy currentCanopy = canopyTable.getSelectionModel().getSelectedItem();
-                //TODO list
-//                System.out.println("Выбрана система "+currentCanopy.getSystemCode()+"!");
-//                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                System.out.println("Выбран купол "+currentCanopy.getCanopyModel()+"-"+currentCanopy.getCanopySize()+"!");
+                ElementDetails detail = new ElementDetails(currentCanopy, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
             }
         });
         ContextMenu canopyContextMenu = new ContextMenu();
@@ -320,17 +331,17 @@ public class ElementsIndex extends Application {
             //Refreshing indexList - in process
             Canopy currentCanopy = canopyTable.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем купол "+currentCanopy.getCanopyModel()+"-"+currentCanopy.getCanopySize()+"?");
-//            SystemDetails detail = new SystemDetails(canopyTable.getSelectionModel().getSelectedItem(), true);
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            ElementDetails detail = new ElementDetails(currentCanopy, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
-            SystemDetails detail = new SystemDetails(stockID);
+            ElementDetails detail = new ElementDetails("canopy",stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -364,14 +375,14 @@ public class ElementsIndex extends Application {
         TableColumn <Reserve, Integer> reserveJumps = new TableColumn<>("Прыжков на куполе");
         TableColumn <Reserve, String> reserveManufacturerName = new TableColumn<>("Производитель");
         //Adding columns into TableView
-        reserveTable.getColumns().addAll(reserve,reserveModel,reserveSN,reserveJumps,reserveManufacturerName);
+        reserveTable.getColumns().addAll(reserve,reserveSN,reserveDOM,reserveJumps,reserveManufacturerName);
         //Getting values and format from class variables
-        reserveModel.setCellValueFactory(new PropertyValueFactory<>("canopyModel"));    
-        reserveSize.setCellValueFactory(new PropertyValueFactory<>("canopySize"));
-        reserveSN.setCellValueFactory(new PropertyValueFactory<>("canopySN"));
-        reserveDOM.setCellValueFactory(new PropertyValueFactory<>("canopyDOM"));      
-        reserveJumps.setCellValueFactory(new PropertyValueFactory<>("canopyJumps"));        
-        reserveManufacturerName.setCellValueFactory(new PropertyValueFactory<>("canopyManufacturerName"));
+        reserveModel.setCellValueFactory(new PropertyValueFactory<>("reserveModel"));    
+        reserveSize.setCellValueFactory(new PropertyValueFactory<>("reserveSize"));
+        reserveSN.setCellValueFactory(new PropertyValueFactory<>("reserveSN"));
+        reserveDOM.setCellValueFactory(new PropertyValueFactory<>("reserveDOM"));      
+        reserveJumps.setCellValueFactory(new PropertyValueFactory<>("reserveJumps"));        
+        reserveManufacturerName.setCellValueFactory(new PropertyValueFactory<>("reserveManufacturerName"));
         //Rendering date cell
         reserveDOM.setCellFactory(column -> {
             return new TableCell<Reserve, LocalDate>() {
@@ -389,19 +400,17 @@ public class ElementsIndex extends Application {
             };
         });
         //Adding data and create scene
-        ObservableList<Reserve> indexList = dr.getReserveList();
-        reserveTable.setItems(indexList);
+        reserveTable.setItems(dr.getReserveList());
         reserveTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView Canopy object
                 Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
-                //TODO list
-//                System.out.println("Выбрана система "+currentCanopy.getSystemCode()+"!");
-//                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                System.out.println("Выбран купол "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize()+"!");
+                ElementDetails detail = new ElementDetails(currentReserve, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
             }
         });
         ContextMenu reserveContextMenu = new ContextMenu();
@@ -417,17 +426,17 @@ public class ElementsIndex extends Application {
             //Refreshing indexList - in process
             Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем купол "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize()+"?");
-//            SystemDetails detail = new SystemDetails(canopyTable.getSelectionModel().getSelectedItem(), true);
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            ElementDetails detail = new ElementDetails(currentReserve, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
-            SystemDetails detail = new SystemDetails(stockID);
+            ElementDetails detail = new ElementDetails("reserve",stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -501,19 +510,17 @@ public class ElementsIndex extends Application {
             };
         });
         //Adding data and create scene
-        ObservableList<AAD> indexList = dr.getAadList();
-        aadTable.setItems(indexList);
+        aadTable.setItems(dr.getAadList());
         aadTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView Canopy object
                 AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-                //TODO list
-//                System.out.println("Выбрана система "+currentCanopy.getSystemCode()+"!");
-//                SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                System.out.println("Выбран прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"!");
+                ElementDetails detail = new ElementDetails(currentAAD, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
             }
         });
         ContextMenu aadContextMenu = new ContextMenu();
@@ -528,18 +535,18 @@ public class ElementsIndex extends Application {
         editItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем прибор "+currentAAD.getAadModel()+"?");
-//            SystemDetails detail = new SystemDetails(canopyTable.getSelectionModel().getSelectedItem(), true);
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            System.out.println("Редактируем прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"?");
+            ElementDetails detail = new ElementDetails(currentAAD, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить прибор?");
-            SystemDetails detail = new SystemDetails(stockID);
+            ElementDetails detail = new ElementDetails("aad",stockID);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -549,7 +556,7 @@ public class ElementsIndex extends Application {
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить прибор "+currentAAD.getAadModel()+"?");
+            System.out.println("Удалить прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"?");
         });
         aadContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {

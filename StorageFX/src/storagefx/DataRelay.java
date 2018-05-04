@@ -39,7 +39,7 @@ public class DataRelay {
         this.stock = stock;
     }
 
-        private ResultSet getData (String Query){
+    private ResultSet getData (String Query){
         ResultSet rs = null;
         try {
             //Call a method dynamically (Reflection)
@@ -56,6 +56,28 @@ public class DataRelay {
 //            e.printStackTrace();
         }
         return rs;
+    }
+    
+    private int updateData (String Query){
+        int row = 0;
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            Statement stmt = conn.createStatement();
+            row = stmt.executeUpdate(Query);
+            conn.commit();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
+        return row;
     }
         
     private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
@@ -162,7 +184,7 @@ public class DataRelay {
         try{
             String selectQuery = "select ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name " +
                                  "from canopy_info ci " +
-                                 "where ci.systemid = 0 and ci.status = "+ getStatus() +"and ci.stockid = "+ getStock() +";";
+                                 "where ci.systemid = 0 and ci.status = "+ getStatus() +" and ci.stockid = "+ getStock();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int systemID = 0;
@@ -192,7 +214,7 @@ public class DataRelay {
         try{
             String selectQuery = "select ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name " +
                                  "from reserve_info ri " +
-                                 "where ri.systemid = 0 and ri.status = "+ getStatus() +" and ri.stockid = "+ getStock() +";";
+                                 "where ri.systemid = 0 and ri.status = "+ getStatus() +" and ri.stockid = "+ getStock();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int systemID = 0;
@@ -436,24 +458,41 @@ public class DataRelay {
         }
     }
     
-    protected void editSkydiveSystem(SkydiveSystem ss) {
+    protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
         //some code here in the future
-        /**/
+        String updateQuery = "Update system_info set " + updParams + "where systemid = "+ss.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+
     }
     
-    protected void editCanopy(Canopy c) {
+    protected void editCanopy(Canopy c, String updParams) {
         //some code here in the future
-        /**/
+        String updateQuery = "Update canopy_info set " + updParams + "where canopyid = "+c.getCanopyID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
-    protected void editReserve(Reserve r) {
+    protected void editReserve(Reserve r, String updParams) {
         //some code here in the future
-        /**/
+        String updateQuery = "Update reserve_info set " + updParams + "where reserveid = "+r.getReserveID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
-    protected void editAAD(AAD aad) {
+    protected void editAAD(AAD aad, String updParams) {
         //some code here in the future
-        /**/
+        String updateQuery = "Update aad_info set " + updParams + "where aadid = "+aad.getAadID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
