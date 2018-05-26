@@ -10,12 +10,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
@@ -138,13 +141,33 @@ public class ElementDetails extends Application {
         });
         
         Label sManufacturerNameLabel = new Label("Производитель: ");
-        TextField sManufacturerName = new TextField(ss.getSystemManufacturerName());
-        sManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (newValue.length()>100) {
-                sManufacturerName.setText(oldValue);
+        ComboBox <Manufacturer> sManufacturerName = new ComboBox<>();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        sManufacturerName.setItems(manufacturerList);
+        sManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
             }
         });
-        sManufacturerName.setEditable(editStatus);
+        sManufacturerName.setButtonCell(new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        sManufacturerName.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
+        sManufacturerName.setDisable(!editStatus);
         details.add(containerGridName, 0, 0);
         details.add(sCode, 1, 0);
         details.add(sModelLabel, 0, 1);
@@ -209,7 +232,7 @@ public class ElementDetails extends Application {
                 sModel.setEditable(editStatus);
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
-                sManufacturerName.setEditable(editStatus);
+                sManufacturerName.setDisable(!editStatus);
                 saveBtn.setDisable(!editStatus);
                 assembleBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
@@ -218,7 +241,7 @@ public class ElementDetails extends Application {
                 sModel.setEditable(editStatus);
                 sSN.setEditable(editStatus);
                 sDOM.setEditable(editStatus);
-                sManufacturerName.setEditable(editStatus);
+                sManufacturerName.setDisable(!editStatus);
                 saveBtn.setDisable(!editStatus);
                 assembleBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
@@ -277,13 +300,33 @@ public class ElementDetails extends Application {
         });
         
         Label cManufacturerNameLabel = new Label("Производитель: ");
-        TextField cManufacturerName = new TextField(c.getCanopyManufacturerName());
-        cManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (newValue.length()>100) {
-                cManufacturerName.setText(oldValue);
+        ComboBox <Manufacturer> cManufacturerName = new ComboBox<>();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        cManufacturerName.setItems(manufacturerList);
+        cManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
             }
         });
-        cManufacturerName.setEditable(editStatus);
+        cManufacturerName.setButtonCell(new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        cManufacturerName.getSelectionModel().select(selectedSystem.getCanopyManufacturerID()-1);
+        cManufacturerName.setDisable(!editStatus);
         Label cJumpsLabel = new Label ("Прыжков: ");
         TextField cJumps = new TextField (Integer.toString(c.getCanopyJumps()));
         cJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -361,7 +404,7 @@ public class ElementDetails extends Application {
                 cSize.setEditable(editStatus);
                 cSN.setEditable(editStatus);
                 cDOM.setEditable(editStatus);
-                cManufacturerName.setEditable(editStatus);
+                cManufacturerName.setDisable(!editStatus);
                 cJumps.setEditable(editStatus);
                 saveBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
@@ -371,7 +414,7 @@ public class ElementDetails extends Application {
                 cSize.setEditable(editStatus);
                 cSN.setEditable(editStatus);
                 cDOM.setEditable(editStatus);
-                cManufacturerName.setEditable(editStatus);
+                cManufacturerName.setDisable(!editStatus);
                 cJumps.setEditable(editStatus);
                 saveBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
@@ -430,13 +473,33 @@ public class ElementDetails extends Application {
         });
         
         Label rManufacturerNameLabel = new Label("Производитель: ");
-        TextField rManufacturerName = new TextField(r.getReserveManufacturerName());
-        rManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (newValue.length()>100) {
-                rManufacturerName.setText(oldValue);
+        ComboBox <Manufacturer> rManufacturerName = new ComboBox<>();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        rManufacturerName.setItems(manufacturerList);
+        rManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
             }
         });
-        rManufacturerName.setEditable(editStatus);
+        rManufacturerName.setButtonCell(new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        rManufacturerName.getSelectionModel().select(selectedSystem.getReserveManufacturerID()-1);
+        rManufacturerName.setDisable(!editStatus);
         Label rJumpsLabel = new Label ("Применений: ");
         TextField rJumps = new TextField (Integer.toString(r.getReserveJumps()));
         rJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -528,7 +591,7 @@ public class ElementDetails extends Application {
                 rSize.setEditable(editStatus);
                 rSN.setEditable(editStatus);
                 rDOM.setEditable(editStatus);
-                rManufacturerName.setEditable(editStatus);
+                rManufacturerName.setDisable(!editStatus);
                 rJumps.setEditable(editStatus);
                 rPackDate.setEditable(editStatus);
                 saveBtn.setDisable(!editStatus);
@@ -539,7 +602,7 @@ public class ElementDetails extends Application {
                 rSize.setEditable(editStatus);
                 rSN.setEditable(editStatus);
                 rDOM.setEditable(editStatus);
-                rManufacturerName.setEditable(editStatus);
+                rManufacturerName.setDisable(!editStatus);
                 rJumps.setEditable(editStatus);
                 rPackDate.setEditable(editStatus);
                 saveBtn.setDisable(!editStatus);
@@ -591,13 +654,33 @@ public class ElementDetails extends Application {
         });
         
         Label aManufacturerNameLabel = new Label("Производитель: ");
-        TextField aManufacturerName = new TextField(a.getAadManufacturerName());
-        aManufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (newValue.length()>100) {
-                aManufacturerName.setText(oldValue);
+        ComboBox <Manufacturer> aManufacturerName = new ComboBox<>();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        aManufacturerName.setItems(manufacturerList);
+        aManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
             }
         });
-        aManufacturerName.setEditable(editStatus);
+        aManufacturerName.setButtonCell(new ListCell <Manufacturer> () {
+            @Override
+            protected void updateItem(Manufacturer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    setText(item.getManufacturerName());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+        aManufacturerName.getSelectionModel().select(selectedSystem.getReserveManufacturerID()-1);
+        aManufacturerName.setDisable(!editStatus);
         Label aJumpsLabel = new Label ("Прыжков: ");
         TextField aJumps = new TextField (Integer.toString(a.getAadJumps()));
         aJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -697,7 +780,7 @@ public class ElementDetails extends Application {
                 aModel.setEditable(editStatus);
                 aSN.setEditable(editStatus);
                 aDOM.setEditable(editStatus);
-                aManufacturerName.setEditable(editStatus);
+                aManufacturerName.setDisable(!editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
                 aSaved.setEditable(editStatus);
@@ -708,7 +791,7 @@ public class ElementDetails extends Application {
                 aModel.setEditable(editStatus);
                 aSN.setEditable(editStatus);
                 aDOM.setEditable(editStatus);
-                aManufacturerName.setEditable(editStatus);
+                aManufacturerName.setDisable(!editStatus);
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
                 aSaved.setEditable(editStatus);
