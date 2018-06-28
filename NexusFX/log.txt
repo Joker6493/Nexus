@@ -5,3 +5,5 @@
 02.04.2018 14:35:17 +0400 Config log: This is CONFIG log record example
 02.04.2018 14:35:17 +0400 Success log: This is SUCCESS log record example
 02.04.2018 14:35:17 +0400 Debug log: This is DEBUG log record example
+28.06.2018 17:52:28 +0400 Info log: Загрузка калькулятора загрузки
+28.06.2018 17:52:28 +0400 Success log: Калькулятор загружен!

@@ -66,6 +66,7 @@ public class NexusFX extends Application {
         MenuItem exit = new MenuItem("Выход");
         clear.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
         exit.setOnAction((ActionEvent t) -> {
+            logger.writeLog(Level.INFO, "Завершение программы");
             System.exit(0);
         });
         menuMain.getItems().addAll(storage, new SeparatorMenuItem(), clear, new SeparatorMenuItem(), exit);
@@ -77,11 +78,13 @@ public class NexusFX extends Application {
         Menu menuHelp = new Menu("Помощь");
         MenuItem loadcalc = new MenuItem("Расчет загрузки купола");
         loadcalc.setOnAction((ActionEvent event) -> {
+            logger.writeLog(Level.INFO, "Загрузка калькулятора загрузки");
             LoadCalcFX calc = new LoadCalcFX();
             Stage calcStage = new Stage();
             calcStage.initModality(Modality.WINDOW_MODAL);
             calcStage.initOwner(primaryStage);
             calc.start(calcStage);
+            logger.writeLog(Level.SUCCESS, "Калькулятор загружен!");
         });
         MenuItem testClass = new MenuItem("Проверка ClassLoader");
         testClass.setOnAction((ActionEvent event) -> {
