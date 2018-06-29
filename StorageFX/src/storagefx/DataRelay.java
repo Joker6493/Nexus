@@ -553,7 +553,15 @@ public class DataRelay {
         }
     }
     
-    //delete container only - in future
+    protected void deleteSkydiveSystemOnly(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.STATUS = 1 " +
+                             "where si.systemid = " + ss.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
     
     protected void deleteCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
@@ -597,7 +605,15 @@ public class DataRelay {
         }
     }
     
-    //restore container only - in future
+    protected void restoreSkydiveSystemOnly(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.STATUS = 0 " +
+                             "where si.systemid = " + ss.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
     
     protected void restoreCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
@@ -639,7 +655,15 @@ public class DataRelay {
         }
     }
     
-    //repair container only - in future
+    protected void repairSkydiveSystemOnly(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.STATUS = 2 " +
+                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
     
     protected void repairCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
