@@ -458,6 +458,54 @@ public class DataRelay {
         }
     }
     
+    protected void addStock(Stock stock) {
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCKID,STOCK_NAME,STATUS) values (?,?,?)");
+            stmt.setInt(1, stock.getStockID());
+            stmt.setString(2, stock.getStockName());
+            stmt.setInt(3, 0);
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();           
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
+    }
+    
+    protected void addManufacturer(Manufacturer man) {
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURERID,MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?,?)");
+            stmt.setInt(1, man.getManufacturerID());
+            stmt.setString(2, man.getManufacturerName());
+            stmt.setString(3, man.getManufacturerCountry());
+            stmt.setString(4, man.getManufacturerTelephone());
+            stmt.setString(5, man.getManufacturerEmail());
+            stmt.execute();
+            Connection bdcon = stmt.getConnection();
+            stmt.close();
+            bdcon.close();           
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
+    }
+    
     protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
         //some code here in the future
         String updateQuery = "Update system_info set " + updParams + "where systemid = "+ss.getSystemID();
@@ -496,61 +544,87 @@ public class DataRelay {
     }
     
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
-        //some code here in the future
-        /*update system_info
-set STATUS=1
-where systemid=[systemid]
-update canopy_info
-set STATUS=1
-where systemid=[systemid]
-update reserve_info
-set STATUS=1
-where systemid=[systemid]
-update aad_info
-set STATUS=1
-where systemid=[systemid]*/
+        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
+                             "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
+                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
     protected void deleteCanopy(Canopy c) {
-        //some code here in the future
-        /*update [table_name]
-set STATUS=1
-where [element]id=[elementid]*/
+        String updateQuery = "Update canopy_info ci " + 
+                             "set ci.STATUS = 1 " +
+                             "where ci.systemid = " + c.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
     protected void deleteReserve(Reserve r) {
-        //some code here in the future
-        /*update [table_name]
-set STATUS=1
-where [element]id=[elementid]*/
+        String updateQuery = "Update reserve_info ri " + 
+                             "set ri.STATUS = 1 " +
+                             "where ri.systemid = " + r.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
     
     protected void deleteAAD(AAD aad) {
-        //some code here in the future
-        /*update [table_name]
-set STATUS=1
-where [element]id=[elementid]*/
+        String updateQuery = "Update aad_info ai " + 
+                             "set ai.STATUS = 1 " +
+                             "where ai.systemid = " + aad.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void restoreSkydiveSystem(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
+                             "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
+                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void restoreCanopy(Canopy c) {
+        String updateQuery = "Update canopy_info ci " + 
+                             "set ci.STATUS = 0 " +
+                             "where ci.systemid = " + c.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void restoreReserve(Reserve r) {
+        String updateQuery = "Update reserve_info ri " + 
+                             "set ri.STATUS = 0 " +
+                             "where ri.systemid = " + r.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void restoreAAD(AAD aad) {
+        String updateQuery = "Update aad_info ai " + 
+                             "set ai.STATUS = 0 " +
+                             "where ai.systemid = " + aad.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
     }
 }
 
 /*
---creating new stock
-Insert into STOCK_INFO (STOCKID,STOCK_NAME,STATUS) values (?,?,?);
---creating new manufacturer
-Insert into MANUFACTURER_INFO (MANUFACTURERID,MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?,?);
---deleting system - full
-update system_info
-set STATUS=1
-where systemid=[systemid]
-update canopy_info
-set STATUS=1
-where systemid=[systemid]
-update reserve_info
-set STATUS=1
-where systemid=[systemid]
-update aad_info
-set STATUS=1
-where systemid=[systemid]
 --deleting system - container only, other elements removing
 update system_info
 set STATUS=1, canopyid = 0, reserveid = 0, aadid = 0
@@ -571,10 +645,4 @@ UPDATE [table_name] t1 JOIN [table_name] t2
 update system_info
 set [element]id=[elementid_new]
 where [element]id=[elementid_old]
-
-select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid as system_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid) as system_manufacturer_name, ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name, ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name, ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_saved, ai.manufacturerid as aad_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) as aad_manufacturer_name 
-from system_info si
-inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.status = si.status and ci.stockid = si.stockid
-inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.status = si.status and ri.stockid = si.stockid
-inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.status = si.status and ai.stockid = si.stockid
-where si.status = getStatus() and si.stockid = getStock();*/
+*/
