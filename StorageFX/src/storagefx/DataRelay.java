@@ -467,10 +467,9 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCKID,STOCK_NAME,STATUS) values (?,?,?)");
-            stmt.setInt(1, stock.getStockID());
-            stmt.setString(2, stock.getStockName());
-            stmt.setInt(3, 0);
+            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCK_NAME,STATUS) values (?,?)");
+            stmt.setString(1, stock.getStockName());
+            stmt.setInt(2, 0);
             stmt.execute();
             Connection bdcon = stmt.getConnection();
             stmt.close();
@@ -490,12 +489,11 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURERID,MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?,?)");
-            stmt.setInt(1, man.getManufacturerID());
-            stmt.setString(2, man.getManufacturerName());
-            stmt.setString(3, man.getManufacturerCountry());
-            stmt.setString(4, man.getManufacturerTelephone());
-            stmt.setString(5, man.getManufacturerEmail());
+            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?)");
+            stmt.setString(1, man.getManufacturerName());
+            stmt.setString(2, man.getManufacturerCountry());
+            stmt.setString(3, man.getManufacturerTelephone());
+            stmt.setString(4, man.getManufacturerEmail());
             stmt.execute();
             Connection bdcon = stmt.getConnection();
             stmt.close();
@@ -543,6 +541,8 @@ public class DataRelay {
         }
     }
     
+    //editStock, editManufacturer - in future
+    
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
@@ -552,6 +552,8 @@ public class DataRelay {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
+    
+    //delete container only - in future
     
     protected void deleteCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
@@ -583,6 +585,8 @@ public class DataRelay {
         }
     }
     
+    //deleteStock, deleteManufacturer - in future
+    
     protected void restoreSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
@@ -592,6 +596,8 @@ public class DataRelay {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
+    
+    //restore container only - in future
     
     protected void restoreCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
@@ -622,6 +628,51 @@ public class DataRelay {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
+    
+    protected void repairSkydiveSystem(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
+                             "set si.STATUS = 2, ci.STATUS = 2, ri.STATUS = 2, ai.STATUS = 2 " +
+                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    //repair container only - in future
+    
+    protected void repairCanopy(Canopy c) {
+        String updateQuery = "Update canopy_info ci " + 
+                             "set ci.STATUS = 2 " +
+                             "where ci.systemid = " + c.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void repairReserve(Reserve r) {
+        String updateQuery = "Update reserve_info ri " + 
+                             "set ri.STATUS = 2 " +
+                             "where ri.systemid = " + r.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void repairAAD(AAD aad) {
+        String updateQuery = "Update aad_info ai " + 
+                             "set ai.STATUS = 2 " +
+                             "where ai.systemid = " + aad.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    //restoreStock, restoreManufacturer - in future
+    
 }
 
 /*
