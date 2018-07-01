@@ -22,6 +22,7 @@ public class SAMConn {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             mysqlcon = DriverManager.getConnection(url, login, password);
+            mysqlcon.setAutoCommit(false);
             System.out.println("Соединение установлено");
         } catch (Exception e){
             System.out.println("Ошибка " + e.getMessage());
