@@ -553,7 +553,7 @@ public class DataRelay {
         }
     }
     
-    protected void deleteSkydiveSystemOnly(SkydiveSystem ss) {
+    protected void deleteContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID();
@@ -605,7 +605,7 @@ public class DataRelay {
         }
     }
     
-    protected void restoreSkydiveSystemOnly(SkydiveSystem ss) {
+    protected void restoreContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 0 " +
                              "where si.systemid = " + ss.getSystemID();
@@ -655,7 +655,7 @@ public class DataRelay {
         }
     }
     
-    protected void repairSkydiveSystemOnly(SkydiveSystem ss) {
+    protected void repairContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 2 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";

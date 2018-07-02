@@ -225,9 +225,7 @@ public class ElementsIndex extends Application {
         ContextMenu containerContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
         refreshList.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
             containerTable.getItems().clear();
             containerTable.setItems(dr.getContainersList());
             System.out.println("Обновление списка завершено");
@@ -245,7 +243,6 @@ public class ElementsIndex extends Application {
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Добавить ранец?");
             ElementDetails detail = new ElementDetails("container",stockID);
             Stage detailStage = new Stage();

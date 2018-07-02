@@ -77,6 +77,7 @@ public class ElementDetails extends Application {
     }
     ElementDetails (String elementType, int stockID){
         this.elementType = elementType;
+        this.editStatus = true;
         switch (elementType) {
             case "container":
                 this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
@@ -100,7 +101,6 @@ public class ElementDetails extends Application {
                 this.scene = new Scene(aadDetail(selectedAAD));
                 break;
         }
-        this.editStatus = true;
     }
         
     private GridPane containerDetail(SkydiveSystem ss){
