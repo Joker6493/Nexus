@@ -541,7 +541,10 @@ public class DataRelay {
         }
     }
     
-    //editStock, editManufacturer - in future
+//    update [table_name]
+//    set [set_of_changed_variables]
+//    where [element]id=[elementid]
+//    editStock, editManufacturer - in future
     
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
@@ -554,6 +557,12 @@ public class DataRelay {
     }
     
     protected void deleteContainer(SkydiveSystem ss) {
+        
+//   deleting system - container only, other elements removing
+//   update system_info
+//   set STATUS=1, canopyid = 0, reserveid = 0, aadid = 0
+//   where systemid=[systemid]
+        
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID();
@@ -566,7 +575,7 @@ public class DataRelay {
     protected void deleteCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 1 " +
-                             "where ci.systemid = " + c.getSystemID();
+                             "where ci.canopyid = " + c.getCanopyID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -576,7 +585,7 @@ public class DataRelay {
     protected void deleteReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 1 " +
-                             "where ri.systemid = " + r.getSystemID();
+                             "where ri.reserveid = " + r.getReserveID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -586,14 +595,18 @@ public class DataRelay {
     protected void deleteAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 1 " +
-                             "where ai.systemid = " + aad.getSystemID();
+                             "where ai.aadid = " + aad.getAadID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
     
-    //deleteStock, deleteManufacturer - in future
+//     deleting single element
+//     update [table_name]
+//     set STATUS=1
+//     where [element]id=[elementid]
+//     deleteStock, deleteManufacturer - in future
     
     protected void restoreSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
@@ -618,7 +631,7 @@ public class DataRelay {
     protected void restoreCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 0 " +
-                             "where ci.systemid = " + c.getSystemID();
+                             "where ci.canopyid = " + c.getCanopyID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -628,7 +641,7 @@ public class DataRelay {
     protected void restoreReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 0 " +
-                             "where ri.systemid = " + r.getSystemID();
+                             "where ri.reserveid = " + r.getReserveID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -638,7 +651,7 @@ public class DataRelay {
     protected void restoreAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 0 " +
-                             "where ai.systemid = " + aad.getSystemID();
+                             "where ai.aadid = " + aad.getAadID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -658,7 +671,7 @@ public class DataRelay {
     protected void repairContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 2 " +
-                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+                             "where si.systemid = " + ss.getSystemID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -668,7 +681,7 @@ public class DataRelay {
     protected void repairCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 2 " +
-                             "where ci.systemid = " + c.getSystemID();
+                             "where ci.canopyid = " + c.getCanopyID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -678,7 +691,7 @@ public class DataRelay {
     protected void repairReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 2 " +
-                             "where ri.systemid = " + r.getSystemID();
+                             "where ri.reserveid = " + r.getReserveID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -688,7 +701,7 @@ public class DataRelay {
     protected void repairAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 2 " +
-                             "where ai.systemid = " + aad.getSystemID();
+                             "where ai.aadid = " + aad.getAadID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -697,27 +710,78 @@ public class DataRelay {
     
     //restoreStock, restoreManufacturer - in future
     
+    protected void disassembleSkydiveSystem(SkydiveSystem ss) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
+                             "where si.systemid = " + ss.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update canopy_info ci, reserve_info ri, aad_info ai " + 
+                             "set ci.systemid = 0, ri.systemid = 0, ai.systemid = 0 " +
+                             "where ci.systemid = " + ss.getSystemID() + " and ci.systemid = ri.systemid = ai.systemid";
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void replaceCanopy(Canopy c_Old, Canopy c_New) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.canopyid = " + c_New.getCanopyID() + " " +
+                             "where si.systemid = " + c_Old.getSystemID() + " AND si.canopyid = " + c_Old.getCanopyID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "UPDATE canopy_info t1 JOIN canopy_info t2 " +
+                        "ON t1.canopyid = " + c_Old.getCanopyID() + " AND t2.canopyid = " + c_New.getCanopyID() + " " +
+                       "SET t1.systemid = 0, " +
+                           "t2.systemid = " + c_Old.getSystemID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void replaceReserve(Reserve r_Old,Reserve r_New) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.reserveid = " + r_New.getReserveID() + " " +
+                             "where si.systemid = " + r_Old.getSystemID() + " AND si.reserveid = " + r_Old.getReserveID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "UPDATE reserve_info t1 JOIN reserve_info t2 " +
+                        "ON t1.reserveid = " + r_Old.getReserveID() + " AND t2.reserveid = " + r_New.getReserveID() + " " +
+                       "SET t1.systemid = 0, " +
+                           "t2.systemid = " + r_Old.getSystemID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void replaceAAD(AAD aad_Old, AAD aad_New) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.aadid = " + aad_New.getAadID() + " " +
+                             "where si.systemid = " + aad_Old.getSystemID() + " AND si.aadid = " + aad_Old.getAadID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "UPDATE aad_info t1 JOIN aad_info t2 " +
+                        "ON t1.aadid = " + aad_Old.getAadID() + " AND t2.aadid = " + aad_New.getAadID() + " " +
+                       "SET t1.systemid = 0, " +
+                           "t2.systemid = " + aad_Old.getSystemID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+
+//  changing stock - in process
+
 }
 
-/*
---deleting system - container only, other elements removing
-update system_info
-set STATUS=1, canopyid = 0, reserveid = 0, aadid = 0
-where systemid=[systemid]
---deleting single element
-update [table_name]
-set STATUS=1
-where [element]id=[elementid]
---changing element
-update [table_name]
-set [set_of_changed_variables]
-where [element]id=[elementid]
---replacing elements 
-UPDATE [table_name] t1 JOIN [table_name] t2
-    ON t1.[element]id = [elementid_old] AND t2.[element]id = [elementid_new]
-   SET t1.systemid = 0,
-       t2.systemid = [systemid];
-update system_info
-set [element]id=[elementid_new]
-where [element]id=[elementid_old]
-*/

@@ -215,6 +215,14 @@ public class StorageIndex extends Application {
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
         });
+        MenuItem disassembleItem = new MenuItem("Разобрать");
+        editItem.setOnAction((ActionEvent e) -> {
+            //Disassemble system - in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Разобрать систему "+currentSystem.getSystemCode()+"?");
+            //
+            System.out.println("Система разобрана!");
+        });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
@@ -231,7 +239,7 @@ public class StorageIndex extends Application {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
         });
-        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, disassembleItem, deleteItem);
         indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
             storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
         });
