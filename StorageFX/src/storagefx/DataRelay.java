@@ -602,12 +602,27 @@ public class DataRelay {
         }
     }
     
-//     deleting single element
-//     update [table_name]
-//     set STATUS=1
-//     where [element]id=[elementid]
-//     deleteStock, deleteManufacturer - in future
+    protected void deleteStock(Stock stock) {
+        String updateQuery = "Update stock_info si " + 
+                             "set si.STATUS = 1 " +
+                             "where si.stockid = " + stock.getStockID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
     
+    //!!!not working - manufacturer status required in database
+    protected void deleteManufacturer(Manufacturer man) {
+        String updateQuery = "Update manufacturer_info mi " + 
+                             "set mi.STATUS = 1 " +
+                             "where mi.manufacturerid = " + man.getManufacturerID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+
     protected void restoreSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
@@ -652,6 +667,27 @@ public class DataRelay {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 0 " +
                              "where ai.aadid = " + aad.getAadID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    protected void restoreStock(Stock stock) {
+        String updateQuery = "Update stock_info si " + 
+                             "set si.STATUS = 0 " +
+                             "where si.stockid = " + stock.getStockID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
+    //!!!not working - manufacturer status required in database
+    protected void restoreManufacturer(Manufacturer man) {
+        String updateQuery = "Update manufacturer_info mi " + 
+                             "set mi.STATUS = 0 " +
+                             "where mi.manufacturerid = " + man.getManufacturerID();
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -707,9 +743,7 @@ public class DataRelay {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
-    
-    //restoreStock, restoreManufacturer - in future
-    
+        
     protected void disassembleSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
