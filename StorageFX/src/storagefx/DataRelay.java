@@ -541,11 +541,24 @@ public class DataRelay {
         }
     }
     
-//    update [table_name]
-//    set [set_of_changed_variables]
-//    where [element]id=[elementid]
-//    editStock, editManufacturer - in future
+    protected void editManufacturer(Manufacturer man, String updParams) {
+        //some code here in the future
+        String updateQuery = "Update manufacturer_info set " + updParams + "where manufacturerid = "+man.getManufacturerID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
     
+    protected void editStock (Stock stock, String updParams) {
+        //some code here in the future
+        String updateQuery = "Update stock_info set " + updParams + "where stockid = "+stock.getStockID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+        
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
@@ -557,12 +570,7 @@ public class DataRelay {
     }
     
     protected void deleteContainer(SkydiveSystem ss) {
-        
-//   deleting system - container only, other elements removing
-//   update system_info
-//   set STATUS=1, canopyid = 0, reserveid = 0, aadid = 0
-//   where systemid=[systemid]
-        
+
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID();
@@ -814,8 +822,6 @@ public class DataRelay {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
     }
-
-//  changing stock - in process
 
 }
 
