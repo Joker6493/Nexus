@@ -119,6 +119,8 @@ public class StorageIndex extends Application {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             //Some code here
+            indexStore.getItems().clear();
+            indexStore.setItems(dr.getSystemsList());
             //indexStore.refresh();
             System.out.println("Обновление списка завершено");
         });
@@ -199,14 +201,13 @@ public class StorageIndex extends Application {
         ContextMenu storageContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
         refreshList.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
+            indexStore.getItems().clear();
+            indexStore.setItems(dr.getSystemsList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
             SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
@@ -217,11 +218,19 @@ public class StorageIndex extends Application {
         });
         MenuItem disassembleItem = new MenuItem("Разобрать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Disassemble system - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Разобрать систему "+currentSystem.getSystemCode()+"?");
-            //
+            dr.disassembleSkydiveSystem(currentSystem);
             System.out.println("Система разобрана!");
+        });
+        MenuItem moveItem = new MenuItem("Переместить");
+        editItem.setOnAction((ActionEvent e) -> {
+            //in process
+            SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
+            System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
+            String stockNew = "stockid = ";
+            //dr.editSkydiveSystem(currentSystem, "");
+            System.out.println("Система перемещена!");
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
@@ -238,8 +247,10 @@ public class StorageIndex extends Application {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+            dr.deleteSkydiveSystem(currentSystem);
+            System.out.println("Система удалена!");
         });
-        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, disassembleItem, deleteItem);
+        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, moveItem, disassembleItem, deleteItem);
         indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
             storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
         });

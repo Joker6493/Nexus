@@ -480,7 +480,6 @@ public class DataRelay {
 //            e.printStackTrace();
         }
     }
-    //requires add status to MANUFACTURER_INFO table
     protected void addManufacturer(Manufacturer man) {
         try {
             //Call a method dynamically (Reflection)
@@ -616,7 +615,6 @@ public class DataRelay {
         }
     }
     
-    //!!!not working - manufacturer status required in database
     protected void deleteManufacturer(Manufacturer man) {
         String updateQuery = "Update manufacturer_info mi " + 
                              "set mi.STATUS = 1 " +
@@ -687,7 +685,6 @@ public class DataRelay {
         }
     }
     
-    //!!!not working - manufacturer status required in database
     protected void restoreManufacturer(Manufacturer man) {
         String updateQuery = "Update manufacturer_info mi " + 
                              "set mi.STATUS = 0 " +
