@@ -270,12 +270,13 @@ public class DataRelay {
         ObservableList<AAD> list = FXCollections.observableList(indexList);
         return list;
     }
-    
+    //requires add status to MANUFACTURER_INFO table
     protected ObservableList<Manufacturer> getManufactirerList() {
         ArrayList<Manufacturer> indexList = new ArrayList<>();
         try{
             String selectQuery = "select mi.manufacturerid, mi.manufacturer_name, mi.manufacturer_country, mi.manufacturer_telephone, mi.manufacturer_email " +
-                                 "from manufacturer_info mi";
+                                 "from manufacturer_info mi" +
+                                 "where status = " + getStatus();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int manufacturerID = rs.getInt("manufacturerid");
@@ -300,7 +301,7 @@ public class DataRelay {
         try{
             String selectQuery = "select stockid, stock_name " +
                                  "from stock_info " +
-                                 "where status = " +  + getStatus();
+                                 "where status = " + getStatus();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int stockID = rs.getInt("stockid");
@@ -479,7 +480,7 @@ public class DataRelay {
 //            e.printStackTrace();
         }
     }
-    
+    //requires add status to MANUFACTURER_INFO table
     protected void addManufacturer(Manufacturer man) {
         try {
             //Call a method dynamically (Reflection)
@@ -489,11 +490,12 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL) values (?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL,STATUS) values (?,?,?,?,?)");
             stmt.setString(1, man.getManufacturerName());
             stmt.setString(2, man.getManufacturerCountry());
             stmt.setString(3, man.getManufacturerTelephone());
             stmt.setString(4, man.getManufacturerEmail());
+            stmt.setInt(5, 0);
             stmt.execute();
             Connection bdcon = stmt.getConnection();
             stmt.close();
@@ -505,7 +507,6 @@ public class DataRelay {
     }
     
     protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
-        //some code here in the future
         String updateQuery = "Update system_info set " + updParams + "where systemid = "+ss.getSystemID();
         int row = updateData(updateQuery);
         if (row==0){
@@ -515,7 +516,6 @@ public class DataRelay {
     }
     
     protected void editCanopy(Canopy c, String updParams) {
-        //some code here in the future
         String updateQuery = "Update canopy_info set " + updParams + "where canopyid = "+c.getCanopyID();
         int row = updateData(updateQuery);
         if (row==0){
@@ -524,7 +524,6 @@ public class DataRelay {
     }
     
     protected void editReserve(Reserve r, String updParams) {
-        //some code here in the future
         String updateQuery = "Update reserve_info set " + updParams + "where reserveid = "+r.getReserveID();
         int row = updateData(updateQuery);
         if (row==0){
@@ -533,7 +532,6 @@ public class DataRelay {
     }
     
     protected void editAAD(AAD aad, String updParams) {
-        //some code here in the future
         String updateQuery = "Update aad_info set " + updParams + "where aadid = "+aad.getAadID();
         int row = updateData(updateQuery);
         if (row==0){
@@ -542,7 +540,6 @@ public class DataRelay {
     }
     
     protected void editManufacturer(Manufacturer man, String updParams) {
-        //some code here in the future
         String updateQuery = "Update manufacturer_info set " + updParams + "where manufacturerid = "+man.getManufacturerID();
         int row = updateData(updateQuery);
         if (row==0){
@@ -551,7 +548,6 @@ public class DataRelay {
     }
     
     protected void editStock (Stock stock, String updParams) {
-        //some code here in the future
         String updateQuery = "Update stock_info set " + updParams + "where stockid = "+stock.getStockID();
         int row = updateData(updateQuery);
         if (row==0){
