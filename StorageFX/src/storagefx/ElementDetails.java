@@ -34,6 +34,8 @@ public class ElementDetails extends Application {
     private Canopy selectedCanopy;
     private Reserve selectedReserve;
     private AAD selectedAAD;
+    private Stock selectedStock;
+    private Manufacturer selectedManufacturer;
     private String elementType;
     private boolean editStatus;
     private String stageTitle;
@@ -100,6 +102,16 @@ public class ElementDetails extends Application {
                 this.stageTitle = "Добавление нового страхующего прибора";
                 this.scene = new Scene(aadDetail(selectedAAD));
                 break;
+            case "stock":
+                this.selectedStock = new Stock("");
+                this.stageTitle = "Добавление нового склада";
+                this.scene = new Scene(reserveDetail(selectedReserve));
+                break;
+            case "manufacturer": 
+                this.selectedManufacturer = new Manufacturer("", "", "", "");
+                this.stageTitle = "Добавление нового производителя";
+                this.scene = new Scene(aadDetail(selectedAAD));
+                break;    
         }
     }
         
@@ -795,6 +807,197 @@ public class ElementDetails extends Application {
                 aJumps.setEditable(editStatus);
                 aNextRegl.setEditable(editStatus);
                 aSaved.setEditable(editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
+            }             
+        });
+        Button closeBtn = new Button("Закрыть");
+        closeBtn.setCancelButton(true);
+        closeBtn.setOnAction((ActionEvent event) -> {
+            //some code here, if there are some changes, ask for save them, then close window, if not - close window
+            details.getScene().getWindow().hide();
+        });
+        
+        HBox buttonPane = new HBox();
+        buttonPane.getChildren().addAll(saveBtn, cancelBtn);
+        details.add(buttonPane, 1, 8);
+        
+        return details;
+    }
+    
+    private GridPane stockDetail(Stock stock){
+        GridPane details = new GridPane();
+        
+        Label stockNameLabel = new Label("Наименование: ");
+        TextField stockName = new TextField(stock.getStockName());
+        stockName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                stockName.setText(oldValue);
+            }
+        });
+        stockName.setEditable(editStatus);
+        details.add(stockNameLabel, 0, 1);
+        details.add(stockName, 1, 1);
+        details.setPadding(new Insets(5));
+        
+        Button saveBtn = new Button("Сохранить");
+        saveBtn.setDisable(!editStatus);
+        Button cancelBtn = new Button("Отменить");
+        cancelBtn.setDisable(!editStatus);
+        cancelBtn.setOnAction((ActionEvent event) -> {
+            //some code here, rollback any changes
+        });
+        saveBtn.setOnAction((ActionEvent event) -> {
+        //AAD
+            ArrayList <String> aadNewParams = new ArrayList<>();
+            if (!stockName.getText().equals(stock.getStockName())){
+                aadNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
+            }
+        //Apply changes    
+            if (aadNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = aadNewParams.get(0);
+                int i = aadNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                }
+                dr.editStock(stock, updParams);
+            }
+            aadNewParams.clear();
+
+        });
+        ToggleButton editBtn = new ToggleButton ("Редактировать");
+        editBtn.setSelected(editStatus);
+        editBtn.setOnAction((ActionEvent event) -> {
+            //Allow editing, commiting next
+            if (editStatus==false){
+                editStatus = true;
+                stockName.setEditable(editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
+            }else{
+                editStatus = false;
+                stockName.setEditable(editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
+            }             
+        });
+        Button closeBtn = new Button("Закрыть");
+        closeBtn.setCancelButton(true);
+        closeBtn.setOnAction((ActionEvent event) -> {
+            //some code here, if there are some changes, ask for save them, then close window, if not - close window
+            details.getScene().getWindow().hide();
+        });
+        
+        HBox buttonPane = new HBox();
+        buttonPane.getChildren().addAll(saveBtn, cancelBtn);
+        details.add(buttonPane, 1, 8);
+        
+        return details;
+    }
+    
+    private GridPane manufacturerDetail(Manufacturer man){
+        GridPane details = new GridPane();
+//        String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail
+        Label manufacturerNameLabel = new Label("Модель: ");
+        TextField manufacturerName = new TextField(man.getManufacturerName());
+        manufacturerName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                manufacturerName.setText(oldValue);
+            }
+        });
+        manufacturerName.setEditable(editStatus);
+        Label manufacturerCountryLabel = new Label("Серийный номер: ");
+        TextField manufacturerCountry = new TextField(man.getManufacturerCountry());
+        manufacturerCountry.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                manufacturerCountry.setText(oldValue);
+            }
+        });
+        manufacturerCountry.setEditable(editStatus);
+        Label manufacturerTelephoneLabel = new Label("Модель: ");
+        TextField manufacturerTelephone = new TextField(man.getManufacturerTelephone());
+        manufacturerTelephone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                manufacturerTelephone.setText(oldValue);
+            }
+        });
+        manufacturerTelephone.setEditable(editStatus);
+        Label manufacturerEmailLabel = new Label("Серийный номер: ");
+        TextField manufacturerEmail = new TextField(man.getManufacturerEmail());
+        manufacturerEmail.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.length()>50) {
+                manufacturerEmail.setText(oldValue);
+            }
+        });
+        manufacturerEmail.setEditable(editStatus);
+        
+        details.add(manufacturerNameLabel, 0, 1);
+        details.add(manufacturerName, 1, 1);
+        details.add(manufacturerCountryLabel, 0, 2);
+        details.add(manufacturerCountry, 1, 2);
+        details.add(manufacturerTelephoneLabel, 0, 3);
+        details.add(manufacturerTelephone, 1, 3);
+        details.add(manufacturerEmailLabel, 0, 4);
+        details.add(manufacturerEmail, 1, 4);
+        details.setPadding(new Insets(5));
+        
+        Button saveBtn = new Button("Сохранить");
+        saveBtn.setDisable(!editStatus);
+        Button cancelBtn = new Button("Отменить");
+        cancelBtn.setDisable(!editStatus);
+        cancelBtn.setOnAction((ActionEvent event) -> {
+            //some code here, rollback any changes
+        });
+        saveBtn.setOnAction((ActionEvent event) -> {
+        //AAD
+            ArrayList <String> aadNewParams = new ArrayList<>();
+            if (!manufacturerName.getText().equals(man.getManufacturerName())){
+                aadNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+            }
+            if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
+                aadNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+            }
+            if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
+                aadNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+            }
+            if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
+                aadNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+            }
+        //Apply changes    
+            if (aadNewParams.isEmpty()) {
+                //Ничего не меялось
+            }else{
+                updParams = aadNewParams.get(0);
+                int i = aadNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                }
+                dr.editManufacturer(man, updParams);
+            }
+            
+            aadNewParams.clear();
+
+        });
+        ToggleButton editBtn = new ToggleButton ("Редактировать");
+        editBtn.setSelected(editStatus);
+        editBtn.setOnAction((ActionEvent event) -> {
+            //Allow editing, commiting next
+            if (editStatus==false){
+                editStatus = true;
+                manufacturerName.setEditable(editStatus);
+                manufacturerCountry.setEditable(editStatus);
+                manufacturerTelephone.setEditable(editStatus);
+                manufacturerEmail.setEditable(editStatus);
+                saveBtn.setDisable(!editStatus);
+                cancelBtn.setDisable(!editStatus);
+            }else{
+                editStatus = false;
+                manufacturerName.setEditable(editStatus);
+                manufacturerCountry.setEditable(editStatus);
+                manufacturerTelephone.setEditable(editStatus);
+                manufacturerEmail.setEditable(editStatus);
                 saveBtn.setDisable(!editStatus);
                 cancelBtn.setDisable(!editStatus);
             }             
