@@ -77,6 +77,18 @@ public class ElementDetails extends Application {
         this.editStatus = editStatus;
         this.scene = new Scene(aadDetail(selectedAAD));
     }
+    ElementDetails (Stock selectedStock, boolean editStatus){
+        this.selectedStock = selectedStock;
+        this.stageTitle = "Склад "+selectedStock.getStockName();
+        this.editStatus = editStatus;
+        this.scene = new Scene(stockDetail(selectedStock));
+    }
+    ElementDetails (Manufacturer selectedManufacturer, boolean editStatus){
+        this.selectedManufacturer = selectedManufacturer;
+        this.stageTitle = "Производитель "+selectedManufacturer.getManufacturerName();
+        this.editStatus = editStatus;
+        this.scene = new Scene(manufacturerDetail(selectedManufacturer));
+    }
     ElementDetails (String elementType, int stockID){
         this.elementType = elementType;
         this.editStatus = true;
@@ -105,12 +117,12 @@ public class ElementDetails extends Application {
             case "stock":
                 this.selectedStock = new Stock("");
                 this.stageTitle = "Добавление нового склада";
-                this.scene = new Scene(reserveDetail(selectedReserve));
+                this.scene = new Scene(stockDetail(selectedStock));
                 break;
             case "manufacturer": 
                 this.selectedManufacturer = new Manufacturer("", "", "", "");
                 this.stageTitle = "Добавление нового производителя";
-                this.scene = new Scene(aadDetail(selectedAAD));
+                this.scene = new Scene(manufacturerDetail(selectedManufacturer));
                 break;    
         }
     }
@@ -867,22 +879,6 @@ public class ElementDetails extends Application {
             aadNewParams.clear();
 
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                stockName.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                stockName.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
@@ -976,31 +972,7 @@ public class ElementDetails extends Application {
                 }
                 dr.editManufacturer(man, updParams);
             }
-            
             aadNewParams.clear();
-
-        });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                manufacturerName.setEditable(editStatus);
-                manufacturerCountry.setEditable(editStatus);
-                manufacturerTelephone.setEditable(editStatus);
-                manufacturerEmail.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                manufacturerName.setEditable(editStatus);
-                manufacturerCountry.setEditable(editStatus);
-                manufacturerTelephone.setEditable(editStatus);
-                manufacturerEmail.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);

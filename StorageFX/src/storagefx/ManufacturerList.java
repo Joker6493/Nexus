@@ -142,21 +142,21 @@ public class ManufacturerList extends Application {
         editItem.setOnAction((ActionEvent e) -> {
             Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем производителя " + selectedManufacturer.getManufacturerName() + "?");
-//            SystemDetails detail = new SystemDetails(manufacturerList.getSelectionModel().getSelectedItem(), true);
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            ElementDetails detail = new ElementDetails(selectedManufacturer, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить производителя?");
-//            SystemDetails detail = new SystemDetails(stockBox.getSelectionModel().getSelectedItem().getStockID());
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            ElementDetails detail = new ElementDetails("manufacturer",0);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {

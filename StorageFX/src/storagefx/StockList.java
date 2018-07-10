@@ -129,18 +129,22 @@ public class StockList extends Application {
         editItem.setOnAction((ActionEvent e) -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем склад "+ selectedStock.getStockName() + "?");
-            //modal window - in process
+            ElementDetails detail = new ElementDetails(selectedStock, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
             
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Добавить склад?");
-//            SystemDetails detail = new SystemDetails(stockBox.getSelectionModel().getSelectedItem().getStockID());
-//            Stage detailStage = new Stage();
-//            detailStage.initModality(Modality.WINDOW_MODAL);
-//            detailStage.initOwner(index.getScene().getWindow());
-//            detail.start(detailStage);
+            ElementDetails detail = new ElementDetails("stock",0);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
