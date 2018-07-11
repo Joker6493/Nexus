@@ -762,6 +762,23 @@ public class DataRelay {
         }
     }
     
+    protected void assembleSkydiveSystem(SkydiveSystem ss, Canopy c, Reserve r, AAD aad) {
+        String updateQuery = "Update system_info si " + 
+                             "set si.canopyid = " + c.getCanopyID() + ", si.reserveid = " + r.getReserveID() + ", si.aadid = " + aad.getAadID() + " " +
+                             "where si.systemid = " + ss.getSystemID();
+        int row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update canopy_info ci, reserve_info ri, aad_info ai " + 
+                             "set ci.systemid = " + ss.getSystemID() + ", ri.systemid = " + ss.getSystemID() + ", ai.systemid = " + ss.getSystemID() + " " +
+                             "where ci.systemid = 0 and ci.systemid = ri.systemid = ai.systemid";
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+    }
+    
     protected void replaceCanopy(Canopy c_Old, Canopy c_New) {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = " + c_New.getCanopyID() + " " +
