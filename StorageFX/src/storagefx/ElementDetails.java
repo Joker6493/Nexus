@@ -8,13 +8,17 @@ package storagefx;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -235,17 +239,50 @@ public class ElementDetails extends Application {
         //Apply changes    
             if (systemNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
                 updParams = systemNewParams.get(0);
                 int i = systemNewParams.size()-1;
                 while (i>0){
                     updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
                 }
-                dr.editSkydiveSystem(ss, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("Ранец " + selectedSystem.getSystemCode());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editSkydiveSystem(ss, updParams);
+                    systemNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
             
-            systemNewParams.clear();
- 
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
         editBtn.setSelected(editStatus);
@@ -406,17 +443,49 @@ public class ElementDetails extends Application {
         //Apply changes    
             if (canopyNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
                 updParams = canopyNewParams.get(0);
                 int i = canopyNewParams.size()-1;
                 while (i>0){
                     updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
                 }
-                dr.editCanopy(c, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("Купол " + c.getCanopyModel()+"-"+c.getCanopySize());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editCanopy(c, updParams);
+                    canopyNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
-            
-            canopyNewParams.clear();
-
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
         editBtn.setSelected(editStatus);
@@ -593,17 +662,49 @@ public class ElementDetails extends Application {
         //Apply changes    
             if (reserveNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
                 updParams = reserveNewParams.get(0);
                 int i = reserveNewParams.size()-1;
                 while (i>0){
                     updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
                 }
-                dr.editReserve(r, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("ПЗ " + r.getReserveModel()+"-"+r.getReserveSize());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editReserve(r, updParams);
+                    reserveNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
-            
-            reserveNewParams.clear();
-
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
         editBtn.setSelected(editStatus);
@@ -783,17 +884,49 @@ public class ElementDetails extends Application {
         //Apply changes    
             if (aadNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
                 updParams = aadNewParams.get(0);
                 int i = aadNewParams.size()-1;
                 while (i>0){
                     updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
                 }
-                dr.editAAD(a, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("ПЗ " + a.getAadModel()+" № "+a.getAadSN());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editAAD(a, updParams);
+                    aadNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
-            
-            aadNewParams.clear();
-
         });
         ToggleButton editBtn = new ToggleButton ("Редактировать");
         editBtn.setSelected(editStatus);
@@ -861,23 +994,56 @@ public class ElementDetails extends Application {
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //AAD
-            ArrayList <String> aadNewParams = new ArrayList<>();
+            ArrayList <String> stockNewParams = new ArrayList<>();
             if (!stockName.getText().equals(stock.getStockName())){
-                aadNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
+                stockNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
             }
         //Apply changes    
-            if (aadNewParams.isEmpty()) {
+            if (stockNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
-                updParams = aadNewParams.get(0);
-                int i = aadNewParams.size()-1;
+                updParams = stockNewParams.get(0);
+                int i = stockNewParams.size()-1;
                 while (i>0){
-                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                    updParams = updParams.concat(", ").concat(stockNewParams.get(i--));
                 }
-                dr.editStock(stock, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("Склад " + stock.getStockName());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editStock(stock, updParams);
+                    stockNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
-            aadNewParams.clear();
-
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
@@ -948,31 +1114,65 @@ public class ElementDetails extends Application {
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //AAD
-            ArrayList <String> aadNewParams = new ArrayList<>();
+            ArrayList <String> manufacturerNewParams = new ArrayList<>();
             if (!manufacturerName.getText().equals(man.getManufacturerName())){
-                aadNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+                manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
             }
             if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
-                aadNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+                manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
             }
             if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
-                aadNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+                manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
             }
             if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
-                aadNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+                manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
             }
         //Apply changes    
-            if (aadNewParams.isEmpty()) {
+            if (manufacturerNewParams.isEmpty()) {
                 //Ничего не меялось
+                Alert noChange = new Alert(AlertType.INFORMATION);
+                noChange.setTitle("Внимание!");
+                noChange.setHeaderText(null);
+                noChange.setContentText("Изменений в параметрах нет!");
+                noChange.showAndWait();
             }else{
-                updParams = aadNewParams.get(0);
-                int i = aadNewParams.size()-1;
+                updParams = manufacturerNewParams.get(0);
+                int i = manufacturerNewParams.size()-1;
                 while (i>0){
-                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                    updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
                 }
-                dr.editManufacturer(man, updParams);
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("Склад " + man.getManufacturerName());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Параметры не изменены!");
+                    noChange.showAndWait();
+                } else if (option.get() == yes) {
+                    dr.editManufacturer(man, updParams);
+                    manufacturerNewParams.clear();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                } else {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                }
             }
-            aadNewParams.clear();
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
