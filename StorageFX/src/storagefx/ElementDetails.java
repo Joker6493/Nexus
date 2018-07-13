@@ -993,7 +993,7 @@ public class ElementDetails extends Application {
             //some code here, rollback any changes
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //AAD
+        //Stock
             ArrayList <String> stockNewParams = new ArrayList<>();
             if (!stockName.getText().equals(stock.getStockName())){
                 stockNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
@@ -1113,7 +1113,7 @@ public class ElementDetails extends Application {
             //some code here, rollback any changes
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //AAD
+        //Manufacturer
             ArrayList <String> manufacturerNewParams = new ArrayList<>();
             if (!manufacturerName.getText().equals(man.getManufacturerName())){
                 manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
@@ -1177,8 +1177,56 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            //if there are some changes, ask for save them, then close window, if not - close window
+            ArrayList <String> manufacturerNewParams = new ArrayList<>();
+            if (!manufacturerName.getText().equals(man.getManufacturerName())){
+                manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+            }
+            if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
+                manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+            }
+            if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
+                manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+            }
+            if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
+                manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+            }
+        //Apply changes    
+            if (manufacturerNewParams.isEmpty()) {
+                //Ничего не меялось
+                details.getScene().getWindow().hide();
+            }else{
+                updParams = manufacturerNewParams.get(0);
+                int i = manufacturerNewParams.size()-1;
+                while (i>0){
+                    updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
+                }
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Есть неподтвержденные изменения");
+                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                confirm.setContentText("Склад " + man.getManufacturerName());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    
+                } else if (option.get() == yes) {
+                    dr.editManufacturer(man, updParams);
+                    manufacturerNewParams.clear();
+                    details.getScene().getWindow().hide();
+                } else if (option.get() == no) {
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменения не сохранены!");
+                    noChange.showAndWait();
+                    details.getScene().getWindow().hide();
+                } else {
+                    
+                }
+            }
         });
         
         HBox buttonPane = new HBox();
