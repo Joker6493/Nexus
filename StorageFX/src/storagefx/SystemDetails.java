@@ -30,6 +30,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -223,7 +224,18 @@ public class SystemDetails extends Application {
         cChoose.setTooltip(new Tooltip("Выберите купол основного парашюта"));
         cChoose.setDisable(!editStatus);
         cChoose.setOnAction((ActionEvent event) -> {
-            //some code here
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите купол основного парашюта");
+            
+            //TODO - transmit to modal window stock and current canopy
+            
+            CanopyList cl = new CanopyList();
+            Scene cList = new Scene(cl.CanopyTable());
+            chooseWindow.setScene(cList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(detailStage.getScene().getWindow());
+            chooseWindow.show();
         });
         
         cJumps.setEditable(editStatus);
