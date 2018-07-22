@@ -235,7 +235,16 @@ public class SystemDetails extends Application {
             
             chooseWindow.initModality(Modality.WINDOW_MODAL);
             chooseWindow.initOwner(detailStage.getScene().getWindow());
-            chooseWindow.show();
+            chooseWindow.showAndWait();
+            if (cl.getSelectedCanopy() != null){
+                Canopy newCanopy = cl.getSelectedCanopy();
+                cModel.setText(newCanopy.getCanopyModel());
+                cSize.setText(Integer.toString(newCanopy.getCanopySize()));
+                cSN.setText(newCanopy.getCanopySN());
+                cDOM.setValue(newCanopy.getCanopyDOM());
+                cJumps.setText(Integer.toString(newCanopy.getCanopyJumps()));
+                cManufacturerName.getSelectionModel().select(newCanopy.getCanopyManufacturerID()-1);                
+            }
         });
         
         cJumps.setEditable(editStatus);
@@ -499,9 +508,9 @@ public class SystemDetails extends Application {
             if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
                 systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
             }
-//            if (!sManufacturerName.getText().equals(selectedSystem.getSystemManufacturerName())){
-//                updateParamsList.add("system_code = "+sManufacturerName.getText());
-//            }
+            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
         //Apply changes    
             if (systemNewParams.isEmpty()) {
                 //Ничего не меялось

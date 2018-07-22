@@ -209,7 +209,7 @@ public class StorageIndex extends Application {
         
         HBox storageBar = new HBox();
         storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn, elementBtn);
-        storageBar.setPadding(new Insets(10));
+        storageBar.setPadding(new Insets(20));
         index.setTop(storageBar);
         
         ContextMenu storageContextMenu = new ContextMenu();

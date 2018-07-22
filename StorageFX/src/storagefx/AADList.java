@@ -33,6 +33,16 @@ public class AADList extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
+    private AAD selectedAAD;
+
+    public AAD getSelectedAAD() {
+        return selectedAAD;
+    }
+
+    public void setSelectedAAD(AAD selectedAAD) {
+        this.selectedAAD = selectedAAD;
+    }
+    
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = AADTable();
@@ -101,8 +111,8 @@ public class AADList extends Application {
         aadTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView Canopy object
-                AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-//                System.out.println("Выбран прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"!");
+                setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+                System.out.println("Выбран прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"!");
 //                ElementDetails detail = new ElementDetails(currentAAD, false);
 //                Stage detailStage = new Stage();
 //                detailStage.initModality(Modality.WINDOW_MODAL);
@@ -121,9 +131,9 @@ public class AADList extends Application {
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-            System.out.println("информация о приборе "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN());
-            ElementDetails detail = new ElementDetails(currentAAD, false);
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
+            ElementDetails detail = new ElementDetails(selectedAAD, false);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -132,9 +142,9 @@ public class AADList extends Application {
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"?");
-            ElementDetails detail = new ElementDetails(currentAAD, true);
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("Редактируем прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
+            ElementDetails detail = new ElementDetails(selectedAAD, true);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -153,8 +163,8 @@ public class AADList extends Application {
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            AAD currentAAD = aadTable.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить прибор "+currentAAD.getAadModel()+" № "+currentAAD.getAadSN()+"?");
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("Удалить прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
         });
         aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {

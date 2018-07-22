@@ -33,6 +33,16 @@ public class ReserveList extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
+    private Reserve selectedReserve;
+
+    public Reserve getSelectedReserve() {
+        return selectedReserve;
+    }
+
+    public void setSelectedReserve(Reserve selectedReserve) {
+        this.selectedReserve = selectedReserve;
+    }
+    
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ReserveTable();
@@ -86,8 +96,8 @@ public class ReserveList extends Application {
         reserveTable.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView Canopy object
-                Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
-                System.out.println("Выбран купол "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize()+"!");
+                setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+                System.out.println("Выбран купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"!");
 //                ElementDetails detail = new ElementDetails(currentReserve, false);
 //                Stage detailStage = new Stage();
 //                detailStage.initModality(Modality.WINDOW_MODAL);
@@ -106,9 +116,9 @@ public class ReserveList extends Application {
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
-            System.out.println("информация о куполе "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize());
-            ElementDetails detail = new ElementDetails(currentReserve, false);
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("информация о куполе "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize());
+            ElementDetails detail = new ElementDetails(selectedReserve, false);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -117,9 +127,9 @@ public class ReserveList extends Application {
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем купол "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize()+"?");
-            ElementDetails detail = new ElementDetails(currentReserve, true);
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("Редактируем купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
+            ElementDetails detail = new ElementDetails(selectedReserve, true);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -138,8 +148,8 @@ public class ReserveList extends Application {
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
-            Reserve currentReserve = reserveTable.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить купол "+currentReserve.getReserveModel()+"-"+currentReserve.getReserveSize()+"?");
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("Удалить купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
         });
         reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         reserveTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
