@@ -317,7 +317,7 @@ public class ElementDetails extends Application {
         
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, assembleBtn, cancelBtn);
-        details.add(buttonPane, 1, 4);
+        details.add(buttonPane, 1, 5);
         
         return details;
     }
@@ -1054,7 +1054,7 @@ public class ElementDetails extends Application {
         
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, cancelBtn);
-        details.add(buttonPane, 1, 8);
+        details.add(buttonPane, 1, 2);
         
         return details;
     }
@@ -1231,7 +1231,7 @@ public class ElementDetails extends Application {
         
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, cancelBtn);
-        details.add(buttonPane, 1, 8);
+        details.add(buttonPane, 1, 5);
         
         return details;
     }

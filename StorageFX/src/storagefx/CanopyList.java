@@ -33,8 +33,6 @@ public class CanopyList extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
-    private StackPane table;
-    private DataRelay dr;
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = CanopyTable();
@@ -46,6 +44,7 @@ public class CanopyList extends Application {
     
     public StackPane CanopyTable(){
         StackPane index = new StackPane();
+        DataRelay dr = new DataRelay();
         TableView<Canopy> canopyTable = new TableView<>();
         //Columns
         TableColumn <Canopy, String> canopy = new TableColumn<>("Основной парашют");

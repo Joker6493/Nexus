@@ -33,8 +33,6 @@ public class AADList extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
-    private StackPane table;
-    private DataRelay dr;
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = AADTable();
@@ -46,6 +44,7 @@ public class AADList extends Application {
     
     public StackPane AADTable(){
         StackPane index = new StackPane();
+        DataRelay dr = new DataRelay();
         TableView<AAD> aadTable = new TableView<>();
         //Columns
         //AAD(systemID, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID)

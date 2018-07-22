@@ -275,8 +275,8 @@ public class DataRelay {
         ArrayList<Manufacturer> indexList = new ArrayList<>();
         try{
             String selectQuery = "select mi.manufacturerid, mi.manufacturer_name, mi.manufacturer_country, mi.manufacturer_telephone, mi.manufacturer_email " +
-                                 "from manufacturer_info mi" +
-                                 "where status = " + getStatus();
+                                 "from manufacturer_info mi " +
+                                 "where mi.status = " + getStatus();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
                 int manufacturerID = rs.getInt("manufacturerid");

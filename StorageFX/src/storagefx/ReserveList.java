@@ -33,8 +33,6 @@ public class ReserveList extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
-    private StackPane table;
-    private DataRelay dr;
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ReserveTable();
@@ -46,6 +44,7 @@ public class ReserveList extends Application {
     
     public StackPane ReserveTable(){
         StackPane index = new StackPane();
+        DataRelay dr = new DataRelay();
         TableView<Reserve> reserveTable = new TableView<>();
         //Columns
         //Reserve(systemID, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, stockID)

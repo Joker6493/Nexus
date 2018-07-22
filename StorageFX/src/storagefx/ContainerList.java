@@ -31,10 +31,26 @@ import javafx.stage.Modality;
 public class ContainerList extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     private int stockID;
     private int status;
-    private StackPane table;
-    private DataRelay dr;
+    
+    public int getStockID() {
+        return stockID;
+    }
+
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ContainerTable();
@@ -46,6 +62,7 @@ public class ContainerList extends Application {
     
     public StackPane ContainerTable(){
         StackPane index = new StackPane();
+        DataRelay dr = new DataRelay();
         TableView<SkydiveSystem> containerTable = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");

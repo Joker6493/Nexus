@@ -217,14 +217,14 @@ public class StorageIndex extends Application {
             detail.start(detailStage);
         });
         MenuItem disassembleItem = new MenuItem("Разобрать");
-        editItem.setOnAction((ActionEvent e) -> {
+        disassembleItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Разобрать систему "+currentSystem.getSystemCode()+"?");
             dr.disassembleSkydiveSystem(currentSystem);
             System.out.println("Система разобрана!");
         });
         MenuItem moveItem = new MenuItem("Переместить");
-        editItem.setOnAction((ActionEvent e) -> {
+        moveItem.setOnAction((ActionEvent e) -> {
             //in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
