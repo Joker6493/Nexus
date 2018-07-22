@@ -139,6 +139,16 @@ public class ContainerList extends Application {
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
         });
+        MenuItem assembleItem = new MenuItem("Собрать систему");
+        assembleItem.setOnAction((ActionEvent e) -> {
+            SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
+            System.out.println("Начата сборка системы " + currentSystem.getSystemCode());
+            SystemDetails detail = new SystemDetails(currentSystem, true);
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            detail.start(detailStage);
+        });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
             System.out.println("Добавить ранец?");
@@ -154,7 +164,7 @@ public class ContainerList extends Application {
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("Удалить ранец "+currentSystem.getSystemCode()+"?");
         });
-        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, assembleItem, deleteItem);
         containerTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             containerContextMenu.show(containerTable, event.getScreenX(), event.getScreenY());
         });

@@ -148,11 +148,11 @@ public class SystemDetails extends Application {
         containerGrid.setPadding(new Insets(5));
         
     //Canopy
+        Canopy sCanopy = new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID());
         GridPane canopyGrid = new GridPane();
-        //String canopyModel, int canopySize, String canopySN, String canopyDOM, int canopyJumps, String canopyManufacturerName
         Label canopyGridName = new Label("Основной парашют");
         Label cModelLabel = new Label("Модель: ");
-        TextField cModel = new TextField(selectedSystem.getCanopyModel());
+        TextField cModel = new TextField(sCanopy.getCanopyModel());
         cModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>50) {
                 cModel.setText(oldValue);
@@ -160,7 +160,7 @@ public class SystemDetails extends Application {
         });
         cModel.setEditable(editStatus);
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
-        TextField cSize = new TextField (Integer.toString(selectedSystem.getCanopySize()));
+        TextField cSize = new TextField (Integer.toString(sCanopy.getCanopySize()));
         cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,3}")) {
                 cSize.setText(oldValue);
@@ -168,7 +168,7 @@ public class SystemDetails extends Application {
         });
         cSize.setEditable(editStatus);
         Label cSNLabel = new Label("Серийный номер: ");
-        TextField cSN = new TextField(selectedSystem.getCanopySN());
+        TextField cSN = new TextField(sCanopy.getCanopySN());
         cSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>20) {
                 cSN.setText(oldValue);
@@ -176,7 +176,7 @@ public class SystemDetails extends Application {
         });
         cSN.setEditable(editStatus);
         Label cDOMLabel = new Label("Дата производства: ");
-        DatePicker cDOM = new DatePicker(selectedSystem.getCanopyDOM());
+        DatePicker cDOM = new DatePicker(sCanopy.getCanopyDOM());
         cDOM.setShowWeekNumbers(true);
         cDOM.setEditable(editStatus);
         cDOM.setOnMouseClicked(e -> {
@@ -210,10 +210,10 @@ public class SystemDetails extends Application {
                 }
             }
         });
-        cManufacturerName.getSelectionModel().select(selectedSystem.getCanopyManufacturerID()-1);
+        cManufacturerName.getSelectionModel().select(sCanopy.getCanopyManufacturerID()-1);
         cManufacturerName.setDisable(!editStatus);
         Label cJumpsLabel = new Label ("Прыжков: ");
-        TextField cJumps = new TextField (Integer.toString(selectedSystem.getCanopyJumps()));
+        TextField cJumps = new TextField (Integer.toString(sCanopy.getCanopyJumps()));
         cJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,4}")) {
                 cJumps.setText(oldValue);
@@ -257,11 +257,11 @@ public class SystemDetails extends Application {
         canopyGrid.setPadding(new Insets(5));
         
     //Reserve
+        Reserve sReserve = new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID());
         GridPane reserveGrid = new GridPane();
-        //int reserveID, String reserveModel, int reserveSize, String reserveSN, String reserveDOM, int reserveJumps, String reservePackDate, int reserveManufacturerID, String reserveManufacturerName
         Label reserveGridName = new Label("Запасной парашют");
         Label rModelLabel = new Label("Модель: ");
-        TextField rModel = new TextField(selectedSystem.getReserveModel());
+        TextField rModel = new TextField(sReserve.getReserveModel());
         rModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>50) {
                 rModel.setText(oldValue);
@@ -269,7 +269,7 @@ public class SystemDetails extends Application {
         });
         rModel.setEditable(editStatus);
         Label rSizeLabel = new Label ("Размер купола, кв.фут: ");
-        TextField rSize = new TextField (Integer.toString(selectedSystem.getReserveSize()));
+        TextField rSize = new TextField (Integer.toString(sReserve.getReserveSize()));
         rSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,3}")) {
                 rSize.setText(oldValue);
@@ -277,7 +277,7 @@ public class SystemDetails extends Application {
         });
         rSize.setEditable(editStatus);
         Label rSNLabel = new Label("Серийный номер: ");
-        TextField rSN = new TextField(selectedSystem.getReserveSN());
+        TextField rSN = new TextField(sReserve.getReserveSN());
         rSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>20) {
                 rSN.setText(oldValue);
@@ -285,7 +285,7 @@ public class SystemDetails extends Application {
         });
         rSN.setEditable(editStatus);
         Label rDOMLabel = new Label("Дата производства: ");
-        DatePicker rDOM = new DatePicker(selectedSystem.getReserveDOM());
+        DatePicker rDOM = new DatePicker(sReserve.getReserveDOM());
         rDOM.setShowWeekNumbers(true);
         rDOM.setEditable(editStatus);
         rDOM.setOnMouseClicked(e -> {
@@ -319,10 +319,10 @@ public class SystemDetails extends Application {
                 }
             }
         });
-        rManufacturerName.getSelectionModel().select(selectedSystem.getReserveManufacturerID()-1);
+        rManufacturerName.getSelectionModel().select(sReserve.getReserveManufacturerID()-1);
         rManufacturerName.setDisable(!editStatus);
         Label rJumpsLabel = new Label ("Применений: ");
-        TextField rJumps = new TextField (Integer.toString(selectedSystem.getReserveJumps()));
+        TextField rJumps = new TextField (Integer.toString(sReserve.getReserveJumps()));
         rJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,4}")) {
                 rJumps.setText(oldValue);
@@ -330,7 +330,7 @@ public class SystemDetails extends Application {
         });
         rJumps.setEditable(editStatus);
         Label rPackDateLabel = new Label ("Дата укладки: ");
-        DatePicker rPackDate = new DatePicker(selectedSystem.getReservePackDate());
+        DatePicker rPackDate = new DatePicker(sReserve.getReservePackDate());
         rPackDate.setShowWeekNumbers(true);
         rPackDate.setEditable(editStatus);
         rPackDate.setOnMouseClicked(e -> {
@@ -365,11 +365,13 @@ public class SystemDetails extends Application {
         reserveGrid.setPadding(new Insets(5));
         
     //AAD
+        AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
         GridPane aadGrid = new GridPane();
+        //AAD(systemID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID)
         //int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName
         Label aadGridName = new Label("Страхующий прибор");
         Label aModelLabel = new Label("Модель: ");
-        TextField aModel = new TextField(selectedSystem.getAadModel());
+        TextField aModel = new TextField(sAAD.getAadModel());
         aModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>50) {
                 aModel.setText(oldValue);
@@ -377,7 +379,7 @@ public class SystemDetails extends Application {
         });
         aModel.setEditable(editStatus);
         Label aSNLabel = new Label("Серийный номер: ");
-        TextField aSN = new TextField(selectedSystem.getAadSN());
+        TextField aSN = new TextField(sAAD.getAadSN());
         aSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.length()>20) {
                 aSN.setText(oldValue);
@@ -385,7 +387,7 @@ public class SystemDetails extends Application {
         });
         aSN.setEditable(editStatus);
         Label aDOMLabel = new Label("Дата производства: ");
-        DatePicker aDOM = new DatePicker(selectedSystem.getAadDOM());
+        DatePicker aDOM = new DatePicker(sAAD.getAadDOM());
         aDOM.setShowWeekNumbers(true);
         aDOM.setEditable(editStatus);
         aDOM.setOnMouseClicked(e -> {
@@ -419,10 +421,10 @@ public class SystemDetails extends Application {
                 }
             }
         });
-        aManufacturerName.getSelectionModel().select(selectedSystem.getAadManufacturerID()-1);
+        aManufacturerName.getSelectionModel().select(sAAD.getAadManufacturerID()-1);
         aManufacturerName.setDisable(!editStatus);
         Label aJumpsLabel = new Label ("Прыжков: ");
-        TextField aJumps = new TextField (Integer.toString(selectedSystem.getAadJumps()));
+        TextField aJumps = new TextField (Integer.toString(sAAD.getAadJumps()));
         aJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,4}")) {
                 aJumps.setText(oldValue);
@@ -430,7 +432,7 @@ public class SystemDetails extends Application {
         });
         aJumps.setEditable(editStatus);
         Label aNextReglLabel = new Label ("Дата следующего регламента: ");
-        DatePicker aNextRegl = new DatePicker(selectedSystem.getAadNextRegl());
+        DatePicker aNextRegl = new DatePicker(sAAD.getAadNextRegl());
         aNextRegl.setShowWeekNumbers(true);
         aNextRegl.setEditable(editStatus);
         aNextRegl.setOnMouseClicked(e -> {
@@ -440,7 +442,7 @@ public class SystemDetails extends Application {
         });
         
         Label aSavedLabel = new Label ("Количество применений: ");
-        TextField aSaved = new TextField (Integer.toString(selectedSystem.getAadSaved()));
+        TextField aSaved = new TextField (Integer.toString(sAAD.getAadSaved()));
         aSaved.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d{0,4}")) {
                 aSaved.setText(oldValue);
@@ -516,22 +518,22 @@ public class SystemDetails extends Application {
             
         //Canopy
             ArrayList <String> canopyNewParams = new ArrayList<>();
-            if (!cModel.getText().equals(selectedSystem.getCanopyModel())){
+            if (!cModel.getText().equals(sCanopy.getCanopyModel())){
                 canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
             }
-            if (!cSize.getText().equals(Integer.toString(selectedSystem.getCanopySize()))){
+            if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
                 canopyNewParams.add("canopy_size = "+cSize.getText());
             }
-            if (!cSN.getText().equals(selectedSystem.getCanopySN())){
+            if (!cSN.getText().equals(sCanopy.getCanopySN())){
                 canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
             }
-            if (!cDOM.getValue().equals(selectedSystem.getCanopyDOM())){
+            if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
                 canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
             }
 //            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
 //                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
 //            }
-            if (!cJumps.getText().equals(Integer.toString(selectedSystem.getCanopyJumps()))){
+            if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
                 canopyNewParams.add("canopy_jumps = "+cJumps.getText());
             }
         //Apply changes    
@@ -543,31 +545,31 @@ public class SystemDetails extends Application {
                 while (i>0){
                     updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
                 }
-                dr.editCanopy(new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID()), updParams);
+                dr.editCanopy(sCanopy, updParams);
             }
             
             canopyNewParams.clear();
         //Reserve
             ArrayList <String> reserveNewParams = new ArrayList<>();
-            if (!rModel.getText().equals(selectedSystem.getReserveModel())){
+            if (!rModel.getText().equals(sReserve.getReserveModel())){
                 reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
             }
-            if (!rSize.getText().equals(Integer.toString(selectedSystem.getReserveSize()))){
+            if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
                 reserveNewParams.add("reserve_size = "+rSize.getText());
             }
-            if (!rSN.getText().equals(selectedSystem.getReserveSN())){
+            if (!rSN.getText().equals(sReserve.getReserveSN())){
                 reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
             }
-            if (!rDOM.getValue().equals(selectedSystem.getReserveDOM())){
+            if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
                 reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
             }
 //            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
 //                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
 //            }
-            if (!rJumps.getText().equals(Integer.toString(selectedSystem.getReserveJumps()))){
+            if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
                 reserveNewParams.add("reserve_jumps = "+rJumps.getText());
             }
-            if (!rPackDate.getValue().equals(selectedSystem.getReservePackDate())){
+            if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
                 reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
             }
         //Apply changes    
@@ -579,31 +581,31 @@ public class SystemDetails extends Application {
                 while (i>0){
                     updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
                 }
-                dr.editReserve(new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID()), updParams);
+                dr.editReserve(sReserve, updParams);
             }
             
             reserveNewParams.clear();
         //AAD
             ArrayList <String> aadNewParams = new ArrayList<>();
-            if (!aModel.getText().equals(selectedSystem.getAadModel())){
+            if (!aModel.getText().equals(sAAD.getAadModel())){
                 aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
             }
-            if (!aSN.getText().equals(selectedSystem.getAadSN())){
+            if (!aSN.getText().equals(sAAD.getAadSN())){
                 aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
             }
-            if (!aDOM.getValue().equals(selectedSystem.getAadDOM())){
+            if (!aDOM.getValue().equals(sAAD.getAadDOM())){
                 aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
             }
 //            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
 //                updateParamsList.add("aad_code = "+sCode.getText());
 //            }
-            if (!aJumps.getText().equals(Integer.toString(selectedSystem.getAadJumps()))){
+            if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
                 aadNewParams.add("aad_jumps = "+aJumps.getText());
             }
-            if (!aNextRegl.getValue().equals(selectedSystem.getAadNextRegl())){
+            if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
                 aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
             }
-            if (!aSaved.getText().equals(Integer.toString(selectedSystem.getAadSaved()))){
+            if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
                 aadNewParams.add("aad_saved = "+aSaved.getText());
             }
         //Apply changes    
@@ -615,7 +617,7 @@ public class SystemDetails extends Application {
                 while (i>0){
                     updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
                 }
-                dr.editAAD(new AAD(selectedSystem.getSystemID(), selectedSystem.getAadID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID()), updParams);
+                dr.editAAD(sAAD, updParams);
             }
             
             aadNewParams.clear();

@@ -5,6 +5,7 @@
  */
 package storagefx;
 
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,6 +15,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -192,9 +195,20 @@ public class StorageIndex extends Application {
             status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
+        Button elementBtn = new Button("Элементы системы");
+        elementBtn.setOnAction((ActionEvent event) -> {
+            ElementsIndex detail = new ElementsIndex();
+            Stage detailStage = new Stage();
+            detailStage.initModality(Modality.WINDOW_MODAL);
+            detailStage.initOwner(index.getScene().getWindow());
+            try {
+                detail.start(detailStage);
+            } catch (SQLException ex) {
+            }
+        });
         
         HBox storageBar = new HBox();
-        storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
+        storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn, elementBtn);
         storageBar.setPadding(new Insets(10));
         index.setTop(storageBar);
         
