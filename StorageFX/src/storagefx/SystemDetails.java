@@ -8,13 +8,16 @@ package storagefx;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -737,8 +740,23 @@ public class SystemDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
@@ -758,8 +776,8 @@ public class SystemDetails extends Application {
         Scene scene = new Scene(details);
         detailStage.setTitle(stageTitle);
         detailStage.setScene(scene);
-        detailStage.show(); 
-
+        detailStage.show();
+        
     }
    
     /**

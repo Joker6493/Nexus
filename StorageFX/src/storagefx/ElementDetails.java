@@ -311,8 +311,23 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
@@ -516,8 +531,23 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
@@ -737,8 +767,23 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
@@ -959,8 +1004,23 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
@@ -1048,8 +1108,23 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //some code here, if there are some changes, ask for save them, then close window, if not - close window
-            details.getScene().getWindow().hide();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Закрыть окно?");
+            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+            if (option.get() == null) {
+                
+            } else if (option.get() == yes) {
+                details.getScene().getWindow().hide();
+            } else if (option.get() == no) {
+                
+            } else {
+                
+            }
         });
         
         HBox buttonPane = new HBox();
