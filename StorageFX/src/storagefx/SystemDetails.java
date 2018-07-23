@@ -226,11 +226,9 @@ public class SystemDetails extends Application {
         cChoose.setOnAction((ActionEvent event) -> {
             Stage chooseWindow = new Stage();
             chooseWindow.setTitle("Выберите купол основного парашюта");
-            
             //TODO - transmit to modal window stock and current canopy
-            
             CanopyList cl = new CanopyList();
-            Scene cList = new Scene(cl.CanopyTable());
+            Scene cList = new Scene(cl.CanopyTable(true));
             chooseWindow.setScene(cList);
             
             chooseWindow.initModality(Modality.WINDOW_MODAL);
@@ -351,7 +349,26 @@ public class SystemDetails extends Application {
         rChoose.setTooltip(new Tooltip("Выберите купол запасного парашюта"));
         rChoose.setDisable(!editStatus);
         rChoose.setOnAction((ActionEvent event) -> {
-            //some code here
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите купол запасного парашюта");
+            //TODO - transmit to modal window stock and current canopy
+            ReserveList rl = new ReserveList();
+            Scene rList = new Scene(rl.ReserveTable(true));
+            chooseWindow.setScene(rList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(detailStage.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (rl.getSelectedReserve() != null){
+                Reserve newReserve = rl.getSelectedReserve();
+                rModel.setText(newReserve.getReserveModel());
+                rSize.setText(Integer.toString(newReserve.getReserveSize()));
+                rSN.setText(newReserve.getReserveSN());
+                rDOM.setValue(newReserve.getReserveDOM());
+                rManufacturerName.getSelectionModel().select(newReserve.getReserveManufacturerID()-1); 
+                rJumps.setText(Integer.toString(newReserve.getReserveJumps()));
+                rPackDate.setValue(newReserve.getReservePackDate());                
+            }
         });
         
         reserveGrid.add(reserveGridName, 0, 0);
@@ -376,8 +393,6 @@ public class SystemDetails extends Application {
     //AAD
         AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
         GridPane aadGrid = new GridPane();
-        //AAD(systemID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID)
-        //int aadID, String aadModel, String aadSN, String aadDOM, int aadJumps, String aadNextRegl, boolean aadFired, int aadManufacturerID, String aadManufacturerName
         Label aadGridName = new Label("Страхующий прибор");
         Label aModelLabel = new Label("Модель: ");
         TextField aModel = new TextField(sAAD.getAadModel());
@@ -461,7 +476,26 @@ public class SystemDetails extends Application {
         aChoose.setTooltip(new Tooltip("Выберите страхующий прибор"));
         aChoose.setDisable(!editStatus);
         aChoose.setOnAction((ActionEvent event) -> {
-            //some code here
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите страхующий прибор");
+            //TODO - transmit to modal window stock and current canopy
+            AADList al = new AADList();
+            Scene aList = new Scene(al.AADTable(true));
+            chooseWindow.setScene(aList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(detailStage.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (al.getSelectedAAD() != null){
+                AAD newAAD = al.getSelectedAAD();
+                aModel.setText(newAAD.getAadModel());
+                aSN.setText(newAAD.getAadSN());
+                aDOM.setValue(newAAD.getAadDOM());
+                aManufacturerName.getSelectionModel().select(newAAD.getAadManufacturerID()-1);
+                aJumps.setText(Integer.toString(newAAD.getAadJumps()));
+                aNextRegl.setValue(newAAD.getAadNextRegl());
+                aSaved.setText(Integer.toString(newAAD.getAadSaved()));            
+            }
         });
         
         aSaved.setEditable(editStatus);
@@ -539,9 +573,9 @@ public class SystemDetails extends Application {
             if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
                 canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
             }
-//            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
-//                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
-//            }
+            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+                canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
                 canopyNewParams.add("canopy_jumps = "+cJumps.getText());
             }
@@ -572,9 +606,9 @@ public class SystemDetails extends Application {
             if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
                 reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
             }
-//            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
-//                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
-//            }
+            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+                reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
                 reserveNewParams.add("reserve_jumps = "+rJumps.getText());
             }
@@ -605,9 +639,9 @@ public class SystemDetails extends Application {
             if (!aDOM.getValue().equals(sAAD.getAadDOM())){
                 aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
             }
-//            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
-//                updateParamsList.add("aad_code = "+sCode.getText());
-//            }
+            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+                aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
                 aadNewParams.add("aad_jumps = "+aJumps.getText());
             }

@@ -53,14 +53,14 @@ public class ContainerList extends Application {
     
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        StackPane index = ContainerTable();
+        StackPane index = ContainerTable(false);
         Scene scene = new Scene(index);
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    public StackPane ContainerTable(){
+    public StackPane ContainerTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
         TableView<SkydiveSystem> containerTable = new TableView<>();
@@ -102,11 +102,15 @@ public class ContainerList extends Application {
                 SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбран ранец "+currentSystem.getSystemCode()+"!");
-//                ElementDetails detail = new ElementDetails(currentSystem, false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }else{
+                ElementDetails detail = new ElementDetails(currentSystem, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
+                }
             }
         });
         ContextMenu containerContextMenu = new ContextMenu();

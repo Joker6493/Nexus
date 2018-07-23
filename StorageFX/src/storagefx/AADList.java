@@ -45,14 +45,14 @@ public class AADList extends Application {
     
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        StackPane index = AADTable();
+        StackPane index = AADTable(false);
         Scene scene = new Scene(index);
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    public StackPane AADTable(){
+    public StackPane AADTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
         TableView<AAD> aadTable = new TableView<>();
@@ -113,11 +113,15 @@ public class AADList extends Application {
                 //Get selected TableView Canopy object
                 setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"!");
-//                ElementDetails detail = new ElementDetails(currentAAD, false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }else{
+                ElementDetails detail = new ElementDetails(selectedAAD, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
+                }
             }
         });
         ContextMenu aadContextMenu = new ContextMenu();

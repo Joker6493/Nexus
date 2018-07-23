@@ -233,9 +233,9 @@ public class ElementDetails extends Application {
             if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
                 systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
             }
-//            if (!sManufacturerName.getText().equals(selectedSystem.getSystemManufacturerName())){
-//                updateParamsList.add("system_code = "+sManufacturerName.getText());
-//            }
+            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
         //Apply changes    
             if (systemNewParams.isEmpty()) {
                 //Ничего не меялось
@@ -434,9 +434,9 @@ public class ElementDetails extends Application {
             if (!cDOM.getValue().equals(c.getCanopyDOM())){
                 canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
             }
-//            if (!cManufacturerName.getText().equals(selectedSystem.getCanopyManufacturerName())){
-//                updateParamsList.add("canopy_code = "+cManufacturerName.getText());
-//            }
+            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=c.getCanopyManufacturerID()){
+                canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!cJumps.getText().equals(Integer.toString(c.getCanopyJumps()))){
                 canopyNewParams.add("canopy_jumps = "+cJumps.getText());
             }
@@ -650,9 +650,9 @@ public class ElementDetails extends Application {
             if (!rDOM.getValue().equals(r.getReserveDOM())){
                 reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
             }
-//            if (!rManufacturerName.getText().equals(selectedSystem.getReserveManufacturerName())){
-//                updateParamsList.add("reserve_code = "+rManufacturerName.getText());
-//            }
+            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=r.getReserveManufacturerID()){
+                reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
                 reserveNewParams.add("reserve_jumps = "+rJumps.getText());
             }
@@ -869,9 +869,9 @@ public class ElementDetails extends Application {
             if (!aDOM.getValue().equals(a.getAadDOM())){
                 aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
             }
-//            if (!aManufacturerName.getText().equals(selectedSystem.getAadManufacturerName())){
-//                updateParamsList.add("aad_code = "+sCode.getText());
-//            }
+            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=a.getAadManufacturerID()){
+                aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            }
             if (!aJumps.getText().equals(Integer.toString(a.getAadJumps()))){
                 aadNewParams.add("aad_jumps = "+aJumps.getText());
             }

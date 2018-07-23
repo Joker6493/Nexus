@@ -63,19 +63,19 @@ public class ElementsIndex extends Application {
             switch (elementsBox.getSelectionModel().getSelectedItem()){
                 case "Ранцы":
                     ContainerList col = new ContainerList();
-                    table = col.ContainerTable();
+                    table = col.ContainerTable(false);
                     break;
                 case "Основные парашюты":
                     CanopyList cl = new CanopyList();
-                    table = cl.CanopyTable();
+                    table = cl.CanopyTable(false);
                     break;
                 case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
-                    table = rl.ReserveTable();
+                    table = rl.ReserveTable(false);
                     break;
                 case "Страхующие приборы":
                     AADList al = new AADList();
-                    table = al.AADTable();
+                    table = al.AADTable(false);
                     break;
             }
             index.setCenter(table);
@@ -152,19 +152,19 @@ public class ElementsIndex extends Application {
         switch (elementsBox.getSelectionModel().getSelectedItem()){
             case "Ранцы":
                     ContainerList col = new ContainerList();
-                    table = col.ContainerTable();
+                    table = col.ContainerTable(false);
                     break;
             case "Основные парашюты":
                     CanopyList cl = new CanopyList();
-                    table = cl.CanopyTable();
+                    table = cl.CanopyTable(false);
                     break;
             case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
-                    table = rl.ReserveTable();
+                    table = rl.ReserveTable(false);
                     break;
             case "Страхующие приборы":
                     AADList al = new AADList();
-                    table = al.AADTable();
+                    table = al.AADTable(false);
                     break;
         }
         index.setCenter(table);

@@ -45,14 +45,14 @@ public class ReserveList extends Application {
     
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        StackPane index = ReserveTable();
+        StackPane index = ReserveTable(false);
         Scene scene = new Scene(index);
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    public StackPane ReserveTable(){
+    public StackPane ReserveTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
         TableView<Reserve> reserveTable = new TableView<>();
@@ -98,11 +98,15 @@ public class ReserveList extends Application {
                 //Get selected TableView Canopy object
                 setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"!");
-//                ElementDetails detail = new ElementDetails(currentReserve, false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }else{
+                ElementDetails detail = new ElementDetails(selectedReserve, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
+                }
             }
         });
         ContextMenu reserveContextMenu = new ContextMenu();

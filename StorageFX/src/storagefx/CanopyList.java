@@ -44,14 +44,14 @@ public class CanopyList extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws SQLException {
-        StackPane index = CanopyTable();
+        StackPane index = CanopyTable(false);
         Scene scene = new Scene(index);
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    public StackPane CanopyTable(){
+    public StackPane CanopyTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
         TableView<Canopy> canopyTable = new TableView<>();
@@ -96,11 +96,15 @@ public class CanopyList extends Application {
                 //Get selected TableView Canopy object
                 setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"!");
-//                ElementDetails detail = new ElementDetails(selectedCanopy, false);
-//                Stage detailStage = new Stage();
-//                detailStage.initModality(Modality.WINDOW_MODAL);
-//                detailStage.initOwner(index.getScene().getWindow());
-//                detail.start(detailStage);
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }else{
+                ElementDetails detail = new ElementDetails(selectedCanopy, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);                    
+                }
             }
         });
         ContextMenu canopyContextMenu = new ContextMenu();
