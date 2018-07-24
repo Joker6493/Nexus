@@ -53,6 +53,7 @@ public class StockList extends Application {
     public BorderPane StockList () {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
+        dr.setStatus(status);
         ListView<Stock> stockList = new ListView<>();
         //Adding data and create scene
         ObservableList<Stock> indexList = dr.getStockList();

@@ -63,6 +63,8 @@ public class ContainerList extends Application {
     public StackPane ContainerTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
+        dr.setStatus(status);
+        dr.setStock(stockID);
         TableView<SkydiveSystem> containerTable = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");

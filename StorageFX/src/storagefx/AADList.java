@@ -71,6 +71,8 @@ public class AADList extends Application {
     public StackPane AADTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
+        dr.setStatus(status);
+        dr.setStock(stockID);
         TableView<AAD> aadTable = new TableView<>();
         //Columns
         //AAD(systemID, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID)
