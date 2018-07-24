@@ -212,7 +212,35 @@ public class StorageIndex extends Application {
         });
         Menu directoryMenu = new Menu("Справочники");
         MenuItem stocksList = new MenuItem("Склады");
+        stocksList.setOnAction((ActionEvent event) -> {
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Справочник - Склады");
+            StockList sl = new StockList();
+        //Need to modify - choosing statuses in modal window
+            sl.setStatus(status);
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+        });
+        
         MenuItem manufacturersList = new MenuItem("Производители");
+        manufacturersList.setOnAction((ActionEvent event) -> {
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Справочник - Производители");
+            ManufacturerList ml = new ManufacturerList();
+        //Need to modify - choosing statuses in modal window
+            ml.setStatus(status);
+            Scene mList = new Scene(ml.ManufacturerList(true));
+            chooseWindow.setScene(mList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+        });
+        
         directoryMenu.getItems().addAll(stocksList, manufacturersList);
         MenuItem close = new MenuItem("Закрыть");
         close.setOnAction((ActionEvent event) -> {
