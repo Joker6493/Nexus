@@ -215,7 +215,12 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //Container
+            sCode.setText(selectedSystem.getSystemCode());
+            sModel.setText(selectedSystem.getSystemModel());
+            sSN.setText(selectedSystem.getSystemSN());
+            sDOM.setValue(selectedSystem.getSystemDOM());
+            sManufacturerName.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //check fields for changing, creating update query
@@ -284,49 +289,25 @@ public class ElementDetails extends Application {
             }
             
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                sModel.setEditable(editStatus);
-                sSN.setEditable(editStatus);
-                sDOM.setEditable(editStatus);
-                sManufacturerName.setDisable(!editStatus);
-                saveBtn.setDisable(!editStatus);
-                assembleBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                sModel.setEditable(editStatus);
-                sSN.setEditable(editStatus);
-                sDOM.setEditable(editStatus);
-                sManufacturerName.setDisable(!editStatus);
-                saveBtn.setDisable(!editStatus);
-                assembleBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
@@ -432,7 +413,13 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //Canopy
+            cModel.setText(c.getCanopyModel());
+            cSize.setText(Integer.toString(c.getCanopySize()));
+            cSN.setText(c.getCanopySN());
+            cDOM.setValue(c.getCanopyDOM());
+            cJumps.setText(Integer.toString(c.getCanopyJumps()));
+            cManufacturerName.getSelectionModel().select(c.getCanopyManufacturerID()-1);
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //Canopy
@@ -502,51 +489,25 @@ public class ElementDetails extends Application {
                 }
             }
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setDisable(!editStatus);
-                cJumps.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setDisable(!editStatus);
-                cJumps.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
@@ -663,7 +624,14 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //Reserve
+            rModel.setText(r.getReserveModel());
+            rSize.setText(Integer.toString(r.getReserveSize()));
+            rSN.setText(r.getReserveSN());
+            rDOM.setValue(r.getReserveDOM());
+            rManufacturerName.getSelectionModel().select(r.getReserveManufacturerID()-1); 
+            rJumps.setText(Integer.toString(r.getReserveJumps()));
+            rPackDate.setValue(r.getReservePackDate()); 
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //Reserve
@@ -736,53 +704,26 @@ public class ElementDetails extends Application {
                 }
             }
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setDisable(!editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setDisable(!editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
+        
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
@@ -900,7 +841,14 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //AAD
+            aModel.setText(a.getAadModel());
+            aSN.setText(a.getAadSN());
+            aDOM.setValue(a.getAadDOM());
+            aManufacturerName.getSelectionModel().select(a.getAadManufacturerID()-1);
+            aJumps.setText(Integer.toString(a.getAadJumps()));
+            aNextRegl.setValue(a.getAadNextRegl());
+            aSaved.setText(Integer.toString(a.getAadSaved()));
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //AAD
@@ -973,53 +921,25 @@ public class ElementDetails extends Application {
                 }
             }
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setDisable(!editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setDisable(!editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
@@ -1050,7 +970,8 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //Stock
+            stockName.setText(stock.getStockName());
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //Stock
@@ -1108,22 +1029,22 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
@@ -1185,7 +1106,11 @@ public class ElementDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+        //Manufacturer
+            manufacturerName.setText(man.getManufacturerName());
+            manufacturerCountry.setText(man.getManufacturerCountry());
+            manufacturerTelephone.setText(man.getManufacturerTelephone());
+            manufacturerEmail.setText(man.getManufacturerEmail());
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //Manufacturer
@@ -1252,55 +1177,22 @@ public class ElementDetails extends Application {
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            //if there are some changes, ask for save them, then close window, if not - close window
-            ArrayList <String> manufacturerNewParams = new ArrayList<>();
-            if (!manufacturerName.getText().equals(man.getManufacturerName())){
-                manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
-            }
-            if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
-                manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
-            }
-            if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
-                manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
-            }
-            if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
-                manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
-            }
-        //Apply changes    
-            if (manufacturerNewParams.isEmpty()) {
-                //Ничего не меялось
-                details.getScene().getWindow().hide();
-            }else{
-                updParams = manufacturerNewParams.get(0);
-                int i = manufacturerNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Есть неподтвержденные изменения");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("Склад " + man.getManufacturerName());
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
                 ButtonType yes = new ButtonType("Да");
                 ButtonType no = new ButtonType("Нет");
                 confirm.getButtonTypes().clear();
                 confirm.getButtonTypes().addAll(yes, no);
                 Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
-                    
-                } else if (option.get() == yes) {
-                    dr.editManufacturer(man, updParams);
-                    manufacturerNewParams.clear();
-                    details.getScene().getWindow().hide();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                    details.getScene().getWindow().hide();
-                } else {
-                    
-                }
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+                details.getScene().getWindow().hide();
             }
         });
         

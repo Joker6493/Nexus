@@ -526,11 +526,38 @@ public class SystemDetails extends Application {
         Button cancelBtn = new Button("Отменить");
         cancelBtn.setDisable(!editStatus);
         cancelBtn.setOnAction((ActionEvent event) -> {
-            //some code here, rollback any changes
+            //rollback any changes
+        //Container
+            sCode.setText(selectedSystem.getSystemCode());
+            sModel.setText(selectedSystem.getSystemModel());
+            sSN.setText(selectedSystem.getSystemSN());
+            sDOM.setValue(selectedSystem.getSystemDOM());
+            sManufacturerName.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
+        //Canopy
+            cModel.setText(sCanopy.getCanopyModel());
+            cSize.setText(Integer.toString(sCanopy.getCanopySize()));
+            cSN.setText(sCanopy.getCanopySN());
+            cDOM.setValue(sCanopy.getCanopyDOM());
+            cJumps.setText(Integer.toString(sCanopy.getCanopyJumps()));
+            cManufacturerName.getSelectionModel().select(sCanopy.getCanopyManufacturerID()-1);
+        //Reserve
+            rModel.setText(sReserve.getReserveModel());
+            rSize.setText(Integer.toString(sReserve.getReserveSize()));
+            rSN.setText(sReserve.getReserveSN());
+            rDOM.setValue(sReserve.getReserveDOM());
+            rManufacturerName.getSelectionModel().select(sReserve.getReserveManufacturerID()-1); 
+            rJumps.setText(Integer.toString(sReserve.getReserveJumps()));
+            rPackDate.setValue(sReserve.getReservePackDate()); 
+        //AAD
+            aModel.setText(sAAD.getAadModel());
+            aSN.setText(sAAD.getAadSN());
+            aDOM.setValue(sAAD.getAadDOM());
+            aManufacturerName.getSelectionModel().select(sAAD.getAadManufacturerID()-1);
+            aJumps.setText(Integer.toString(sAAD.getAadJumps()));
+            aNextRegl.setValue(sAAD.getAadNextRegl());
+            aSaved.setText(Integer.toString(sAAD.getAadSaved()));
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-            //check fields for changing, creating update query
-            
         //Container
             ArrayList <String> systemNewParams = new ArrayList<>();
             if (!sCode.getText().equals(selectedSystem.getSystemCode())){
@@ -550,7 +577,7 @@ public class SystemDetails extends Application {
             }
         //Apply changes    
             if (systemNewParams.isEmpty()) {
-                //Ничего не меялось
+        //Nothing changed, do nothing
             }else{
                 updParams = systemNewParams.get(0);
                 int i = systemNewParams.size()-1;
@@ -561,7 +588,6 @@ public class SystemDetails extends Application {
             }
             
             systemNewParams.clear();
-            
         //Canopy
             ArrayList <String> canopyNewParams = new ArrayList<>();
             if (!cModel.getText().equals(sCanopy.getCanopyModel())){
@@ -584,7 +610,7 @@ public class SystemDetails extends Application {
             }
         //Apply changes    
             if (canopyNewParams.isEmpty()) {
-                //Ничего не меялось
+        //Nothing changed, do nothing
             }else{
                 updParams = canopyNewParams.get(0);
                 int i = canopyNewParams.size()-1;
@@ -620,7 +646,7 @@ public class SystemDetails extends Application {
             }
         //Apply changes    
             if (reserveNewParams.isEmpty()) {
-                //Ничего не меялось
+        //Nothing changed, do nothing
             }else{
                 updParams = reserveNewParams.get(0);
                 int i = reserveNewParams.size()-1;
@@ -656,7 +682,7 @@ public class SystemDetails extends Application {
             }
         //Apply changes    
             if (aadNewParams.isEmpty()) {
-                //Ничего не меялось
+        //Nothing changed, do nothing
             }else{
                 updParams = aadNewParams.get(0);
                 int i = aadNewParams.size()-1;
@@ -669,100 +695,31 @@ public class SystemDetails extends Application {
             aadNewParams.clear();
 
         });
-        ToggleButton editBtn = new ToggleButton ("Редактировать");
-        editBtn.setSelected(editStatus);
-        editBtn.setOnAction((ActionEvent event) -> {
-            //Allow editing, commiting next
-            if (editStatus==false){
-                editStatus = true;
-                sModel.setEditable(editStatus);
-                sSN.setEditable(editStatus);
-                sDOM.setEditable(editStatus);
-                sManufacturerName.setDisable(!editStatus);
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setDisable(!editStatus);
-                cJumps.setEditable(editStatus);
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setDisable(!editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setDisable(!editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                cChoose.setDisable(!editStatus);
-                rChoose.setDisable(!editStatus);
-                aChoose.setDisable(!editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }else{
-                editStatus = false;
-                sModel.setEditable(editStatus);
-                sSN.setEditable(editStatus);
-                sDOM.setEditable(editStatus);
-                sManufacturerName.setDisable(!editStatus);
-                cModel.setEditable(editStatus);
-                cSize.setEditable(editStatus);
-                cSN.setEditable(editStatus);
-                cDOM.setEditable(editStatus);
-                cManufacturerName.setDisable(!editStatus);
-                cJumps.setEditable(editStatus);
-                rModel.setEditable(editStatus);
-                rSize.setEditable(editStatus);
-                rSN.setEditable(editStatus);
-                rDOM.setEditable(editStatus);
-                rManufacturerName.setDisable(!editStatus);
-                rJumps.setEditable(editStatus);
-                rPackDate.setEditable(editStatus);
-                aModel.setEditable(editStatus);
-                aSN.setEditable(editStatus);
-                aDOM.setEditable(editStatus);
-                aManufacturerName.setDisable(!editStatus);
-                aJumps.setEditable(editStatus);
-                aNextRegl.setEditable(editStatus);
-                aSaved.setEditable(editStatus);
-                cChoose.setDisable(!editStatus);
-                rChoose.setDisable(!editStatus);
-                aChoose.setDisable(!editStatus);
-                saveBtn.setDisable(!editStatus);
-                cancelBtn.setDisable(!editStatus);
-            }             
-        });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Закрыть окно?");
-            confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-            if (option.get() == null) {
-                
-            } else if (option.get() == yes) {
+            if (editStatus == true){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Закрыть окно?");
+                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                    } else {
+                    }
                 details.getScene().getWindow().hide();
-            } else if (option.get() == no) {
-                
-            } else {
-                
             }
         });
         
         HBox buttonPane = new HBox();
         buttonPane.getChildren().addAll(saveBtn, cancelBtn);
         
-        details.add(editBtn, 1, 0);
         details.add(containerGrid, 0, 1);
         details.add(canopyGrid, 1, 1);
         details.add(aadGrid, 0, 2);

@@ -63,18 +63,26 @@ public class ElementsIndex extends Application {
             switch (elementsBox.getSelectionModel().getSelectedItem()){
                 case "Ранцы":
                     ContainerList col = new ContainerList();
+                    col.setStatus(status);
+                    col.setStockID(stockID);
                     table = col.ContainerTable(false);
                     break;
                 case "Основные парашюты":
                     CanopyList cl = new CanopyList();
+                    cl.setStatus(status);
+                    cl.setStockID(stockID);
                     table = cl.CanopyTable(false);
                     break;
                 case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
+                    rl.setStatus(status);
+                    rl.setStockID(stockID);
                     table = rl.ReserveTable(false);
                     break;
                 case "Страхующие приборы":
                     AADList al = new AADList();
+                    al.setStatus(status);
+                    al.setStockID(stockID);
                     table = al.AADTable(false);
                     break;
             }
@@ -152,18 +160,26 @@ public class ElementsIndex extends Application {
         switch (elementsBox.getSelectionModel().getSelectedItem()){
             case "Ранцы":
                     ContainerList col = new ContainerList();
+                    col.setStatus(status);
+                    col.setStockID(stockID);
                     table = col.ContainerTable(false);
                     break;
             case "Основные парашюты":
                     CanopyList cl = new CanopyList();
+                    cl.setStatus(status);
+                    cl.setStockID(stockID);
                     table = cl.CanopyTable(false);
                     break;
             case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
+                    rl.setStatus(status);
+                    rl.setStockID(stockID);
                     table = rl.ReserveTable(false);
                     break;
             case "Страхующие приборы":
                     AADList al = new AADList();
+                    al.setStatus(status);
+                    al.setStockID(stockID);
                     table = al.AADTable(false);
                     break;
         }

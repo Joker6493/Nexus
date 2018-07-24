@@ -24,6 +24,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
@@ -195,8 +197,10 @@ public class StorageIndex extends Application {
             status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
-        Button elementBtn = new Button("Элементы системы");
-        elementBtn.setOnAction((ActionEvent event) -> {
+        MenuBar storageBarMenu = new MenuBar();
+        Menu storageMenu = new Menu("Меню");
+        MenuItem elementsList = new MenuItem("Элементы системы");
+        elementsList.setOnAction((ActionEvent event) -> {
             ElementsIndex detail = new ElementsIndex();
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
@@ -206,10 +210,21 @@ public class StorageIndex extends Application {
             } catch (SQLException ex) {
             }
         });
-        
+        Menu directoryMenu = new Menu("Справочники");
+        MenuItem stocksList = new MenuItem("Склады");
+        MenuItem manufacturersList = new MenuItem("Производители");
+        directoryMenu.getItems().addAll(stocksList, manufacturersList);
+        MenuItem close = new MenuItem("Закрыть");
+        close.setOnAction((ActionEvent event) -> {
+            //Some code here
+            System.out.println("Закрыть?");
+        });
+        storageMenu.getItems().addAll(elementsList, new SeparatorMenuItem(), directoryMenu, close);
+        storageBarMenu.getMenus().add(storageMenu);
         HBox storageBar = new HBox();
-        storageBar.getChildren().addAll(stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn, elementBtn);
-        storageBar.setPadding(new Insets(20));
+        storageBar.getChildren().addAll(storageBarMenu, stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
+        storageBar.setPadding(new Insets(10));
+        storageBar.setSpacing(10);
         index.setTop(storageBar);
         
         ContextMenu storageContextMenu = new ContextMenu();
