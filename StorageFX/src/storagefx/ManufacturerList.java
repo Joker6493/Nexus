@@ -41,7 +41,7 @@ public class ManufacturerList extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        BorderPane index = ManufacturerList();
+        BorderPane index = ManufacturerList(false);
         Scene scene = new Scene(index);
         
         primaryStage.setTitle("Hello World!");
@@ -49,7 +49,7 @@ public class ManufacturerList extends Application {
         primaryStage.show();
     }
     
-    public BorderPane ManufacturerList () {
+    public BorderPane ManufacturerList (boolean closeOnSelect) {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
         dr.setStatus(status);
@@ -76,6 +76,9 @@ public class ManufacturerList extends Application {
                 Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбран производитель " + selectedManufacturer.getManufacturerName() + "!");
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }
             }
         });
         

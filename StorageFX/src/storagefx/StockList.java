@@ -42,7 +42,7 @@ public class StockList extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        BorderPane index = StockList();
+        BorderPane index = StockList(false);
         Scene scene = new Scene(index);
         
         primaryStage.setTitle("Hello World!");
@@ -50,7 +50,7 @@ public class StockList extends Application {
         primaryStage.show();
     }
     
-    public BorderPane StockList () {
+    public BorderPane StockList (boolean closeOnSelect) {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
         dr.setStatus(status);
@@ -64,7 +64,10 @@ public class StockList extends Application {
                 Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбран склад "+selectedStock.getStockName() + "!");
-                }
+                if (closeOnSelect == true) {
+                    index.getScene().getWindow().hide();
+                }    
+            }
         });
         
         Button refreshBtn = new Button();
