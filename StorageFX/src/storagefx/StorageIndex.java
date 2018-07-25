@@ -251,8 +251,7 @@ public class StorageIndex extends Application {
         storageBarMenu.getMenus().add(storageMenu);
         HBox storageBar = new HBox();
         storageBar.getChildren().addAll(storageBarMenu, stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
-        storageBar.setPadding(new Insets(10));
-        storageBar.setSpacing(10);
+        storageBar.setSpacing(5);
         index.setTop(storageBar);
         
         ContextMenu storageContextMenu = new ContextMenu();
