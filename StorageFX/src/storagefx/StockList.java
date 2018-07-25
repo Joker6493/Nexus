@@ -33,11 +33,17 @@ import javafx.stage.Stage;
 public class StockList extends Application {
         
     private int status;
+    private Stock selectedStock;
 
+    public Stock getSelectedStock() {
+        return selectedStock;
+    }
+    public void setSelectedStock(Stock selectedStock) {
+        this.selectedStock = selectedStock;
+    }
     public int getStatus() {
         return status;
     }
-
     public void setStatus(int status) {
         this.status = status;
     }
@@ -63,7 +69,7 @@ public class StockList extends Application {
         stockList.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
                 //Get selected TableView SkydiveSystem object
-                Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+                setSelectedStock(stockList.getSelectionModel().getSelectedItem());
                 //TODO list
                 System.out.println("Выбран склад "+selectedStock.getStockName() + "!");
                 if (closeOnSelect == true) {

@@ -281,12 +281,28 @@ public class StorageIndex extends Application {
         });
         MenuItem moveItem = new MenuItem("Переместить");
         moveItem.setOnAction((ActionEvent e) -> {
-            //in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
-            String stockNew = "stockid = ";
-            //dr.editSkydiveSystem(currentSystem, "");
-            System.out.println("Система перемещена!");
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите склад");
+            //TODO - transmit to modal window stock and current canopy
+            StockList sl = new StockList();
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (sl.getSelectedStock() != null){
+                Stock newStock = sl.getSelectedStock();
+                String stockNew = "stockid = "+ newStock.getStockID();
+                dr.editSkydiveSystem(currentSystem, stockNew);
+                System.out.println("Система перемещена!");
+            //Updating skydive system list
+                currentSystem.setStockID(newStock.getStockID());
+                indexStore.getItems().clear();
+                indexStore.setItems(dr.getSystemsList());
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
