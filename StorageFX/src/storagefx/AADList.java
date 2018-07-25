@@ -189,7 +189,8 @@ public class AADList extends Application {
         refreshList.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
+            aadTable.getItems().clear();
+            aadTable.setItems(dr.getAadList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem viewItem = new MenuItem("Просмотр");
@@ -224,13 +225,38 @@ public class AADList extends Application {
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
         });
+        MenuItem moveItem = new MenuItem("Переместить");
+        moveItem.setOnAction((ActionEvent e) -> {
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("Переместить прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите склад");
+            //TODO - transmit to modal window stock and current canopy
+            StockList sl = new StockList();
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (sl.getSelectedStock() != null){
+                Stock newStock = sl.getSelectedStock();
+                String stockNew = "stockid = "+ newStock.getStockID();
+                dr.editAAD(selectedAAD, stockNew);
+                System.out.println("Система перемещена!");
+            //Updating skydive system list
+                selectedAAD.setStockID(newStock.getStockID());
+                aadTable.getItems().clear();
+                aadTable.setItems(dr.getAadList());
+            }
+        });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("Удалить прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
         });
-        aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem, deleteItem);
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             aadContextMenu.show(aadTable, event.getScreenX(), event.getScreenY());
         });

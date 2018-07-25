@@ -172,7 +172,8 @@ public class CanopyList extends Application {
         refreshList.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
+            canopyTable.getItems().clear();
+            canopyTable.setItems(dr.getCanopyList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem viewItem = new MenuItem("Просмотр");
@@ -196,6 +197,31 @@ public class CanopyList extends Application {
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
+        });
+        MenuItem moveItem = new MenuItem("Переместить");
+        moveItem.setOnAction((ActionEvent e) -> {
+            setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
+            System.out.println("Переместить систему "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите склад");
+            //TODO - transmit to modal window stock and current canopy
+            StockList sl = new StockList();
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (sl.getSelectedStock() != null){
+                Stock newStock = sl.getSelectedStock();
+                String stockNew = "stockid = "+ newStock.getStockID();
+                dr.editCanopy(selectedCanopy, stockNew);
+                System.out.println("Система перемещена!");
+            //Updating skydive system list
+                selectedCanopy.setStockID(newStock.getStockID());
+                canopyTable.getItems().clear();
+                canopyTable.setItems(dr.getCanopyList());
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {

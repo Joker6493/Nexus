@@ -174,7 +174,8 @@ public class ReserveList extends Application {
         refreshList.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
+            reserveTable.getItems().clear();
+            reserveTable.setItems(dr.getReserveList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem viewItem = new MenuItem("Просмотр");
@@ -198,6 +199,31 @@ public class ReserveList extends Application {
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
+        });
+        MenuItem moveItem = new MenuItem("Переместить");
+        moveItem.setOnAction((ActionEvent e) -> {
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("Переместить купол ПЗ "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите склад");
+            //TODO - transmit to modal window stock and current canopy
+            StockList sl = new StockList();
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (sl.getSelectedStock() != null){
+                Stock newStock = sl.getSelectedStock();
+                String stockNew = "stockid = "+ newStock.getStockID();
+                dr.editReserve(selectedReserve, stockNew);
+                System.out.println("Система перемещена!");
+            //Updating skydive system list
+                selectedReserve.setStockID(newStock.getStockID());
+                reserveTable.getItems().clear();
+                reserveTable.setItems(dr.getReserveList());
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
