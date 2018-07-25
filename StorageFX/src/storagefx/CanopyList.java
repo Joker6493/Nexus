@@ -14,7 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -32,32 +35,43 @@ public class CanopyList extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public int getStockID() {
-        return stockID;
-    }
-
-    public void setStockID(int stockID) {
-        this.stockID = stockID;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
     private int stockID;
     private int status;
     private Canopy selectedCanopy;
+    private Canopy oldCanopy;
+    private SkydiveSystem selectedSystem;
 
     public Canopy getSelectedCanopy() {
         return selectedCanopy;
     }
-
     public void setSelectedCanopy(Canopy selectedCanopy) {
         this.selectedCanopy = selectedCanopy;
     }
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public Canopy getOldCanopy() {
+        return oldCanopy;
+    }
+    public void setOldCanopy(Canopy oldCanopy) {
+        this.oldCanopy = oldCanopy;
+    }
+    public SkydiveSystem getSelectedSystem() {
+        return selectedSystem;
+    }
+    public void setSelectedSystem(SkydiveSystem selectedSystem) {
+        this.selectedSystem = selectedSystem;
+    }
+
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = CanopyTable(false);
@@ -115,7 +129,35 @@ public class CanopyList extends Application {
                 setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"!");
                 if (closeOnSelect == true) {
-                    index.getScene().getWindow().hide();
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Вы уверены, что хотите провести замену куполов в ранце "+ selectedSystem.getSystemCode() +"?");
+                    confirm.setContentText("Текущий купол: " + oldCanopy.getCanopyModel() +"-"+ oldCanopy.getCanopySize() +"/n"+ "Новый купол: " + selectedCanopy.getCanopyModel() +"-"+ selectedCanopy.getCanopySize());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.replaceCanopy(oldCanopy, selectedCanopy);
+                        index.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                        setSelectedCanopy(oldCanopy);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                        index.getScene().getWindow().hide();
+                    } else {
+                        setSelectedCanopy(oldCanopy);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedCanopy, false);
                 Stage detailStage = new Stage();

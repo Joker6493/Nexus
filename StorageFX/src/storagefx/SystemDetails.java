@@ -231,6 +231,8 @@ public class SystemDetails extends Application {
             chooseWindow.setTitle("Выберите купол основного парашюта");
             //TODO - transmit to modal window stock and current canopy
             CanopyList cl = new CanopyList();
+            cl.setOldCanopy(sCanopy);
+            cl.setSelectedSystem(selectedSystem);
             Scene cList = new Scene(cl.CanopyTable(true));
             chooseWindow.setScene(cList);
             
@@ -244,7 +246,10 @@ public class SystemDetails extends Application {
                 cSN.setText(newCanopy.getCanopySN());
                 cDOM.setValue(newCanopy.getCanopyDOM());
                 cJumps.setText(Integer.toString(newCanopy.getCanopyJumps()));
-                cManufacturerName.getSelectionModel().select(newCanopy.getCanopyManufacturerID()-1);                
+                cManufacturerName.getSelectionModel().select(newCanopy.getCanopyManufacturerID()-1);
+            //Updating canopy data in skydive system
+            //Canopy sCanopy = new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID());
+                
             }
         });
         
@@ -356,6 +361,8 @@ public class SystemDetails extends Application {
             chooseWindow.setTitle("Выберите купол запасного парашюта");
             //TODO - transmit to modal window stock and current canopy
             ReserveList rl = new ReserveList();
+            rl.setOldReserve(sReserve);
+            rl.setSelectedSystem(selectedSystem);
             Scene rList = new Scene(rl.ReserveTable(true));
             chooseWindow.setScene(rList);
             
@@ -370,7 +377,10 @@ public class SystemDetails extends Application {
                 rDOM.setValue(newReserve.getReserveDOM());
                 rManufacturerName.getSelectionModel().select(newReserve.getReserveManufacturerID()-1); 
                 rJumps.setText(Integer.toString(newReserve.getReserveJumps()));
-                rPackDate.setValue(newReserve.getReservePackDate());                
+                rPackDate.setValue(newReserve.getReservePackDate());  
+            //Updating reserve data in skydive system
+            //Reserve sReserve = new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID());
+                
             }
         });
         
@@ -483,6 +493,8 @@ public class SystemDetails extends Application {
             chooseWindow.setTitle("Выберите страхующий прибор");
             //TODO - transmit to modal window stock and current canopy
             AADList al = new AADList();
+            al.setOldAAD(sAAD);
+            al.setSelectedSystem(selectedSystem);
             Scene aList = new Scene(al.AADTable(true));
             chooseWindow.setScene(aList);
             
@@ -497,7 +509,10 @@ public class SystemDetails extends Application {
                 aManufacturerName.getSelectionModel().select(newAAD.getAadManufacturerID()-1);
                 aJumps.setText(Integer.toString(newAAD.getAadJumps()));
                 aNextRegl.setValue(newAAD.getAadNextRegl());
-                aSaved.setText(Integer.toString(newAAD.getAadSaved()));            
+                aSaved.setText(Integer.toString(newAAD.getAadSaved()));
+            //Updating aad data in skydive system
+            //AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
+                                
             }
         });
         

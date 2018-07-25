@@ -94,9 +94,9 @@ public class DataRelay {
                                  "ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name, " + 
                                  "ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_saved, ai.manufacturerid as aad_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) as aad_manufacturer_name " +
                                  "from system_info si " +
-                                 "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.status = si.status and ci.stockid = si.stockid " +
-                                 "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.status = si.status and ri.stockid = si.stockid " +
-                                 "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.status = si.status and ai.stockid = si.stockid " +
+                                 "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.status = si.status and ci.stockid = si.stockid and ci.systemid = si.systemid " +
+                                 "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.status = si.status and ri.stockid = si.stockid and ri.systemid = si.systemid " +
+                                 "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.status = si.status and ai.stockid = si.stockid and ai.systemid = si.systemid " +
                                  "where si.status = "+ getStatus() +" and si.stockid = "+ getStock() +";";
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
@@ -753,9 +753,23 @@ public class DataRelay {
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
-        updateQuery = "Update canopy_info ci, reserve_info ri, aad_info ai " + 
-                             "set ci.systemid = 0, ri.systemid = 0, ai.systemid = 0 " +
-                             "where ci.systemid = " + ss.getSystemID() + " and ci.systemid = ri.systemid = ai.systemid";
+        updateQuery = "Update canopy_info ci " + 
+                             "set ci.systemid = 0 " +
+                             "where ci.systemid = " + ss.getSystemID() + " and ci.canopyid = " + ss.getCanopyID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update reserve_info ri " + 
+                             "set ri.systemid = 0 " +
+                             "where ri.systemid = " + ss.getSystemID() + " and ri.reserveid = " + ss.getReserveID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update aad_info ai " + 
+                             "ai.systemid = 0 " +
+                             "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + ss.getAadID();
         row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
@@ -770,9 +784,23 @@ public class DataRelay {
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
-        updateQuery = "Update canopy_info ci, reserve_info ri, aad_info ai " + 
-                             "set ci.systemid = " + ss.getSystemID() + ", ri.systemid = " + ss.getSystemID() + ", ai.systemid = " + ss.getSystemID() + " " +
-                             "where ci.systemid = 0 and ci.systemid = ri.systemid = ai.systemid";
+        updateQuery = "Update canopy_info ci " + 
+                             "set ci.systemid = " + ss.getSystemID() + " " +
+                             "where ci.systemid = 0 and ci.canopyid = " + c.getCanopyID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update reserve_info ri " + 
+                             "ri.systemid = " + ss.getSystemID() + " " +
+                             "where ri.systemid = 0 and ri.reserveid = " + r.getReserveID();
+        row = updateData(updateQuery);
+        if (row==0){
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        }
+        updateQuery = "Update aad_info ai " + 
+                             "ai.systemid = " + ss.getSystemID() + " " +
+                             "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + aad.getAadID();
         row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");

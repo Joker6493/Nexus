@@ -14,7 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -32,31 +35,42 @@ public class AADList extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public int getStockID() {
-        return stockID;
-    }
-
-    public void setStockID(int stockID) {
-        this.stockID = stockID;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+    
     private int stockID;
     private int status;
     private AAD selectedAAD;
+    private AAD oldAAD;
+    private SkydiveSystem selectedSystem;
 
     public AAD getSelectedAAD() {
         return selectedAAD;
     }
-
     public void setSelectedAAD(AAD selectedAAD) {
         this.selectedAAD = selectedAAD;
+    }
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public AAD getOldAAD() {
+        return oldAAD;
+    }
+    public void setOldAAD(AAD oldAAD) {
+        this.oldAAD = oldAAD;
+    }
+    public SkydiveSystem getSelectedSystem() {
+        return selectedSystem;
+    }
+    public void setSelectedSystem(SkydiveSystem selectedSystem) {
+        this.selectedSystem = selectedSystem;
     }
     
     @Override
@@ -132,7 +146,35 @@ public class AADList extends Application {
                 setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"!");
                 if (closeOnSelect == true) {
-                    index.getScene().getWindow().hide();
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Вы уверены, что хотите провести замену приборов в ранце "+ selectedSystem.getSystemCode() +"?");
+                    confirm.setContentText("Текущий прибор: " + oldAAD.getAadModel() +" № "+ oldAAD.getAadSN() +"/n"+ "Новый прибор: " + selectedAAD.getAadModel() +" № "+ selectedAAD.getAadSN());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.replaceAAD(oldAAD, selectedAAD);
+                        index.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                        setSelectedAAD(oldAAD);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                        index.getScene().getWindow().hide();
+                    } else {
+                        setSelectedAAD(oldAAD);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedAAD, false);
                 Stage detailStage = new Stage();

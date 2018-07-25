@@ -14,7 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -32,31 +35,42 @@ public class ReserveList extends Application {
         
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public int getStockID() {
-        return stockID;
-    }
-
-    public void setStockID(int stockID) {
-        this.stockID = stockID;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+    
     private int stockID;
     private int status;
     private Reserve selectedReserve;
+    private Reserve oldReserve;
+    private SkydiveSystem selectedSystem;
 
     public Reserve getSelectedReserve() {
         return selectedReserve;
     }
-
     public void setSelectedReserve(Reserve selectedReserve) {
         this.selectedReserve = selectedReserve;
+    }
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public Reserve getOldReserve() {
+        return oldReserve;
+    }
+    public void setOldReserve(Reserve oldReserve) {
+        this.oldReserve = oldReserve;
+    }
+    public SkydiveSystem getSelectedSystem() {
+        return selectedSystem;
+    }
+    public void setSelectedSystem(SkydiveSystem selectedSystem) {
+        this.selectedSystem = selectedSystem;
     }
     
     @Override
@@ -117,7 +131,35 @@ public class ReserveList extends Application {
                 setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"!");
                 if (closeOnSelect == true) {
-                    index.getScene().getWindow().hide();
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Вы уверены, что хотите провести замену куполов ПЗ в ранце "+ selectedSystem.getSystemCode() +"?");
+                    confirm.setContentText("Текущий купол: " + oldReserve.getReserveModel() +"-"+ oldReserve.getReserveSize() +"/n"+ "Новый купол: " + selectedSystem.getReserveModel() +"-"+ selectedSystem.getReserveSize());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.replaceReserve(oldReserve, selectedReserve);
+                        index.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                        setSelectedReserve(oldReserve);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                        index.getScene().getWindow().hide();
+                    } else {
+                        setSelectedReserve(oldReserve);
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedReserve, false);
                 Stage detailStage = new Stage();
