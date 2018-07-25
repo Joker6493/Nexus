@@ -248,8 +248,20 @@ public class SystemDetails extends Application {
                 cJumps.setText(Integer.toString(newCanopy.getCanopyJumps()));
                 cManufacturerName.getSelectionModel().select(newCanopy.getCanopyManufacturerID()-1);
             //Updating canopy data in skydive system
-            //Canopy sCanopy = new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID());
-                
+                selectedSystem.setCanopyModel(newCanopy.getCanopyModel());
+                selectedSystem.setCanopySize(newCanopy.getCanopySize());
+                selectedSystem.setCanopySN(newCanopy.getCanopySN());
+                selectedSystem.setCanopyDOM(newCanopy.getCanopyDOM());
+                selectedSystem.setCanopyJumps(newCanopy.getCanopyJumps());
+                selectedSystem.setCanopyManufacturerID(newCanopy.getCanopyManufacturerID());
+                selectedSystem.setCanopyManufacturerName(newCanopy.getCanopyManufacturerName());
+                sCanopy.setCanopyModel(newCanopy.getCanopyModel());
+                sCanopy.setCanopySize(newCanopy.getCanopySize());
+                sCanopy.setCanopySN(newCanopy.getCanopySN());
+                sCanopy.setCanopyDOM(newCanopy.getCanopyDOM());
+                sCanopy.setCanopyJumps(newCanopy.getCanopyJumps());
+                sCanopy.setCanopyManufacturerID(newCanopy.getCanopyManufacturerID());
+                sCanopy.setCanopyManufacturerName(newCanopy.getCanopyManufacturerName());
             }
         });
         
@@ -379,8 +391,22 @@ public class SystemDetails extends Application {
                 rJumps.setText(Integer.toString(newReserve.getReserveJumps()));
                 rPackDate.setValue(newReserve.getReservePackDate());  
             //Updating reserve data in skydive system
-            //Reserve sReserve = new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID());
-                
+                selectedSystem.setReserveModel(newReserve.getReserveModel());
+                selectedSystem.setReserveSize(newReserve.getReserveSize());
+                selectedSystem.setReserveSN(newReserve.getReserveSN());
+                selectedSystem.setReserveDOM(newReserve.getReserveDOM());
+                selectedSystem.setReserveJumps(newReserve.getReserveJumps());
+                selectedSystem.setReservePackDate(newReserve.getReservePackDate());
+                selectedSystem.setReserveManufacturerID(newReserve.getReserveManufacturerID());
+                selectedSystem.setReserveManufacturerName(newReserve.getReserveManufacturerName());
+                sReserve.setReserveModel(newReserve.getReserveModel());
+                sReserve.setReserveSize(newReserve.getReserveSize());
+                sReserve.setReserveSN(newReserve.getReserveSN());
+                sReserve.setReserveDOM(newReserve.getReserveDOM());
+                sReserve.setReserveJumps(newReserve.getReserveJumps());
+                sReserve.setReservePackDate(newReserve.getReservePackDate());
+                sReserve.setReserveManufacturerID(newReserve.getReserveManufacturerID());
+                sReserve.setReserveManufacturerName(newReserve.getReserveManufacturerName());
             }
         });
         
@@ -511,8 +537,22 @@ public class SystemDetails extends Application {
                 aNextRegl.setValue(newAAD.getAadNextRegl());
                 aSaved.setText(Integer.toString(newAAD.getAadSaved()));
             //Updating aad data in skydive system
-            //AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
-                                
+                selectedSystem.setAadModel(newAAD.getAadModel());
+                selectedSystem.setAadSN(newAAD.getAadSN());
+                selectedSystem.setAadDOM(newAAD.getAadDOM());
+                selectedSystem.setAadJumps(newAAD.getAadJumps());
+                selectedSystem.setAadNextRegl(newAAD.getAadNextRegl());
+                selectedSystem.setAadSaved(newAAD.getAadSaved());
+                selectedSystem.setAadManufacturerID(newAAD.getAadManufacturerID());
+                selectedSystem.setAadManufacturerName(newAAD.getAadManufacturerName());
+                sAAD.setAadModel(newAAD.getAadModel());
+                sAAD.setAadSN(newAAD.getAadSN());
+                sAAD.setAadDOM(newAAD.getAadDOM());
+                sAAD.setAadJumps(newAAD.getAadJumps());
+                sAAD.setAadNextRegl(newAAD.getAadNextRegl());
+                sAAD.setAadSaved(newAAD.getAadSaved());
+                sAAD.setAadManufacturerID(newAAD.getAadManufacturerID());
+                sAAD.setAadManufacturerName(newAAD.getAadManufacturerName());
             }
         });
         
