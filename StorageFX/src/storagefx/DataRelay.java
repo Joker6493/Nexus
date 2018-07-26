@@ -183,7 +183,7 @@ public class DataRelay {
         ArrayList<Canopy> indexList = new ArrayList<>();
         try{
             String selectQuery = "select ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name " +
-                                 "from canopy_info ci " +
+                                 "from canopy_info ci " + 
                                  "where ci.systemid = 0 and ci.status = "+ getStatus() +" and ci.stockid = "+ getStock();
             ResultSet rs = getData(selectQuery);
             while (rs.next()) {
@@ -750,38 +750,39 @@ public class DataRelay {
                              "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
                              "where si.systemid = " + ss.getSystemID();
         //debug
-        System.out.println(updateQuery);
-        /*int row = updateData(updateQuery);
+//        System.out.println(updateQuery);
+        int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }*/
+        }
         updateQuery = "Update canopy_info ci " + 
                              "set ci.systemid = 0 " +
                              "where ci.systemid = " + ss.getSystemID() + " and ci.canopyid = " + ss.getCanopyID();
         //debug
-        System.out.println(updateQuery);
-        /*row = updateData(updateQuery);
+//        System.out.println(updateQuery);
+        row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }*/
+        }
         updateQuery = "Update reserve_info ri " + 
                              "set ri.systemid = 0 " +
                              "where ri.systemid = " + ss.getSystemID() + " and ri.reserveid = " + ss.getReserveID();
         //debug
-        System.out.println(updateQuery);
-        /*row = updateData(updateQuery);
+//        System.out.println(updateQuery);
+        row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }*/
+        }
         updateQuery = "Update aad_info ai " + 
-                             "ai.systemid = 0 " +
+                             "set ai.systemid = 0 " +
                              "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + ss.getAadID();
         //debug
-        System.out.println(updateQuery);
-        /*row = updateData(updateQuery);
+//        System.out.println(updateQuery);
+        row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }*/
+        }
+        
     }
     
     protected void assembleSkydiveSystem(SkydiveSystem ss, Canopy c, Reserve r, AAD aad) {
