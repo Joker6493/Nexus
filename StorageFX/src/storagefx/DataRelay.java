@@ -749,31 +749,39 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
                              "where si.systemid = " + ss.getSystemID();
-        int row = updateData(updateQuery);
+        //debug
+        System.out.println(updateQuery);
+        /*int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        }*/
         updateQuery = "Update canopy_info ci " + 
                              "set ci.systemid = 0 " +
                              "where ci.systemid = " + ss.getSystemID() + " and ci.canopyid = " + ss.getCanopyID();
-        row = updateData(updateQuery);
+        //debug
+        System.out.println(updateQuery);
+        /*row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        }*/
         updateQuery = "Update reserve_info ri " + 
                              "set ri.systemid = 0 " +
                              "where ri.systemid = " + ss.getSystemID() + " and ri.reserveid = " + ss.getReserveID();
-        row = updateData(updateQuery);
+        //debug
+        System.out.println(updateQuery);
+        /*row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        }*/
         updateQuery = "Update aad_info ai " + 
                              "ai.systemid = 0 " +
                              "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + ss.getAadID();
-        row = updateData(updateQuery);
+        //debug
+        System.out.println(updateQuery);
+        /*row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        }*/
     }
     
     protected void assembleSkydiveSystem(SkydiveSystem ss, Canopy c, Reserve r, AAD aad) {
