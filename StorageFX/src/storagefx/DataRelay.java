@@ -319,9 +319,9 @@ public class DataRelay {
     }
     protected ObservableList<Status> getStatusList() {
         ArrayList<Status> statusList = new ArrayList<>();
-        Status active = new Status(0,"Активная");
+        Status active = new Status(0,"Активные");
         statusList.add(active);
-        Status disable = new Status(1,"Удаленная");
+        Status disable = new Status(1,"Удаленные");
         statusList.add(disable);
         Status repair = new Status(2,"В ремонте");
         statusList.add(repair);
