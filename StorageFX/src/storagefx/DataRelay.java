@@ -345,7 +345,7 @@ public class DataRelay {
         ObservableList<AAD> list = FXCollections.observableList(indexList);
         return list;
     }
-    //requires add status to MANUFACTURER_INFO table
+
     protected ObservableList<Manufacturer> getManufactirerList() {
         ArrayList<Manufacturer> indexList = new ArrayList<>();
         try{
@@ -392,6 +392,7 @@ public class DataRelay {
         ObservableList<Stock> list = FXCollections.observableList(stockList);
         return list;
     }
+    
     protected ObservableList<Status> getStatusList() {
         ArrayList<Status> statusList = new ArrayList<>();
         Status active = new Status(0,"Активные");
@@ -441,8 +442,6 @@ public class DataRelay {
             }
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -468,12 +467,10 @@ public class DataRelay {
             stmt.setInt(9, c.getStockID());
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();          
+            getConn().commit();
+            getConn().close();          
         } catch (Exception e) {
-            System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());;
 //            e.printStackTrace();
         }
     }
@@ -500,12 +497,10 @@ public class DataRelay {
             stmt.setInt(10, r.getStockID());
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();          
+            getConn().commit();
+            getConn().close();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -532,12 +527,10 @@ public class DataRelay {
             stmt.setInt(10, aad.getAadSaved());
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();         
+            getConn().commit();
+            getConn().close();         
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -556,15 +549,14 @@ public class DataRelay {
             stmt.setInt(2, 0);
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();          
+            getConn().commit();
+            getConn().close();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
 //            e.printStackTrace();
         }
     }
+    
     protected void addManufacturer(Manufacturer man) {
         try {
             //Call a method dynamically (Reflection)
@@ -582,100 +574,77 @@ public class DataRelay {
             stmt.setInt(5, 0);
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();          
+            getConn().commit();
+            getConn().close();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
-            setQueryResult(false);
-            commitQuery();
 //            e.printStackTrace();
         }
     }
     
     protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
         String updateQuery = "Update system_info set " + updParams + "where systemid = "+ss.getSystemID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void editCanopy(Canopy c, String updParams) {
         String updateQuery = "Update canopy_info set " + updParams + "where canopyid = "+c.getCanopyID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void editReserve(Reserve r, String updParams) {
         String updateQuery = "Update reserve_info set " + updParams + "where reserveid = "+r.getReserveID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void editAAD(AAD aad, String updParams) {
         String updateQuery = "Update aad_info set " + updParams + "where aadid = "+aad.getAadID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void editManufacturer(Manufacturer man, String updParams) {
         String updateQuery = "Update manufacturer_info set " + updParams + "where manufacturerid = "+man.getManufacturerID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void editStock (Stock stock, String updParams) {
         String updateQuery = "Update stock_info set " + updParams + "where stockid = "+stock.getStockID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
         
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteContainer(SkydiveSystem ss) {
@@ -683,252 +652,198 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 1 " +
                              "where ci.canopyid = " + c.getCanopyID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 1 " +
                              "where ri.reserveid = " + r.getReserveID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 1 " +
                              "where ai.aadid = " + aad.getAadID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteStock(Stock stock) {
         String updateQuery = "Update stock_info si " + 
                              "set si.STATUS = 1 " +
                              "where si.stockid = " + stock.getStockID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void deleteManufacturer(Manufacturer man) {
         String updateQuery = "Update manufacturer_info mi " + 
                              "set mi.STATUS = 1 " +
                              "where mi.manufacturerid = " + man.getManufacturerID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
 
     protected void restoreSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 0 " +
                              "where si.systemid = " + ss.getSystemID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 0 " +
                              "where ci.canopyid = " + c.getCanopyID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 0 " +
                              "where ri.reserveid = " + r.getReserveID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 0 " +
                              "where ai.aadid = " + aad.getAadID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreStock(Stock stock) {
         String updateQuery = "Update stock_info si " + 
                              "set si.STATUS = 0 " +
                              "where si.stockid = " + stock.getStockID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void restoreManufacturer(Manufacturer man) {
         String updateQuery = "Update manufacturer_info mi " + 
                              "set mi.STATUS = 0 " +
                              "where mi.manufacturerid = " + man.getManufacturerID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void repairSkydiveSystem(SkydiveSystem ss) {
         String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
                              "set si.STATUS = 2, ci.STATUS = 2, ri.STATUS = 2, ai.STATUS = 2 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void repairContainer(SkydiveSystem ss) {
         String updateQuery = "Update system_info si " + 
                              "set si.STATUS = 2 " +
                              "where si.systemid = " + ss.getSystemID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void repairCanopy(Canopy c) {
         String updateQuery = "Update canopy_info ci " + 
                              "set ci.STATUS = 2 " +
                              "where ci.canopyid = " + c.getCanopyID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void repairReserve(Reserve r) {
         String updateQuery = "Update reserve_info ri " + 
                              "set ri.STATUS = 2 " +
                              "where ri.reserveid = " + r.getReserveID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
     
     protected void repairAAD(AAD aad) {
         String updateQuery = "Update aad_info ai " + 
                              "set ai.STATUS = 2 " +
                              "where ai.aadid = " + aad.getAadID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-            setQueryResult(false);
-            commitQuery();
+        try {
+            executeQuery(addQuery(updateQuery));
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        setQueryResult(true);
-        commitQuery();
     }
         
     protected void disassembleSkydiveSystem(SkydiveSystem ss) {
