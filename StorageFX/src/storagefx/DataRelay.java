@@ -19,13 +19,29 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DataRelay {
     private int status = 0;
     private int stock = 2;
-        
+    private Connection conn;
+    private boolean queryResult;
+
+    public boolean isQueryResult() {
+        return queryResult;
+    }
+    public void setQueryResult(boolean queryResult) {
+        this.queryResult = queryResult;
+    }
+    public Connection getConn() {
+        return conn;
+    }
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
     public int getStatus() {
         return status;
     }
@@ -48,7 +64,7 @@ public class DataRelay {
             Class mysql = Class.forName("utils.SAMConn");
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(Query);
         } catch (Exception e) {
@@ -67,19 +83,41 @@ public class DataRelay {
             Class mysql = Class.forName("utils.SAMConn");
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            if (conn.getAutoCommit()==true){
+                conn.setAutoCommit(false);
+            }
             Statement stmt = conn.createStatement();
             row = stmt.executeUpdate(Query);
-            conn.commit();
             stmt.close();
-            conn.close();
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
+        if (row!=0){
+            setQueryResult(true);
+        }else{
+            setQueryResult(false); 
+        }
         return row;
     }
-        
+    
+    private boolean commitQuery(){
+        boolean result = false;
+        try{
+            if (isQueryResult()){
+                getConn().commit();
+                getConn().close();
+            }else{
+                getConn().rollback();
+                getConn().close();
+            }
+        }catch (SQLException ex) {
+            System.out.println("Ошибка связи с сервером:" + ex.getMessage());
+        }
+        return result;
+    }
+    
     private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
         rs.close();
         stmt.close();
@@ -337,7 +375,7 @@ public class DataRelay {
             Class mysql = Class.forName("utils.SAMConn");
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
             //insert system only
             PreparedStatement stmt = conn.prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)");
             stmt.setString(1, ss.getSystemCode());
@@ -351,9 +389,9 @@ public class DataRelay {
             stmt.setInt(9, 0);
             stmt.setInt(10, ss.getStockID());
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();
+            setQueryResult(true);
+            commitQuery();
             //if added also new elements - insert them
             if (ss.getCanopyID()!=0){
                 addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
@@ -366,6 +404,8 @@ public class DataRelay {
             }
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -390,11 +430,13 @@ public class DataRelay {
             stmt.setInt(8, 0);
             stmt.setInt(9, c.getStockID());
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();           
+            setQueryResult(true);
+            commitQuery();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -420,11 +462,13 @@ public class DataRelay {
             stmt.setInt(9, 0);
             stmt.setInt(10, r.getStockID());
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();           
+            setQueryResult(true);
+            commitQuery();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -450,11 +494,13 @@ public class DataRelay {
             stmt.setInt(9, aad.getStockID());
             stmt.setInt(10, aad.getAadSaved());
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();           
+            setQueryResult(true);
+            commitQuery();         
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -472,11 +518,13 @@ public class DataRelay {
             stmt.setString(1, stock.getStockName());
             stmt.setInt(2, 0);
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();           
+            setQueryResult(true);
+            commitQuery();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -496,11 +544,13 @@ public class DataRelay {
             stmt.setString(4, man.getManufacturerEmail());
             stmt.setInt(5, 0);
             stmt.execute();
-            Connection bdcon = stmt.getConnection();
             stmt.close();
-            bdcon.close();           
+            setQueryResult(true);
+            commitQuery();          
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            setQueryResult(false);
+            commitQuery();
 //            e.printStackTrace();
         }
     }
@@ -510,8 +560,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
-
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void editCanopy(Canopy c, String updParams) {
@@ -519,7 +572,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void editReserve(Reserve r, String updParams) {
@@ -527,7 +584,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void editAAD(AAD aad, String updParams) {
@@ -535,7 +596,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void editManufacturer(Manufacturer man, String updParams) {
@@ -543,7 +608,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void editStock (Stock stock, String updParams) {
@@ -551,7 +620,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
         
     protected void deleteSkydiveSystem(SkydiveSystem ss) {
@@ -561,7 +634,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteContainer(SkydiveSystem ss) {
@@ -572,7 +649,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteCanopy(Canopy c) {
@@ -582,7 +663,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteReserve(Reserve r) {
@@ -592,7 +677,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteAAD(AAD aad) {
@@ -602,7 +691,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteStock(Stock stock) {
@@ -612,7 +705,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void deleteManufacturer(Manufacturer man) {
@@ -622,7 +719,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
 
     protected void restoreSkydiveSystem(SkydiveSystem ss) {
@@ -632,7 +733,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreContainer(SkydiveSystem ss) {
@@ -642,7 +747,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreCanopy(Canopy c) {
@@ -652,7 +761,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreReserve(Reserve r) {
@@ -662,7 +775,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreAAD(AAD aad) {
@@ -672,7 +789,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreStock(Stock stock) {
@@ -682,7 +803,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void restoreManufacturer(Manufacturer man) {
@@ -692,7 +817,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void repairSkydiveSystem(SkydiveSystem ss) {
@@ -702,7 +831,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void repairContainer(SkydiveSystem ss) {
@@ -712,7 +845,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void repairCanopy(Canopy c) {
@@ -722,7 +859,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void repairReserve(Reserve r) {
@@ -732,7 +873,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
     
     protected void repairAAD(AAD aad) {
@@ -742,7 +887,11 @@ public class DataRelay {
         int row = updateData(updateQuery);
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+            setQueryResult(false);
+            commitQuery();
         }
+        setQueryResult(true);
+        commitQuery();
     }
         
     protected void disassembleSkydiveSystem(SkydiveSystem ss) {
@@ -782,6 +931,7 @@ public class DataRelay {
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
+        commitQuery();
         
     }
     
