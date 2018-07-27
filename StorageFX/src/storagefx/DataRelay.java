@@ -20,8 +20,6 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -29,13 +27,20 @@ public class DataRelay {
     private int status = 0;
     private int stock = 2;
     private Connection conn;
-    private boolean queryResult;
+    private Statement stmt;
+    private boolean result;
 
-    public boolean isQueryResult() {
-        return queryResult;
+    public boolean isResult() {
+        return result;
     }
-    public void setQueryResult(boolean queryResult) {
-        this.queryResult = queryResult;
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+    public Statement getStmt() {
+        return stmt;
+    }
+    public void setStmt(Statement stmt) {
+        this.stmt = stmt;
     }
     public Connection getConn() {
         return conn;
@@ -66,8 +71,8 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
-            Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery(Query);
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(Query);
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
@@ -95,32 +100,11 @@ public class DataRelay {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
-        if (row!=0){
-            setQueryResult(true);
-        }else{
-            setQueryResult(false); 
-        }
         return row;
     }
     
-    private boolean commitQuery(){
-        boolean result = false;
-        try{
-            if (isQueryResult()){
-                getConn().commit();
-                getConn().close();
-            }else{
-                getConn().rollback();
-                getConn().close();
-            }
-        }catch (SQLException ex) {
-            System.out.println("Ошибка связи с сервером:" + ex.getMessage());
-        }
-        return result;
-    }
-    
     private Statement addQuery (String Query){
-        Statement stmt = null;
+        Statement st = getStmt();
         try {
             //Call a method dynamically (Reflection)
             Class params[] = {};
@@ -129,13 +113,13 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
-            stmt = getConn().createStatement();
-            stmt.addBatch(Query);
+            st = getConn().createStatement();
+            st.addBatch(Query);
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
-        return stmt;
+        return st;
     }
     private boolean executeQuery (Statement stmt) throws SQLException{
         boolean result = false;
@@ -883,7 +867,6 @@ public class DataRelay {
         if (row==0){
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
         }
-        commitQuery();
         
     }
     
