@@ -11,6 +11,7 @@ package storagefx;
  */
 
 import java.lang.reflect.Method;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -114,6 +115,42 @@ public class DataRelay {
             }
         }catch (SQLException ex) {
             System.out.println("Ошибка связи с сервером:" + ex.getMessage());
+        }
+        return result;
+    }
+    
+    private Statement addQuery (String Query){
+        Statement stmt = null;
+        try {
+            //Call a method dynamically (Reflection)
+            Class params[] = {};
+            Object paramsObj[] = {};
+            Class mysql = Class.forName("utils.SAMConn");
+            Object mysqlClass = mysql.newInstance();
+            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            stmt = getConn().createStatement();
+            stmt.addBatch(Query);
+        } catch (Exception e) {
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
+        return stmt;
+    }
+    private boolean executeQuery (Statement stmt) throws SQLException{
+        boolean result = false;
+        try{
+            int[] count = stmt.executeBatch();
+            stmt.close();
+            getConn().commit();
+            getConn().close();
+            result = true;
+        }catch (BatchUpdateException e) {
+            System.out.println("Ошибка при выполнении запроса:" + e.getMessage());
+            System.out.println("Выполнено:" + e.getUpdateCounts());
+            getConn().rollback();
+            getConn().close();
+            result = false;
         }
         return result;
     }
@@ -390,8 +427,8 @@ public class DataRelay {
             stmt.setInt(10, ss.getStockID());
             stmt.execute();
             stmt.close();
-            setQueryResult(true);
-            commitQuery();
+            getConn().commit();
+            getConn().close();
             //if added also new elements - insert them
             if (ss.getCanopyID()!=0){
                 addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
