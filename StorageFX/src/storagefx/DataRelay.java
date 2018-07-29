@@ -80,63 +80,41 @@ public class DataRelay {
         return rs;
     }
     
-    private int updateData (String Query){
-        int row = 0;
+    private void addQuery (String Query){
         try {
+            if (getStmt()==null){
             //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
-            if (conn.getAutoCommit()==true){
-                conn.setAutoCommit(false);
+                Class params[] = {};
+                Object paramsObj[] = {};
+                Class mysql = Class.forName("utils.SAMConn");
+                Object mysqlClass = mysql.newInstance();
+                Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+                setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+                setStmt(getConn().createStatement());
             }
-            Statement stmt = conn.createStatement();
-            row = stmt.executeUpdate(Query);
-            stmt.close();
+            getStmt().addBatch(Query);
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
-        return row;
     }
     
-    private Statement addQuery (String Query){
-        Statement st = getStmt();
-        try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
-            st = getConn().createStatement();
-            st.addBatch(Query);
-        } catch (Exception e) {
-            System.out.println("Ошибка связи с сервером:" + e.getMessage());
-//            e.printStackTrace();
-        }
-        return st;
-    }
-    private boolean executeQuery (Statement stmt) throws SQLException{
-        boolean result = false;
+    private void executeQuery (Statement stmt) throws SQLException{
         try{
             int[] count = stmt.executeBatch();
             stmt.close();
             getConn().commit();
             getConn().close();
-            result = true;
+            setStmt(null);
+            setResult(true);
         }catch (BatchUpdateException e) {
             System.out.println("Ошибка при выполнении запроса:" + e.getMessage());
             System.out.println("Выполнено:" + e.getUpdateCounts());
             getConn().rollback();
             getConn().close();
-            result = false;
+            setStmt(null);
+            setResult(false);
         }
-        return result;
     }
     
     private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
@@ -567,54 +545,60 @@ public class DataRelay {
     }
     
     protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
-        String updateQuery = "Update system_info set " + updParams + "where systemid = "+ss.getSystemID();
+        String updateQuery = "Update system_info set " + updParams + " where systemid = "+ss.getSystemID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
     protected void editCanopy(Canopy c, String updParams) {
-        String updateQuery = "Update canopy_info set " + updParams + "where canopyid = "+c.getCanopyID();
+        String updateQuery = "Update canopy_info set " + updParams + " where canopyid = "+c.getCanopyID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
     protected void editReserve(Reserve r, String updParams) {
-        String updateQuery = "Update reserve_info set " + updParams + "where reserveid = "+r.getReserveID();
+        String updateQuery = "Update reserve_info set " + updParams + " where reserveid = "+r.getReserveID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
     protected void editAAD(AAD aad, String updParams) {
-        String updateQuery = "Update aad_info set " + updParams + "where aadid = "+aad.getAadID();
+        String updateQuery = "Update aad_info set " + updParams + " where aadid = "+aad.getAadID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
     protected void editManufacturer(Manufacturer man, String updParams) {
-        String updateQuery = "Update manufacturer_info set " + updParams + "where manufacturerid = "+man.getManufacturerID();
+        String updateQuery = "Update manufacturer_info set " + updParams + " where manufacturerid = "+man.getManufacturerID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
     protected void editStock (Stock stock, String updParams) {
-        String updateQuery = "Update stock_info set " + updParams + "where stockid = "+stock.getStockID();
+        String updateQuery = "Update stock_info set " + updParams + " where stockid = "+stock.getStockID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -625,7 +609,8 @@ public class DataRelay {
                              "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -637,7 +622,8 @@ public class DataRelay {
                              "set si.STATUS = 1 " +
                              "where si.systemid = " + ss.getSystemID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -648,7 +634,8 @@ public class DataRelay {
                              "set ci.STATUS = 1 " +
                              "where ci.canopyid = " + c.getCanopyID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -659,7 +646,8 @@ public class DataRelay {
                              "set ri.STATUS = 1 " +
                              "where ri.reserveid = " + r.getReserveID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -670,7 +658,8 @@ public class DataRelay {
                              "set ai.STATUS = 1 " +
                              "where ai.aadid = " + aad.getAadID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -681,7 +670,8 @@ public class DataRelay {
                              "set si.STATUS = 1 " +
                              "where si.stockid = " + stock.getStockID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -692,7 +682,8 @@ public class DataRelay {
                              "set mi.STATUS = 1 " +
                              "where mi.manufacturerid = " + man.getManufacturerID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -703,7 +694,8 @@ public class DataRelay {
                              "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -714,7 +706,8 @@ public class DataRelay {
                              "set si.STATUS = 0 " +
                              "where si.systemid = " + ss.getSystemID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -725,7 +718,8 @@ public class DataRelay {
                              "set ci.STATUS = 0 " +
                              "where ci.canopyid = " + c.getCanopyID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -736,7 +730,8 @@ public class DataRelay {
                              "set ri.STATUS = 0 " +
                              "where ri.reserveid = " + r.getReserveID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -747,7 +742,8 @@ public class DataRelay {
                              "set ai.STATUS = 0 " +
                              "where ai.aadid = " + aad.getAadID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -758,7 +754,8 @@ public class DataRelay {
                              "set si.STATUS = 0 " +
                              "where si.stockid = " + stock.getStockID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -769,7 +766,8 @@ public class DataRelay {
                              "set mi.STATUS = 0 " +
                              "where mi.manufacturerid = " + man.getManufacturerID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -780,7 +778,8 @@ public class DataRelay {
                              "set si.STATUS = 2, ci.STATUS = 2, ri.STATUS = 2, ai.STATUS = 2 " +
                              "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -791,7 +790,8 @@ public class DataRelay {
                              "set si.STATUS = 2 " +
                              "where si.systemid = " + ss.getSystemID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -802,7 +802,8 @@ public class DataRelay {
                              "set ci.STATUS = 2 " +
                              "where ci.canopyid = " + c.getCanopyID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -813,7 +814,8 @@ public class DataRelay {
                              "set ri.STATUS = 2 " +
                              "where ri.reserveid = " + r.getReserveID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -824,7 +826,8 @@ public class DataRelay {
                              "set ai.STATUS = 2 " +
                              "where ai.aadid = " + aad.getAadID();
         try {
-            executeQuery(addQuery(updateQuery));
+            addQuery(updateQuery);
+            executeQuery(getStmt());
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
@@ -834,70 +837,47 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
                              "where si.systemid = " + ss.getSystemID();
-        //debug
-//        System.out.println(updateQuery);
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update canopy_info ci " + 
                              "set ci.systemid = 0 " +
                              "where ci.systemid = " + ss.getSystemID() + " and ci.canopyid = " + ss.getCanopyID();
-        //debug
-//        System.out.println(updateQuery);
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update reserve_info ri " + 
                              "set ri.systemid = 0 " +
                              "where ri.systemid = " + ss.getSystemID() + " and ri.reserveid = " + ss.getReserveID();
-        //debug
-//        System.out.println(updateQuery);
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update aad_info ai " + 
                              "set ai.systemid = 0 " +
                              "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + ss.getAadID();
-        //debug
-//        System.out.println(updateQuery);
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        addQuery(updateQuery);
+        try {
+            executeQuery(getStmt());
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
-        
     }
     
     protected void assembleSkydiveSystem(SkydiveSystem ss, Canopy c, Reserve r, AAD aad) {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = " + c.getCanopyID() + ", si.reserveid = " + r.getReserveID() + ", si.aadid = " + aad.getAadID() + " " +
                              "where si.systemid = " + ss.getSystemID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update canopy_info ci " + 
                              "set ci.systemid = " + ss.getSystemID() + " " +
                              "where ci.systemid = 0 and ci.canopyid = " + c.getCanopyID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update reserve_info ri " + 
                              "ri.systemid = " + ss.getSystemID() + " " +
                              "where ri.systemid = 0 and ri.reserveid = " + r.getReserveID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "Update aad_info ai " + 
                              "ai.systemid = " + ss.getSystemID() + " " +
                              "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + aad.getAadID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        addQuery(updateQuery);
+        try {
+            executeQuery(getStmt());
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
@@ -905,17 +885,16 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.canopyid = " + c_New.getCanopyID() + " " +
                              "where si.systemid = " + c_Old.getSystemID() + " AND si.canopyid = " + c_Old.getCanopyID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "UPDATE canopy_info t1 JOIN canopy_info t2 " +
                         "ON t1.canopyid = " + c_Old.getCanopyID() + " AND t2.canopyid = " + c_New.getCanopyID() + " " +
                        "SET t1.systemid = 0, " +
                            "t2.systemid = " + c_Old.getSystemID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        addQuery(updateQuery);
+        try {
+            executeQuery(getStmt());
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
@@ -923,17 +902,16 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.reserveid = " + r_New.getReserveID() + " " +
                              "where si.systemid = " + r_Old.getSystemID() + " AND si.reserveid = " + r_Old.getReserveID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "UPDATE reserve_info t1 JOIN reserve_info t2 " +
                         "ON t1.reserveid = " + r_Old.getReserveID() + " AND t2.reserveid = " + r_New.getReserveID() + " " +
                        "SET t1.systemid = 0, " +
                            "t2.systemid = " + r_Old.getSystemID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        addQuery(updateQuery);
+        try {
+            executeQuery(getStmt());
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
     
@@ -941,19 +919,16 @@ public class DataRelay {
         String updateQuery = "Update system_info si " + 
                              "set si.aadid = " + aad_New.getAadID() + " " +
                              "where si.systemid = " + aad_Old.getSystemID() + " AND si.aadid = " + aad_Old.getAadID();
-        int row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
-        }
+        addQuery(updateQuery);
         updateQuery = "UPDATE aad_info t1 JOIN aad_info t2 " +
                         "ON t1.aadid = " + aad_Old.getAadID() + " AND t2.aadid = " + aad_New.getAadID() + " " +
                        "SET t1.systemid = 0, " +
                            "t2.systemid = " + aad_Old.getSystemID();
-        row = updateData(updateQuery);
-        if (row==0){
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку.");
+        addQuery(updateQuery);
+        try {
+            executeQuery(getStmt());
+        } catch (SQLException ex) {
+            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
         }
     }
-
 }
-
