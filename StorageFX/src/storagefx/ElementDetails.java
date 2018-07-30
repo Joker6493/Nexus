@@ -47,6 +47,21 @@ public class ElementDetails extends Application {
     private boolean assemble = false;
     private String updParams;
     private DataRelay dr = new DataRelay();
+    private int stockID;
+    private int status;
+    
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
     public String getUpdParams() {
         return updParams;
     }
@@ -59,6 +74,8 @@ public class ElementDetails extends Application {
     ElementDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(containerDetail(selectedSystem));
         this.assemble = true;
@@ -66,31 +83,42 @@ public class ElementDetails extends Application {
     ElementDetails (Canopy selectedCanopy, boolean editStatus){
         this.selectedCanopy = selectedCanopy;
         this.stageTitle = "Основной парашют "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize();
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(canopyDetail(selectedCanopy));
     }
     ElementDetails (Reserve selectedReserve, boolean editStatus){
         this.selectedReserve = selectedReserve;
         this.stageTitle = "Запасной парашют "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize();
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(reserveDetail(selectedReserve));
     }
     ElementDetails (AAD selectedAAD, boolean editStatus){
         this.selectedAAD = selectedAAD;
         this.stageTitle = "Страхующий прибор "+selectedAAD.getAadModel()+" "+selectedAAD.getAadSN();
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(aadDetail(selectedAAD));
     }
     ElementDetails (Stock selectedStock, boolean editStatus){
         this.selectedStock = selectedStock;
         this.stageTitle = "Склад "+selectedStock.getStockName();
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(stockDetail(selectedStock));
     }
     ElementDetails (Manufacturer selectedManufacturer, boolean editStatus){
         this.selectedManufacturer = selectedManufacturer;
         this.stageTitle = "Производитель "+selectedManufacturer.getManufacturerName();
-        this.editStatus = editStatus;
+        this.editStatus = editStatus;this.setStatus(getStatus());
+        this.setStockID(getStockID());
+        this.setStatus(getStatus());
+        this.setStockID(getStockID());
         this.scene = new Scene(manufacturerDetail(selectedManufacturer));
     }
     ElementDetails (String elementType, int stockID){

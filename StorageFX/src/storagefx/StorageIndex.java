@@ -217,6 +217,8 @@ public class StorageIndex extends Application {
         MenuItem elementsList = new MenuItem("Элементы системы");
         elementsList.setOnAction((ActionEvent event) -> {
             ElementsIndex detail = new ElementsIndex();
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

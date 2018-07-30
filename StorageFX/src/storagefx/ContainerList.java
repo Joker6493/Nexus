@@ -38,19 +38,15 @@ public class ContainerList extends Application {
     public int getStockID() {
         return stockID;
     }
-
     public void setStockID(int stockID) {
         this.stockID = stockID;
     }
-
     public int getStatus() {
         return status;
     }
-
     public void setStatus(int status) {
         this.status = status;
     }
-    
     @Override
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ContainerTable(false);
@@ -63,8 +59,8 @@ public class ContainerList extends Application {
     public StackPane ContainerTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
-        dr.setStatus(status);
-        dr.setStock(stockID);
+        dr.setStatus(getStatus());
+        dr.setStock(getStockID());
         TableView<SkydiveSystem> containerTable = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -108,6 +104,8 @@ public class ContainerList extends Application {
                     index.getScene().getWindow().hide();
                 }else{
                 ElementDetails detail = new ElementDetails(currentSystem, false);
+                detail.setStatus(getStatus());
+                detail.setStockID(getStockID());
                 Stage detailStage = new Stage();
                 detailStage.initModality(Modality.WINDOW_MODAL);
                 detailStage.initOwner(index.getScene().getWindow());

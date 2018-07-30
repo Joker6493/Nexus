@@ -85,8 +85,8 @@ public class ReserveList extends Application {
     public StackPane ReserveTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
-        dr.setStatus(status);
-        dr.setStock(stockID);
+        dr.setStatus(getStatus());
+        dr.setStock(getStockID());
         TableView<Reserve> reserveTable = new TableView<>();
         //Columns
         //Reserve(systemID, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, stockID)

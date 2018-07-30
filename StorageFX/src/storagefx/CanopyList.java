@@ -84,8 +84,8 @@ public class CanopyList extends Application {
     public StackPane CanopyTable(boolean closeOnSelect){
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
-        dr.setStatus(status);
-        dr.setStock(stockID);
+        dr.setStatus(getStatus());
+        dr.setStock(getStockID());
         TableView<Canopy> canopyTable = new TableView<>();
         //Columns
         TableColumn <Canopy, String> canopy = new TableColumn<>("Основной парашют");

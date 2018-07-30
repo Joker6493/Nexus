@@ -61,7 +61,7 @@ public class StockList extends Application {
     public BorderPane StockList (boolean closeOnSelect) {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
-        dr.setStatus(status);
+        dr.setStatus(getStatus());
         ListView<Stock> stockList = new ListView<>();
         //Adding data and create scene
         ObservableList<Stock> indexList = dr.getStockList();

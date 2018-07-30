@@ -30,6 +30,19 @@ public class ElementsIndex extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
+
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
     private StackPane table;
     private DataRelay dr;
     @Override
@@ -44,7 +57,12 @@ public class ElementsIndex extends Application {
     public BorderPane ElementsIndex(){
         BorderPane index = new BorderPane();
         HBox topMenu = new HBox();
-        dr = new DataRelay();
+        //default
+        setStatus(0);
+        setStockID(2);
+        DataRelay dr = new DataRelay();
+        dr.setStatus(getStatus());
+        dr.setStock(getStockID());
         ComboBox <String> elementsBox = new ComboBox<>();
         ArrayList<String> indexList = new ArrayList<>();
         indexList.add("Ранцы");
@@ -63,26 +81,26 @@ public class ElementsIndex extends Application {
             switch (elementsBox.getSelectionModel().getSelectedItem()){
                 case "Ранцы":
                     ContainerList col = new ContainerList();
-                    col.setStatus(status);
-                    col.setStockID(stockID);
+                    col.setStatus(getStatus());
+                    col.setStockID(getStockID());
                     table = col.ContainerTable(false);
                     break;
                 case "Основные парашюты":
                     CanopyList cl = new CanopyList();
-                    cl.setStatus(status);
-                    cl.setStockID(stockID);
+                    cl.setStatus(getStatus());
+                    cl.setStockID(getStockID());
                     table = cl.CanopyTable(false);
                     break;
                 case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
-                    rl.setStatus(status);
-                    rl.setStockID(stockID);
+                    rl.setStatus(getStatus());
+                    rl.setStockID(getStockID());
                     table = rl.ReserveTable(false);
                     break;
                 case "Страхующие приборы":
                     AADList al = new AADList();
-                    al.setStatus(status);
-                    al.setStockID(stockID);
+                    al.setStatus(getStatus());
+                    al.setStockID(getStockID());
                     table = al.AADTable(false);
                     break;
             }
@@ -114,19 +132,19 @@ public class ElementsIndex extends Application {
                 }
             }
         });
-        stockBox.getSelectionModel().select(1);
-        stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
+        stockBox.getSelectionModel().select(getStockID()-1);
+        setStockID(stockBox.getSelectionModel().getSelectedItem().getStockID());
         stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            dr.setStock(stockBox.getSelectionModel().getSelectedItem().getStockID());
-            stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
+            setStockID(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            dr.setStock(getStockID());
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
         ComboBox <Status> statusBox = new ComboBox<>();
         statusBox.setItems(dr.getStatusList());
-        statusBox.getSelectionModel().select(0);
-        status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
+        statusBox.getSelectionModel().select(getStatus());
+        setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
         statusBox.setCellFactory(p -> new ListCell <Status> () {
             @Override
             protected void updateItem(Status item, boolean empty) {
@@ -151,8 +169,8 @@ public class ElementsIndex extends Application {
         });
         statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
-            status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
+            setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
+            dr.setStatus(getStatus());
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
         topMenu.getChildren().addAll(elementsBox, new Label("Элементы системы"), stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
@@ -160,26 +178,26 @@ public class ElementsIndex extends Application {
         switch (elementsBox.getSelectionModel().getSelectedItem()){
             case "Ранцы":
                     ContainerList col = new ContainerList();
-                    col.setStatus(status);
-                    col.setStockID(stockID);
+                    col.setStatus(getStatus());
+                    col.setStockID(getStockID());
                     table = col.ContainerTable(false);
                     break;
             case "Основные парашюты":
                     CanopyList cl = new CanopyList();
-                    cl.setStatus(status);
-                    cl.setStockID(stockID);
+                    cl.setStatus(getStatus());
+                    cl.setStockID(getStockID());
                     table = cl.CanopyTable(false);
                     break;
             case "Запасные парашюты":
                     ReserveList rl = new ReserveList();
-                    rl.setStatus(status);
-                    rl.setStockID(stockID);
+                    rl.setStatus(getStatus());
+                    rl.setStockID(getStockID());
                     table = rl.ReserveTable(false);
                     break;
             case "Страхующие приборы":
                     AADList al = new AADList();
-                    al.setStatus(status);
-                    al.setStockID(stockID);
+                    al.setStatus(getStatus());
+                    al.setStockID(getStockID());
                     table = al.AADTable(false);
                     break;
         }

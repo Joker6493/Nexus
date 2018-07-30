@@ -56,7 +56,7 @@ public class ManufacturerList extends Application {
     public BorderPane ManufacturerList (boolean closeOnSelect) {
         BorderPane index = new BorderPane();
         DataRelay dr = new DataRelay();
-        dr.setStatus(status);
+        dr.setStatus(getStatus());
         TableView<Manufacturer> manufacturerList = new TableView<>();
         //Columns
 //        String manufacturerName, String manufacturerCountry, String manufacturerTelephone, String manufacturerEmail
