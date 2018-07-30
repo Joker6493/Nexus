@@ -15,10 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -44,6 +41,19 @@ public class StorageIndex extends Application {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int stockID;
     private int status;
+
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
     @Override
     public void start(Stage primaryStage) {
         
@@ -57,7 +67,12 @@ public class StorageIndex extends Application {
     
     public BorderPane StorageIndex () {
         BorderPane index = new BorderPane();
+    //default
+        setStatus(0);
+        setStockID(2);
         DataRelay dr = new DataRelay();
+        dr.setStatus(getStatus());
+        dr.setStock(getStockID());
         TableView<SkydiveSystem> indexStore = new TableView<>();
         //Columns
         TableColumn <SkydiveSystem, String> systemCode = new TableColumn<>("Код системы");
@@ -155,20 +170,20 @@ public class StorageIndex extends Application {
                 }
             }
         });
-        stockBox.getSelectionModel().select(1);
-        stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
+        stockBox.getSelectionModel().select(getStockID()-1);
+        setStockID(stockBox.getSelectionModel().getSelectedItem().getStockID());
         stockBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            dr.setStock(stockBox.getSelectionModel().getSelectedItem().getStockID());
-            stockID = stockBox.getSelectionModel().getSelectedItem().getStockID();
+            setStockID(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            dr.setStock(getStockID());
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
         });
         
         ComboBox <Status> statusBox = new ComboBox<>();
         ObservableList<Status> statusList = dr.getStatusList();
         statusBox.setItems(statusList);
-        statusBox.getSelectionModel().select(0);
-        status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
+        statusBox.getSelectionModel().select(getStatus());
+        setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
         statusBox.setCellFactory(p -> new ListCell <Status> () {
             @Override
             protected void updateItem(Status item, boolean empty) {
@@ -193,8 +208,8 @@ public class StorageIndex extends Application {
         });
         statusBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO code
-            dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
-            status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
+            setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
+            dr.setStatus(getStatus());
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
         });
         MenuBar storageBarMenu = new MenuBar();
@@ -217,7 +232,7 @@ public class StorageIndex extends Application {
             chooseWindow.setTitle("Справочник - Склады");
             StockList sl = new StockList();
         //Need to modify - choosing statuses in modal window
-            sl.setStatus(status);
+            sl.setStatus(getStatus());
             Scene sList = new Scene(sl.StockList(true));
             chooseWindow.setScene(sList);
             
@@ -232,7 +247,7 @@ public class StorageIndex extends Application {
             chooseWindow.setTitle("Справочник - Производители");
             ManufacturerList ml = new ManufacturerList();
         //Need to modify - choosing statuses in modal window
-            ml.setStatus(status);
+            ml.setStatus(getStatus());
             Scene mList = new Scene(ml.ManufacturerList(true));
             chooseWindow.setScene(mList);
             
@@ -267,6 +282,8 @@ public class StorageIndex extends Application {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем систему "+currentSystem.getSystemCode()+"?");
             SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -309,6 +326,8 @@ public class StorageIndex extends Application {
             //Refreshing indexList - in process
             System.out.println("Добавить систему?");
             SystemDetails detail = new SystemDetails(stockBox.getSelectionModel().getSelectedItem().getStockID());
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

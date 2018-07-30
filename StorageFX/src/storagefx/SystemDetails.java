@@ -44,7 +44,21 @@ public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
     private boolean editStatus;
     private String stageTitle;
-    private int stock;
+    private int stockID;
+    private int status;
+
+    public int getStockID() {
+        return stockID;
+    }
+    public void setStockID(int stockID) {
+        this.stockID = stockID;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
     private String updParams;
     private DataRelay dr = new DataRelay();
     public String getUpdParams() {
@@ -233,6 +247,8 @@ public class SystemDetails extends Application {
             CanopyList cl = new CanopyList();
             cl.setOldCanopy(sCanopy);
             cl.setSelectedSystem(selectedSystem);
+            cl.setStatus(getStatus());
+            cl.setStockID(getStockID());
             Scene cList = new Scene(cl.CanopyTable(true));
             chooseWindow.setScene(cList);
             
@@ -375,6 +391,8 @@ public class SystemDetails extends Application {
             ReserveList rl = new ReserveList();
             rl.setOldReserve(sReserve);
             rl.setSelectedSystem(selectedSystem);
+            rl.setStatus(getStatus());
+            rl.setStockID(getStockID());
             Scene rList = new Scene(rl.ReserveTable(true));
             chooseWindow.setScene(rList);
             
@@ -521,6 +539,8 @@ public class SystemDetails extends Application {
             AADList al = new AADList();
             al.setOldAAD(sAAD);
             al.setSelectedSystem(selectedSystem);
+            al.setStatus(getStatus());
+            al.setStockID(getStockID());
             Scene aList = new Scene(al.AADTable(true));
             chooseWindow.setScene(aList);
             
