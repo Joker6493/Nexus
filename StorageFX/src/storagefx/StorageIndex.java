@@ -138,7 +138,6 @@ public class StorageIndex extends Application {
         refreshBtn.setOnAction((ActionEvent event) -> {
             //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
             indexStore.getItems().clear();
             indexStore.setItems(dr.getSystemsList());
             //indexStore.refresh();
@@ -340,6 +339,7 @@ public class StorageIndex extends Application {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+        //ask for deleting system elements too or disassemble system and delete container only
             dr.deleteSkydiveSystem(currentSystem);
             System.out.println("Система удалена!");
         });
