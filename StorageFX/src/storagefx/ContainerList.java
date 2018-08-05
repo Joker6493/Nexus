@@ -127,6 +127,8 @@ public class ContainerList extends Application {
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("информация о ранце "+currentSystem.getSystemCode());
             ElementDetails detail = new ElementDetails(currentSystem, false);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -138,6 +140,8 @@ public class ContainerList extends Application {
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем ранец "+currentSystem.getSystemCode()+"?");
             ElementDetails detail = new ElementDetails(currentSystem, true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -148,6 +152,8 @@ public class ContainerList extends Application {
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("Начата сборка системы " + currentSystem.getSystemCode());
             SystemDetails detail = new SystemDetails(currentSystem, true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -157,6 +163,8 @@ public class ContainerList extends Application {
         addItem.setOnAction((ActionEvent e) -> {
             System.out.println("Добавить ранец?");
             ElementDetails detail = new ElementDetails("container",stockID);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

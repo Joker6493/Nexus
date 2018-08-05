@@ -199,6 +199,8 @@ public class AADList extends Application {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
             ElementDetails detail = new ElementDetails(selectedAAD, false);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -210,6 +212,8 @@ public class AADList extends Application {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
             ElementDetails detail = new ElementDetails(selectedAAD, true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -220,6 +224,8 @@ public class AADList extends Application {
             //Refreshing indexList - in process
             System.out.println("Добавить прибор?");
             ElementDetails detail = new ElementDetails("aad",stockID);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

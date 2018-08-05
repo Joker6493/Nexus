@@ -182,6 +182,8 @@ public class CanopyList extends Application {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о куполе "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize());
             ElementDetails detail = new ElementDetails(selectedCanopy, false);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -193,6 +195,8 @@ public class CanopyList extends Application {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
             ElementDetails detail = new ElementDetails(selectedCanopy, true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -228,6 +232,8 @@ public class CanopyList extends Application {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
             ElementDetails detail = new ElementDetails("canopy",stockID);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

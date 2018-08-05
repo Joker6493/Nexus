@@ -184,6 +184,8 @@ public class ReserveList extends Application {
             setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о куполе "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize());
             ElementDetails detail = new ElementDetails(selectedReserve, false);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -195,6 +197,8 @@ public class ReserveList extends Application {
             setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
             ElementDetails detail = new ElementDetails(selectedReserve, true);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
@@ -230,6 +234,8 @@ public class ReserveList extends Application {
             //Refreshing indexList - in process
             System.out.println("Добавить купол?");
             ElementDetails detail = new ElementDetails("reserve",stockID);
+            detail.setStatus(getStatus());
+            detail.setStockID(getStockID());
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());
