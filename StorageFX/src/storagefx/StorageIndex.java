@@ -347,9 +347,9 @@ public class StorageIndex extends Application {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Подтверждение изменений");
             confirm.setHeaderText("Удалить систему " + currentSystem.getSystemCode() +" целиком, или разобрать систему и удалить только ранец?");
-            ButtonType yes = new ButtonType("Да");
+            ButtonType yes = new ButtonType("Удалить все");
             ButtonType containerOnly = new ButtonType("Только ранец");
-            ButtonType no = new ButtonType("Нет");
+            ButtonType no = new ButtonType("Отмена");
             confirm.getButtonTypes().clear();
             confirm.getButtonTypes().addAll(yes, containerOnly, no);
             Optional<ButtonType> option = confirm.showAndWait();
