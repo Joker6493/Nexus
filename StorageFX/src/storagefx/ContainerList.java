@@ -14,7 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -34,7 +37,14 @@ public class ContainerList extends Application {
 
     private int stockID;
     private int status;
-    
+    private boolean assembleInProcess = false;
+
+    public boolean isAssembleInProcess() {
+        return assembleInProcess;
+    }
+    public void setAssembleInProcess(boolean assembleInProcess) {
+        this.assembleInProcess = assembleInProcess;
+    }
     public int getStockID() {
         return stockID;
     }
@@ -123,7 +133,6 @@ public class ContainerList extends Application {
         });
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("информация о ранце "+currentSystem.getSystemCode());
             ElementDetails detail = new ElementDetails(currentSystem, false);
@@ -136,7 +145,6 @@ public class ContainerList extends Application {
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("Редактируем ранец "+currentSystem.getSystemCode()+"?");
             ElementDetails detail = new ElementDetails(currentSystem, true);
@@ -161,6 +169,7 @@ public class ContainerList extends Application {
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
+    //Need to remade
             System.out.println("Добавить ранец?");
             ElementDetails detail = new ElementDetails("container",stockID);
             detail.setStatus(getStatus());
@@ -172,9 +181,26 @@ public class ContainerList extends Application {
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
             System.out.println("Удалить ранец "+currentSystem.getSystemCode()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить ранец " + currentSystem.getSystemCode() +" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.deleteContainer(currentSystem);
+                    containerTable.getItems().clear();
+                    containerTable.setItems(dr.getContainersList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
         });
         containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, assembleItem, deleteItem);
         containerTable.setOnContextMenuRequested((ContextMenuEvent event) -> {

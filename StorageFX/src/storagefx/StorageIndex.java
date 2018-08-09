@@ -15,8 +15,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -340,7 +343,31 @@ public class StorageIndex extends Application {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
             System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
         //ask for deleting system elements too or disassemble system and delete container only
-            dr.deleteSkydiveSystem(currentSystem);
+            System.out.println("Удалить ранец "+currentSystem.getSystemCode()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить систему " + currentSystem.getSystemCode() +" целиком, или разобрать систему и удалить только ранец?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType containerOnly = new ButtonType("Только ранец");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, containerOnly, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.deleteSkydiveSystem(currentSystem);
+                    indexStore.getItems().clear();
+                    indexStore.setItems(dr.getSystemsList());
+                } else if (option.get() == containerOnly) {
+                    dr.disassembleSkydiveSystem(currentSystem);
+                    dr.deleteContainer(currentSystem);
+                    indexStore.getItems().clear();
+                    indexStore.setItems(dr.getSystemsList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
             System.out.println("Система удалена!");
         });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, moveItem, disassembleItem, deleteItem);

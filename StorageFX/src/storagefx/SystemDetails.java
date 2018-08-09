@@ -43,10 +43,40 @@ import javafx.stage.Stage;
 public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
     private boolean editStatus;
+    private String updParams;
+    private DataRelay dr = new DataRelay();
     private String stageTitle;
     private int stockID;
     private int status;
+    private boolean assembleInProcess = false;
+    private Canopy newCanopy;
+    private Reserve newReserve;
+    private AAD newAAD;
 
+    public Canopy getNewCanopy() {
+        return newCanopy;
+    }
+    public void setNewCanopy(Canopy newCanopy) {
+        this.newCanopy = newCanopy;
+    }
+    public Reserve getNewReserve() {
+        return newReserve;
+    }
+    public void setNewReserve(Reserve newReserve) {
+        this.newReserve = newReserve;
+    }
+    public AAD getNewAAD() {
+        return newAAD;
+    }
+    public void setNewAAD(AAD newAAD) {
+        this.newAAD = newAAD;
+    }
+    public boolean isAssembleInProcess() {
+        return assembleInProcess;
+    }
+    public void setAssembleInProcess(boolean assembleInProcess) {
+        this.assembleInProcess = assembleInProcess;
+    }
     public int getStockID() {
         return stockID;
     }
@@ -59,15 +89,13 @@ public class SystemDetails extends Application {
     public void setStatus(int status) {
         this.status = status;
     }
-    private String updParams;
-    private DataRelay dr = new DataRelay();
     public String getUpdParams() {
         return updParams;
     }
-
     public void setUpdParams(String updParams) {
         this.updParams = updParams;
     }
+    
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     DateTimeFormatter mySQLFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     SystemDetails (SkydiveSystem selectedSystem, boolean editStatus){
@@ -249,6 +277,7 @@ public class SystemDetails extends Application {
             cl.setSelectedSystem(selectedSystem);
             cl.setStatus(getStatus());
             cl.setStockID(getStockID());
+            cl.setAssembleInProcess(isAssembleInProcess());
             Scene cList = new Scene(cl.CanopyTable(true));
             chooseWindow.setScene(cList);
             
@@ -256,28 +285,30 @@ public class SystemDetails extends Application {
             chooseWindow.initOwner(detailStage.getScene().getWindow());
             chooseWindow.showAndWait();
             if (cl.getSelectedCanopy() != null){
-                Canopy newCanopy = cl.getSelectedCanopy();
-                cModel.setText(newCanopy.getCanopyModel());
-                cSize.setText(Integer.toString(newCanopy.getCanopySize()));
-                cSN.setText(newCanopy.getCanopySN());
-                cDOM.setValue(newCanopy.getCanopyDOM());
-                cJumps.setText(Integer.toString(newCanopy.getCanopyJumps()));
-                cManufacturerName.getSelectionModel().select(newCanopy.getCanopyManufacturerID()-1);
+                setNewCanopy(cl.getSelectedCanopy());
+                cModel.setText(getNewCanopy().getCanopyModel());
+                cSize.setText(Integer.toString(getNewCanopy().getCanopySize()));
+                cSN.setText(getNewCanopy().getCanopySN());
+                cDOM.setValue(getNewCanopy().getCanopyDOM());
+                cJumps.setText(Integer.toString(getNewCanopy().getCanopyJumps()));
+                cManufacturerName.getSelectionModel().select(getNewCanopy().getCanopyManufacturerID()-1);
+                if (!isAssembleInProcess()){
             //Updating canopy data in skydive system
-                selectedSystem.setCanopyModel(newCanopy.getCanopyModel());
-                selectedSystem.setCanopySize(newCanopy.getCanopySize());
-                selectedSystem.setCanopySN(newCanopy.getCanopySN());
-                selectedSystem.setCanopyDOM(newCanopy.getCanopyDOM());
-                selectedSystem.setCanopyJumps(newCanopy.getCanopyJumps());
-                selectedSystem.setCanopyManufacturerID(newCanopy.getCanopyManufacturerID());
-                selectedSystem.setCanopyManufacturerName(newCanopy.getCanopyManufacturerName());
-                sCanopy.setCanopyModel(newCanopy.getCanopyModel());
-                sCanopy.setCanopySize(newCanopy.getCanopySize());
-                sCanopy.setCanopySN(newCanopy.getCanopySN());
-                sCanopy.setCanopyDOM(newCanopy.getCanopyDOM());
-                sCanopy.setCanopyJumps(newCanopy.getCanopyJumps());
-                sCanopy.setCanopyManufacturerID(newCanopy.getCanopyManufacturerID());
-                sCanopy.setCanopyManufacturerName(newCanopy.getCanopyManufacturerName());
+                    selectedSystem.setCanopyModel(getNewCanopy().getCanopyModel());
+                    selectedSystem.setCanopySize(getNewCanopy().getCanopySize());
+                    selectedSystem.setCanopySN(getNewCanopy().getCanopySN());
+                    selectedSystem.setCanopyDOM(getNewCanopy().getCanopyDOM());
+                    selectedSystem.setCanopyJumps(getNewCanopy().getCanopyJumps());
+                    selectedSystem.setCanopyManufacturerID(getNewCanopy().getCanopyManufacturerID());
+                    selectedSystem.setCanopyManufacturerName(getNewCanopy().getCanopyManufacturerName());
+                    sCanopy.setCanopyModel(getNewCanopy().getCanopyModel());
+                    sCanopy.setCanopySize(getNewCanopy().getCanopySize());
+                    sCanopy.setCanopySN(getNewCanopy().getCanopySN());
+                    sCanopy.setCanopyDOM(getNewCanopy().getCanopyDOM());
+                    sCanopy.setCanopyJumps(getNewCanopy().getCanopyJumps());
+                    sCanopy.setCanopyManufacturerID(getNewCanopy().getCanopyManufacturerID());
+                    sCanopy.setCanopyManufacturerName(getNewCanopy().getCanopyManufacturerName());
+                }
             }
         });
         
@@ -393,6 +424,7 @@ public class SystemDetails extends Application {
             rl.setSelectedSystem(selectedSystem);
             rl.setStatus(getStatus());
             rl.setStockID(getStockID());
+            rl.setAssembleInProcess(isAssembleInProcess());
             Scene rList = new Scene(rl.ReserveTable(true));
             chooseWindow.setScene(rList);
             
@@ -400,31 +432,33 @@ public class SystemDetails extends Application {
             chooseWindow.initOwner(detailStage.getScene().getWindow());
             chooseWindow.showAndWait();
             if (rl.getSelectedReserve() != null){
-                Reserve newReserve = rl.getSelectedReserve();
-                rModel.setText(newReserve.getReserveModel());
-                rSize.setText(Integer.toString(newReserve.getReserveSize()));
-                rSN.setText(newReserve.getReserveSN());
-                rDOM.setValue(newReserve.getReserveDOM());
-                rManufacturerName.getSelectionModel().select(newReserve.getReserveManufacturerID()-1); 
-                rJumps.setText(Integer.toString(newReserve.getReserveJumps()));
-                rPackDate.setValue(newReserve.getReservePackDate());  
+                setNewReserve(rl.getSelectedReserve());
+                rModel.setText(getNewReserve().getReserveModel());
+                rSize.setText(Integer.toString(getNewReserve().getReserveSize()));
+                rSN.setText(getNewReserve().getReserveSN());
+                rDOM.setValue(getNewReserve().getReserveDOM());
+                rManufacturerName.getSelectionModel().select(getNewReserve().getReserveManufacturerID()-1); 
+                rJumps.setText(Integer.toString(getNewReserve().getReserveJumps()));
+                rPackDate.setValue(getNewReserve().getReservePackDate());
+                if (!isAssembleInProcess()){
             //Updating reserve data in skydive system
-                selectedSystem.setReserveModel(newReserve.getReserveModel());
-                selectedSystem.setReserveSize(newReserve.getReserveSize());
-                selectedSystem.setReserveSN(newReserve.getReserveSN());
-                selectedSystem.setReserveDOM(newReserve.getReserveDOM());
-                selectedSystem.setReserveJumps(newReserve.getReserveJumps());
-                selectedSystem.setReservePackDate(newReserve.getReservePackDate());
-                selectedSystem.setReserveManufacturerID(newReserve.getReserveManufacturerID());
-                selectedSystem.setReserveManufacturerName(newReserve.getReserveManufacturerName());
-                sReserve.setReserveModel(newReserve.getReserveModel());
-                sReserve.setReserveSize(newReserve.getReserveSize());
-                sReserve.setReserveSN(newReserve.getReserveSN());
-                sReserve.setReserveDOM(newReserve.getReserveDOM());
-                sReserve.setReserveJumps(newReserve.getReserveJumps());
-                sReserve.setReservePackDate(newReserve.getReservePackDate());
-                sReserve.setReserveManufacturerID(newReserve.getReserveManufacturerID());
-                sReserve.setReserveManufacturerName(newReserve.getReserveManufacturerName());
+                    selectedSystem.setReserveModel(getNewReserve().getReserveModel());
+                    selectedSystem.setReserveSize(getNewReserve().getReserveSize());
+                    selectedSystem.setReserveSN(getNewReserve().getReserveSN());
+                    selectedSystem.setReserveDOM(getNewReserve().getReserveDOM());
+                    selectedSystem.setReserveJumps(getNewReserve().getReserveJumps());
+                    selectedSystem.setReservePackDate(getNewReserve().getReservePackDate());
+                    selectedSystem.setReserveManufacturerID(getNewReserve().getReserveManufacturerID());
+                    selectedSystem.setReserveManufacturerName(getNewReserve().getReserveManufacturerName());
+                    sReserve.setReserveModel(getNewReserve().getReserveModel());
+                    sReserve.setReserveSize(getNewReserve().getReserveSize());
+                    sReserve.setReserveSN(getNewReserve().getReserveSN());
+                    sReserve.setReserveDOM(getNewReserve().getReserveDOM());
+                    sReserve.setReserveJumps(getNewReserve().getReserveJumps());
+                    sReserve.setReservePackDate(getNewReserve().getReservePackDate());
+                    sReserve.setReserveManufacturerID(getNewReserve().getReserveManufacturerID());
+                    sReserve.setReserveManufacturerName(getNewReserve().getReserveManufacturerName());
+                }
             }
         });
         
@@ -541,6 +575,7 @@ public class SystemDetails extends Application {
             al.setSelectedSystem(selectedSystem);
             al.setStatus(getStatus());
             al.setStockID(getStockID());
+            al.setAssembleInProcess(isAssembleInProcess());
             Scene aList = new Scene(al.AADTable(true));
             chooseWindow.setScene(aList);
             
@@ -548,31 +583,33 @@ public class SystemDetails extends Application {
             chooseWindow.initOwner(detailStage.getScene().getWindow());
             chooseWindow.showAndWait();
             if (al.getSelectedAAD() != null){
-                AAD newAAD = al.getSelectedAAD();
-                aModel.setText(newAAD.getAadModel());
-                aSN.setText(newAAD.getAadSN());
-                aDOM.setValue(newAAD.getAadDOM());
-                aManufacturerName.getSelectionModel().select(newAAD.getAadManufacturerID()-1);
-                aJumps.setText(Integer.toString(newAAD.getAadJumps()));
-                aNextRegl.setValue(newAAD.getAadNextRegl());
-                aSaved.setText(Integer.toString(newAAD.getAadSaved()));
+                setNewAAD(al.getSelectedAAD());
+                aModel.setText(getNewAAD().getAadModel());
+                aSN.setText(getNewAAD().getAadSN());
+                aDOM.setValue(getNewAAD().getAadDOM());
+                aManufacturerName.getSelectionModel().select(getNewAAD().getAadManufacturerID()-1);
+                aJumps.setText(Integer.toString(getNewAAD().getAadJumps()));
+                aNextRegl.setValue(getNewAAD().getAadNextRegl());
+                aSaved.setText(Integer.toString(getNewAAD().getAadSaved()));
+                if (!isAssembleInProcess()){
             //Updating aad data in skydive system
-                selectedSystem.setAadModel(newAAD.getAadModel());
-                selectedSystem.setAadSN(newAAD.getAadSN());
-                selectedSystem.setAadDOM(newAAD.getAadDOM());
-                selectedSystem.setAadJumps(newAAD.getAadJumps());
-                selectedSystem.setAadNextRegl(newAAD.getAadNextRegl());
-                selectedSystem.setAadSaved(newAAD.getAadSaved());
-                selectedSystem.setAadManufacturerID(newAAD.getAadManufacturerID());
-                selectedSystem.setAadManufacturerName(newAAD.getAadManufacturerName());
-                sAAD.setAadModel(newAAD.getAadModel());
-                sAAD.setAadSN(newAAD.getAadSN());
-                sAAD.setAadDOM(newAAD.getAadDOM());
-                sAAD.setAadJumps(newAAD.getAadJumps());
-                sAAD.setAadNextRegl(newAAD.getAadNextRegl());
-                sAAD.setAadSaved(newAAD.getAadSaved());
-                sAAD.setAadManufacturerID(newAAD.getAadManufacturerID());
-                sAAD.setAadManufacturerName(newAAD.getAadManufacturerName());
+                    selectedSystem.setAadModel(getNewAAD().getAadModel());
+                    selectedSystem.setAadSN(getNewAAD().getAadSN());
+                    selectedSystem.setAadDOM(getNewAAD().getAadDOM());
+                    selectedSystem.setAadJumps(getNewAAD().getAadJumps());
+                    selectedSystem.setAadNextRegl(getNewAAD().getAadNextRegl());
+                    selectedSystem.setAadSaved(getNewAAD().getAadSaved());
+                    selectedSystem.setAadManufacturerID(getNewAAD().getAadManufacturerID());
+                    selectedSystem.setAadManufacturerName(getNewAAD().getAadManufacturerName());
+                    sAAD.setAadModel(getNewAAD().getAadModel());
+                    sAAD.setAadSN(getNewAAD().getAadSN());
+                    sAAD.setAadDOM(getNewAAD().getAadDOM());
+                    sAAD.setAadJumps(getNewAAD().getAadJumps());
+                    sAAD.setAadNextRegl(getNewAAD().getAadNextRegl());
+                    sAAD.setAadSaved(getNewAAD().getAadSaved());
+                    sAAD.setAadManufacturerID(getNewAAD().getAadManufacturerID());
+                    sAAD.setAadManufacturerName(getNewAAD().getAadManufacturerName());
+                }
             }
         });
         
@@ -633,142 +670,191 @@ public class SystemDetails extends Application {
             aSaved.setText(Integer.toString(sAAD.getAadSaved()));
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //Container
-            ArrayList <String> systemNewParams = new ArrayList<>();
-            if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
-            }
-            if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
-            }
-            if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
-            }
-            if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
-            }
-            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
-                systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-            }
-        //Apply changes    
-            if (systemNewParams.isEmpty()) {
-        //Nothing changed, do nothing
+            if (!isAssembleInProcess()){
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Внести изменения в систему "+ selectedSystem.getSystemCode() +"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                //Container
+                        ArrayList <String> systemNewParams = new ArrayList<>();
+                        if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                            systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
+                        }
+                        if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                            systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
+                        }
+                        if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                            systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
+                        }
+                        if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                            systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
+                        }
+                        if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                            systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                        }
+                    //Apply changes    
+                        if (systemNewParams.isEmpty()) {
+                    //Nothing changed, do nothing
+                        }else{
+                            updParams = systemNewParams.get(0);
+                            int i = systemNewParams.size()-1;
+                            while (i>0){
+                                updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
+                            }
+                            dr.editSkydiveSystem(selectedSystem, updParams);
+                        }
+                        systemNewParams.clear();
+                //Canopy
+                        ArrayList <String> canopyNewParams = new ArrayList<>();
+                        if (!cModel.getText().equals(sCanopy.getCanopyModel())){
+                            canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
+                        }
+                        if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
+                            canopyNewParams.add("canopy_size = "+cSize.getText());
+                        }
+                        if (!cSN.getText().equals(sCanopy.getCanopySN())){
+                            canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
+                        }
+                        if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
+                            canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
+                        }
+                        if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+                            canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                        }
+                        if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
+                            canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+                        }
+                    //Apply changes    
+                        if (canopyNewParams.isEmpty()) {
+                    //Nothing changed, do nothing
+                        }else{
+                            updParams = canopyNewParams.get(0);
+                            int i = canopyNewParams.size()-1;
+                            while (i>0){
+                                updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
+                            }
+                            dr.editCanopy(sCanopy, updParams);
+                        }
+                        canopyNewParams.clear();
+                //Reserve
+                        ArrayList <String> reserveNewParams = new ArrayList<>();
+                        if (!rModel.getText().equals(sReserve.getReserveModel())){
+                            reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
+                        }
+                        if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
+                            reserveNewParams.add("reserve_size = "+rSize.getText());
+                        }
+                        if (!rSN.getText().equals(sReserve.getReserveSN())){
+                            reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
+                        }
+                        if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
+                            reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
+                        }
+                        if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+                            reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                        }
+                        if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
+                            reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+                        }
+                        if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
+                            reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
+                        }
+                    //Apply changes    
+                        if (reserveNewParams.isEmpty()) {
+                    //Nothing changed, do nothing
+                        }else{
+                            updParams = reserveNewParams.get(0);
+                            int i = reserveNewParams.size()-1;
+                            while (i>0){
+                                updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
+                            }
+                            dr.editReserve(sReserve, updParams);
+                        }
+                        reserveNewParams.clear();
+                //AAD
+                        ArrayList <String> aadNewParams = new ArrayList<>();
+                        if (!aModel.getText().equals(sAAD.getAadModel())){
+                            aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
+                        }
+                        if (!aSN.getText().equals(sAAD.getAadSN())){
+                            aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
+                        }
+                        if (!aDOM.getValue().equals(sAAD.getAadDOM())){
+                            aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
+                        }
+                        if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+                            aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                        }
+                        if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
+                            aadNewParams.add("aad_jumps = "+aJumps.getText());
+                        }
+                        if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
+                            aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
+                        }
+                        if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
+                            aadNewParams.add("aad_saved = "+aSaved.getText());
+                        }
+                    //Apply changes    
+                        if (aadNewParams.isEmpty()) {
+                    //Nothing changed, do nothing
+                        }else{
+                            updParams = aadNewParams.get(0);
+                            int i = aadNewParams.size()-1;
+                            while (i>0){
+                                updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                            }
+                            dr.editAAD(sAAD, updParams);
+                        }
+                        aadNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
             }else{
-                updParams = systemNewParams.get(0);
-                int i = systemNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
-                }
-                dr.editSkydiveSystem(selectedSystem, updParams);
+        //assemble system
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Собрать систему "+ selectedSystem.getSystemCode() +"?");
+                confirm.setContentText("Купол ОП: " + getNewCanopy().getCanopyModel() +"-"+ getNewCanopy().getCanopySize()+"/n"+
+                                       "Купол ПЗ: " + getNewReserve().getReserveModel() +"-"+ getNewReserve().getReserveSize() +"/n"+
+                                       "Прибор: " + getNewAAD().getAadModel() +" № "+ getNewAAD().getAadSN());
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.assembleSkydiveSystem(selectedSystem, getNewCanopy(), getNewReserve(), getNewAAD());
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
             }
-            
-            systemNewParams.clear();
-        //Canopy
-            ArrayList <String> canopyNewParams = new ArrayList<>();
-            if (!cModel.getText().equals(sCanopy.getCanopyModel())){
-                canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
-            }
-            if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
-                canopyNewParams.add("canopy_size = "+cSize.getText());
-            }
-            if (!cSN.getText().equals(sCanopy.getCanopySN())){
-                canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
-            }
-            if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
-                canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
-            }
-            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
-                canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-            }
-            if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
-                canopyNewParams.add("canopy_jumps = "+cJumps.getText());
-            }
-        //Apply changes    
-            if (canopyNewParams.isEmpty()) {
-        //Nothing changed, do nothing
-            }else{
-                updParams = canopyNewParams.get(0);
-                int i = canopyNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
-                }
-                dr.editCanopy(sCanopy, updParams);
-            }
-            
-            canopyNewParams.clear();
-        //Reserve
-            ArrayList <String> reserveNewParams = new ArrayList<>();
-            if (!rModel.getText().equals(sReserve.getReserveModel())){
-                reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
-            }
-            if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
-                reserveNewParams.add("reserve_size = "+rSize.getText());
-            }
-            if (!rSN.getText().equals(sReserve.getReserveSN())){
-                reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
-            }
-            if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
-                reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
-            }
-            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
-                reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-            }
-            if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
-                reserveNewParams.add("reserve_jumps = "+rJumps.getText());
-            }
-            if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
-                reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
-            }
-        //Apply changes    
-            if (reserveNewParams.isEmpty()) {
-        //Nothing changed, do nothing
-            }else{
-                updParams = reserveNewParams.get(0);
-                int i = reserveNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
-                }
-                dr.editReserve(sReserve, updParams);
-            }
-            
-            reserveNewParams.clear();
-        //AAD
-            ArrayList <String> aadNewParams = new ArrayList<>();
-            if (!aModel.getText().equals(sAAD.getAadModel())){
-                aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
-            }
-            if (!aSN.getText().equals(sAAD.getAadSN())){
-                aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
-            }
-            if (!aDOM.getValue().equals(sAAD.getAadDOM())){
-                aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
-            }
-            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
-                aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-            }
-            if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
-                aadNewParams.add("aad_jumps = "+aJumps.getText());
-            }
-            if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
-                aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
-            }
-            if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
-                aadNewParams.add("aad_saved = "+aSaved.getText());
-            }
-        //Apply changes    
-            if (aadNewParams.isEmpty()) {
-        //Nothing changed, do nothing
-            }else{
-                updParams = aadNewParams.get(0);
-                int i = aadNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
-                }
-                dr.editAAD(sAAD, updParams);
-            }
-            
-            aadNewParams.clear();
-
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);

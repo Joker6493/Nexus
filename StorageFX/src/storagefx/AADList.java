@@ -41,7 +41,14 @@ public class AADList extends Application {
     private AAD selectedAAD;
     private AAD oldAAD;
     private SkydiveSystem selectedSystem;
+    private boolean assembleInProcess = false;
 
+    public boolean isAssembleInProcess() {
+        return assembleInProcess;
+    }
+    public void setAssembleInProcess(boolean assembleInProcess) {
+        this.assembleInProcess = assembleInProcess;
+    }
     public AAD getSelectedAAD() {
         return selectedAAD;
     }
@@ -83,6 +90,7 @@ public class AADList extends Application {
     }
     
     public StackPane AADTable(boolean closeOnSelect){
+        
         StackPane index = new StackPane();
         DataRelay dr = new DataRelay();
         dr.setStatus(getStatus());
@@ -146,34 +154,38 @@ public class AADList extends Application {
                 setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"!");
                 if (closeOnSelect == true) {
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirm.setTitle("Подтверждение изменений");
-                    confirm.setHeaderText("Вы уверены, что хотите провести замену приборов в ранце "+ selectedSystem.getSystemCode() +"?");
-                    confirm.setContentText("Текущий прибор: " + oldAAD.getAadModel() +" № "+ oldAAD.getAadSN() +"/n"+ "Новый прибор: " + selectedAAD.getAadModel() +" № "+ selectedAAD.getAadSN());
-                    ButtonType yes = new ButtonType("Да");
-                    ButtonType no = new ButtonType("Нет");
-                    confirm.getButtonTypes().clear();
-                    confirm.getButtonTypes().addAll(yes, no);
-                    Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        dr.replaceAAD(oldAAD, selectedAAD);
+                    if (!isAssembleInProcess()){
+                        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirm.setTitle("Подтверждение изменений");
+                        confirm.setHeaderText("Вы уверены, что хотите провести замену приборов в ранце "+ selectedSystem.getSystemCode() +"?");
+                        confirm.setContentText("Текущий прибор: " + oldAAD.getAadModel() +" № "+ oldAAD.getAadSN() +"/n"+ "Новый прибор: " + selectedAAD.getAadModel() +" № "+ selectedAAD.getAadSN());
+                        ButtonType yes = new ButtonType("Да");
+                        ButtonType no = new ButtonType("Нет");
+                        confirm.getButtonTypes().clear();
+                        confirm.getButtonTypes().addAll(yes, no);
+                        Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            dr.replaceAAD(oldAAD, selectedAAD);
+                            index.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                            setSelectedAAD(oldAAD);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                            index.getScene().getWindow().hide();
+                        } else {
+                            setSelectedAAD(oldAAD);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        }
+                    }else{
                         index.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                        setSelectedAAD(oldAAD);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                        index.getScene().getWindow().hide();
-                    } else {
-                        setSelectedAAD(oldAAD);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
                     }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedAAD, false);
@@ -187,7 +199,6 @@ public class AADList extends Application {
         ContextMenu aadContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
         refreshList.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             aadTable.getItems().clear();
             aadTable.setItems(dr.getAadList());
@@ -195,7 +206,6 @@ public class AADList extends Application {
         });
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
             ElementDetails detail = new ElementDetails(selectedAAD, false);
@@ -208,7 +218,6 @@ public class AADList extends Application {
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
             ElementDetails detail = new ElementDetails(selectedAAD, true);
@@ -221,7 +230,7 @@ public class AADList extends Application {
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
+    //Need to remade
             System.out.println("Добавить прибор?");
             ElementDetails detail = new ElementDetails("aad",stockID);
             detail.setStatus(getStatus());
@@ -258,9 +267,26 @@ public class AADList extends Application {
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
-            System.out.println("Удалить прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
+            System.out.println("Удалить прибор "+getSelectedAAD().getAadModel()+" № "+getSelectedAAD().getAadSN()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.deleteAAD(getSelectedAAD());
+                    aadTable.getItems().clear();
+                    aadTable.setItems(dr.getAadList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
         });
         aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem, deleteItem);
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {

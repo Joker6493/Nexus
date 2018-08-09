@@ -40,7 +40,14 @@ public class CanopyList extends Application {
     private Canopy selectedCanopy;
     private Canopy oldCanopy;
     private SkydiveSystem selectedSystem;
+    private boolean assembleInProcess = false;
 
+    public boolean isAssembleInProcess() {
+        return assembleInProcess;
+    }
+    public void setAssembleInProcess(boolean assembleInProcess) {
+        this.assembleInProcess = assembleInProcess;
+    }
     public Canopy getSelectedCanopy() {
         return selectedCanopy;
     }
@@ -129,34 +136,38 @@ public class CanopyList extends Application {
                 setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"!");
                 if (closeOnSelect == true) {
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirm.setTitle("Подтверждение изменений");
-                    confirm.setHeaderText("Вы уверены, что хотите провести замену куполов в ранце "+ selectedSystem.getSystemCode() +"?");
-                    confirm.setContentText("Текущий купол: " + oldCanopy.getCanopyModel() +"-"+ oldCanopy.getCanopySize() +"/n"+ "Новый купол: " + selectedCanopy.getCanopyModel() +"-"+ selectedCanopy.getCanopySize());
-                    ButtonType yes = new ButtonType("Да");
-                    ButtonType no = new ButtonType("Нет");
-                    confirm.getButtonTypes().clear();
-                    confirm.getButtonTypes().addAll(yes, no);
-                    Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        dr.replaceCanopy(oldCanopy, selectedCanopy);
+                    if (!isAssembleInProcess()){
+                        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirm.setTitle("Подтверждение изменений");
+                        confirm.setHeaderText("Вы уверены, что хотите провести замену куполов в ранце "+ selectedSystem.getSystemCode() +"?");
+                        confirm.setContentText("Текущий купол: " + oldCanopy.getCanopyModel() +"-"+ oldCanopy.getCanopySize() +"/n"+ "Новый купол: " + selectedCanopy.getCanopyModel() +"-"+ selectedCanopy.getCanopySize());
+                        ButtonType yes = new ButtonType("Да");
+                        ButtonType no = new ButtonType("Нет");
+                        confirm.getButtonTypes().clear();
+                        confirm.getButtonTypes().addAll(yes, no);
+                        Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            dr.replaceCanopy(oldCanopy, selectedCanopy);
+                            index.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                            setSelectedCanopy(oldCanopy);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                            index.getScene().getWindow().hide();
+                        } else {
+                            setSelectedCanopy(oldCanopy);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        }
+                    }else{
                         index.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                        setSelectedCanopy(oldCanopy);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                        index.getScene().getWindow().hide();
-                    } else {
-                        setSelectedCanopy(oldCanopy);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
                     }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedCanopy, false);
@@ -178,7 +189,6 @@ public class CanopyList extends Application {
         });
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о куполе "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize());
             ElementDetails detail = new ElementDetails(selectedCanopy, false);
@@ -191,7 +201,6 @@ public class CanopyList extends Application {
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
             ElementDetails detail = new ElementDetails(selectedCanopy, true);
@@ -229,7 +238,7 @@ public class CanopyList extends Application {
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
+    //Need to remade
             System.out.println("Добавить купол?");
             ElementDetails detail = new ElementDetails("canopy",stockID);
             detail.setStatus(getStatus());
@@ -241,9 +250,26 @@ public class CanopyList extends Application {
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
             System.out.println("Удалить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.deleteCanopy(getSelectedCanopy());
+                    canopyTable.getItems().clear();
+                    canopyTable.setItems(dr.getCanopyList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
         });
         canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         canopyTable.setOnContextMenuRequested((ContextMenuEvent event) -> {

@@ -41,7 +41,14 @@ public class ReserveList extends Application {
     private Reserve selectedReserve;
     private Reserve oldReserve;
     private SkydiveSystem selectedSystem;
+    private boolean assembleInProcess = false;
 
+    public boolean isAssembleInProcess() {
+        return assembleInProcess;
+    }
+    public void setAssembleInProcess(boolean assembleInProcess) {
+        this.assembleInProcess = assembleInProcess;
+    }
     public Reserve getSelectedReserve() {
         return selectedReserve;
     }
@@ -131,34 +138,38 @@ public class ReserveList extends Application {
                 setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"!");
                 if (closeOnSelect == true) {
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirm.setTitle("Подтверждение изменений");
-                    confirm.setHeaderText("Вы уверены, что хотите провести замену куполов ПЗ в ранце "+ selectedSystem.getSystemCode() +"?");
-                    confirm.setContentText("Текущий купол: " + oldReserve.getReserveModel() +"-"+ oldReserve.getReserveSize() +"/n"+ "Новый купол: " + selectedSystem.getReserveModel() +"-"+ selectedSystem.getReserveSize());
-                    ButtonType yes = new ButtonType("Да");
-                    ButtonType no = new ButtonType("Нет");
-                    confirm.getButtonTypes().clear();
-                    confirm.getButtonTypes().addAll(yes, no);
-                    Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        dr.replaceReserve(oldReserve, selectedReserve);
+                    if (!isAssembleInProcess()){
+                        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirm.setTitle("Подтверждение изменений");
+                        confirm.setHeaderText("Вы уверены, что хотите провести замену куполов ПЗ в ранце "+ selectedSystem.getSystemCode() +"?");
+                        confirm.setContentText("Текущий купол: " + oldReserve.getReserveModel() +"-"+ oldReserve.getReserveSize() +"/n"+ "Новый купол: " + selectedSystem.getReserveModel() +"-"+ selectedSystem.getReserveSize());
+                        ButtonType yes = new ButtonType("Да");
+                        ButtonType no = new ButtonType("Нет");
+                        confirm.getButtonTypes().clear();
+                        confirm.getButtonTypes().addAll(yes, no);
+                        Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            dr.replaceReserve(oldReserve, selectedReserve);
+                            index.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                            setSelectedReserve(oldReserve);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                            index.getScene().getWindow().hide();
+                        } else {
+                            setSelectedReserve(oldReserve);
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        }
+                    }else{
                         index.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                        setSelectedReserve(oldReserve);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                        index.getScene().getWindow().hide();
-                    } else {
-                        setSelectedReserve(oldReserve);
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
                     }
                 }else{
                 ElementDetails detail = new ElementDetails(selectedReserve, false);
@@ -172,7 +183,6 @@ public class ReserveList extends Application {
         ContextMenu reserveContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
         refreshList.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
             reserveTable.getItems().clear();
             reserveTable.setItems(dr.getReserveList());
@@ -180,7 +190,6 @@ public class ReserveList extends Application {
         });
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
             System.out.println("информация о куполе "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize());
             ElementDetails detail = new ElementDetails(selectedReserve, false);
@@ -193,7 +202,6 @@ public class ReserveList extends Application {
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
             ElementDetails detail = new ElementDetails(selectedReserve, true);
@@ -231,7 +239,7 @@ public class ReserveList extends Application {
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
+    //Need to remade
             System.out.println("Добавить купол?");
             ElementDetails detail = new ElementDetails("reserve",stockID);
             detail.setStatus(getStatus());
@@ -243,9 +251,26 @@ public class ReserveList extends Application {
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
-            System.out.println("Удалить купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"?");
+            System.out.println("Удалить купол "+getSelectedReserve().getReserveModel()+"-"+getSelectedReserve().getReserveSize()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить купол ПЗ " + getSelectedReserve().getReserveModel() +"-"+ getSelectedReserve().getReserveSize()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.deleteReserve(getSelectedReserve());
+                    reserveTable.getItems().clear();
+                    reserveTable.setItems(dr.getReserveList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
         });
         reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         reserveTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
