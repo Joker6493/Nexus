@@ -140,7 +140,7 @@ public class CanopyList extends Application {
                         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                         confirm.setTitle("Подтверждение изменений");
                         confirm.setHeaderText("Вы уверены, что хотите провести замену куполов в ранце "+ selectedSystem.getSystemCode() +"?");
-                        confirm.setContentText("Текущий купол: " + oldCanopy.getCanopyModel() +"-"+ oldCanopy.getCanopySize() +"/n"+ "Новый купол: " + selectedCanopy.getCanopyModel() +"-"+ selectedCanopy.getCanopySize());
+                        confirm.setContentText("Текущий купол: " + oldCanopy.getCanopyModel() +"-"+ oldCanopy.getCanopySize() +"\n"+ "Новый купол: " + selectedCanopy.getCanopyModel() +"-"+ selectedCanopy.getCanopySize());
                         ButtonType yes = new ButtonType("Да");
                         ButtonType no = new ButtonType("Нет");
                         confirm.getButtonTypes().clear();

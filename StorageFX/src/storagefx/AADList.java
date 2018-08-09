@@ -158,7 +158,7 @@ public class AADList extends Application {
                         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                         confirm.setTitle("Подтверждение изменений");
                         confirm.setHeaderText("Вы уверены, что хотите провести замену приборов в ранце "+ selectedSystem.getSystemCode() +"?");
-                        confirm.setContentText("Текущий прибор: " + oldAAD.getAadModel() +" № "+ oldAAD.getAadSN() +"/n"+ "Новый прибор: " + selectedAAD.getAadModel() +" № "+ selectedAAD.getAadSN());
+                        confirm.setContentText("Текущий прибор: " + oldAAD.getAadModel() +" № "+ oldAAD.getAadSN() +"\n"+ "Новый прибор: " + selectedAAD.getAadModel() +" № "+ selectedAAD.getAadSN());
                         ButtonType yes = new ButtonType("Да");
                         ButtonType no = new ButtonType("Нет");
                         confirm.getButtonTypes().clear();

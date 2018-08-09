@@ -874,12 +874,12 @@ public class DataRelay {
                              "where ci.systemid = 0 and ci.canopyid = " + c.getCanopyID();
         addQuery(updateQuery);
         updateQuery = "Update reserve_info ri " + 
-                             "ri.systemid = " + ss.getSystemID() + " " +
+                             "set ri.systemid = " + ss.getSystemID() + " " +
                              "where ri.systemid = 0 and ri.reserveid = " + r.getReserveID();
         addQuery(updateQuery);
         updateQuery = "Update aad_info ai " + 
-                             "ai.systemid = " + ss.getSystemID() + " " +
-                             "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + aad.getAadID();
+                             "set ai.systemid = " + ss.getSystemID() + " " +
+                             "where ai.systemid = 0 and ai.aadid = " + aad.getAadID();
         addQuery(updateQuery);
         try {
             executeQuery(getStmt());

@@ -142,7 +142,7 @@ public class ReserveList extends Application {
                         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                         confirm.setTitle("Подтверждение изменений");
                         confirm.setHeaderText("Вы уверены, что хотите провести замену куполов ПЗ в ранце "+ selectedSystem.getSystemCode() +"?");
-                        confirm.setContentText("Текущий купол: " + oldReserve.getReserveModel() +"-"+ oldReserve.getReserveSize() +"/n"+ "Новый купол: " + selectedSystem.getReserveModel() +"-"+ selectedSystem.getReserveSize());
+                        confirm.setContentText("Текущий купол: " + oldReserve.getReserveModel() +"-"+ oldReserve.getReserveSize() +"\n"+ "Новый купол: " + selectedSystem.getReserveModel() +"-"+ selectedSystem.getReserveSize());
                         ButtonType yes = new ButtonType("Да");
                         ButtonType no = new ButtonType("Нет");
                         confirm.getButtonTypes().clear();

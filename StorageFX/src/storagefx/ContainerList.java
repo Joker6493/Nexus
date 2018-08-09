@@ -162,6 +162,7 @@ public class ContainerList extends Application {
             SystemDetails detail = new SystemDetails(currentSystem, true);
             detail.setStatus(getStatus());
             detail.setStockID(getStockID());
+            detail.setAssembleInProcess(true);
             Stage detailStage = new Stage();
             detailStage.initModality(Modality.WINDOW_MODAL);
             detailStage.initOwner(index.getScene().getWindow());

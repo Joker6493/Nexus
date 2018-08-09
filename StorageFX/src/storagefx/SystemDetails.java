@@ -826,12 +826,12 @@ public class SystemDetails extends Application {
                         noChange.showAndWait();
                     }
             }else{
-        //assemble system
+        //assemble system - need to add check all elements on the place
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                 confirm.setTitle("Подтверждение изменений");
                 confirm.setHeaderText("Собрать систему "+ selectedSystem.getSystemCode() +"?");
-                confirm.setContentText("Купол ОП: " + getNewCanopy().getCanopyModel() +"-"+ getNewCanopy().getCanopySize()+"/n"+
-                                       "Купол ПЗ: " + getNewReserve().getReserveModel() +"-"+ getNewReserve().getReserveSize() +"/n"+
+                confirm.setContentText("Купол ОП: " + getNewCanopy().getCanopyModel() +"-"+ getNewCanopy().getCanopySize()+"\n"+
+                                       "Купол ПЗ: " + getNewReserve().getReserveModel() +"-"+ getNewReserve().getReserveSize() +"\n"+
                                        "Прибор: " + getNewAAD().getAadModel() +" № "+ getNewAAD().getAadSN());
                 ButtonType yes = new ButtonType("Да");
                 ButtonType no = new ButtonType("Нет");
@@ -841,6 +841,7 @@ public class SystemDetails extends Application {
                     if (option.get() == null) {
                     } else if (option.get() == yes) {
                         dr.assembleSkydiveSystem(selectedSystem, getNewCanopy(), getNewReserve(), getNewAAD());
+                        details.getScene().getWindow().hide();
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(Alert.AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
