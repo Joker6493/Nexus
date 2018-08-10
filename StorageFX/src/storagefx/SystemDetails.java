@@ -49,6 +49,7 @@ public class SystemDetails extends Application {
     private int stockID;
     private int status;
     private boolean assembleInProcess = false;
+    private boolean newSystem;
     private Canopy newCanopy;
     private Reserve newReserve;
     private AAD newAAD;
@@ -102,12 +103,14 @@ public class SystemDetails extends Application {
         this.selectedSystem = selectedSystem;
         this.stageTitle = "Система "+selectedSystem.getSystemCode();
         this.editStatus = editStatus;
+        this.newSystem = false;
     }
     
     SystemDetails (int stockID){
         this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID, 0, "", 0, "", LocalDate.now(), 0, 0, "", 0, "", 0, "", LocalDate.now(), 0, LocalDate.now(), 0, "", 0, "", "", LocalDate.now(), 0, LocalDate.now(), 0, 0, "");
         this.stageTitle = "Добавление новой системы";
         this.editStatus = true;
+        this.newSystem = true;
     }
         
     @Override
