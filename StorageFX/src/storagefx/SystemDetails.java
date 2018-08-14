@@ -23,7 +23,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -54,6 +53,12 @@ public class SystemDetails extends Application {
     private Reserve newReserve;
     private AAD newAAD;
 
+    public boolean isNewSystem() {
+        return newSystem;
+    }
+    public void setNewSystem(boolean newSystem) {
+        this.newSystem = newSystem;
+    }
     public Canopy getNewCanopy() {
         return newCanopy;
     }
@@ -281,6 +286,7 @@ public class SystemDetails extends Application {
             cl.setStatus(getStatus());
             cl.setStockID(getStockID());
             cl.setAssembleInProcess(isAssembleInProcess());
+            cl.setNewSystem(isNewSystem());
             Scene cList = new Scene(cl.CanopyTable(true));
             chooseWindow.setScene(cList);
             
@@ -428,6 +434,7 @@ public class SystemDetails extends Application {
             rl.setStatus(getStatus());
             rl.setStockID(getStockID());
             rl.setAssembleInProcess(isAssembleInProcess());
+            rl.setNewSystem(isNewSystem());
             Scene rList = new Scene(rl.ReserveTable(true));
             chooseWindow.setScene(rList);
             
@@ -579,6 +586,7 @@ public class SystemDetails extends Application {
             al.setStatus(getStatus());
             al.setStockID(getStockID());
             al.setAssembleInProcess(isAssembleInProcess());
+            al.setNewSystem(isNewSystem());
             Scene aList = new Scene(al.AADTable(true));
             chooseWindow.setScene(aList);
             

@@ -42,7 +42,14 @@ public class ReserveList extends Application {
     private Reserve oldReserve;
     private SkydiveSystem selectedSystem;
     private boolean assembleInProcess = false;
+    private boolean newSystem = false;
 
+    public boolean isNewSystem() {
+        return newSystem;
+    }
+    public void setNewSystem(boolean newSystem) {
+        this.newSystem = newSystem;
+    }
     public boolean isAssembleInProcess() {
         return assembleInProcess;
     }
@@ -138,7 +145,7 @@ public class ReserveList extends Application {
                 setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
                 System.out.println("Выбран купол "+selectedReserve.getReserveModel()+"-"+selectedReserve.getReserveSize()+"!");
                 if (closeOnSelect == true) {
-                    if (!isAssembleInProcess()){
+                    if (!isAssembleInProcess() && !isNewSystem()){
                         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                         confirm.setTitle("Подтверждение изменений");
                         confirm.setHeaderText("Вы уверены, что хотите провести замену куполов ПЗ в ранце "+ selectedSystem.getSystemCode() +"?");
@@ -168,6 +175,9 @@ public class ReserveList extends Application {
                             noChange.setContentText("Изменения не сохранены!");
                             noChange.showAndWait();
                         }
+                    }else if (isNewSystem()){
+                        //
+                        index.getScene().getWindow().hide();
                     }else{
                         index.getScene().getWindow().hide();
                     }
