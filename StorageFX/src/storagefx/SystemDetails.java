@@ -681,7 +681,89 @@ public class SystemDetails extends Application {
             aSaved.setText(Integer.toString(sAAD.getAadSaved()));
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-            if (!isAssembleInProcess()){
+        //First - check on fill, if something empty - abort saving, alert user
+        //Container
+            boolean emptyErr = true;
+            if (sCode.getText().isEmpty()){
+                
+            }
+            if (sModel.getText().equals(selectedSystem.getSystemModel())){
+                
+            }
+            if (sSN.getText().equals(selectedSystem.getSystemSN())){
+                
+            }
+            if (sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                
+            }
+            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()==selectedSystem.getSystemManufacturerID()){
+                
+            }
+        //Canopy
+            if (!cModel.getText().equals(sCanopy.getCanopyModel())){
+
+            }
+            if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
+
+            }
+            if (!cSN.getText().equals(sCanopy.getCanopySN())){
+
+            }
+            if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
+
+            }
+            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+
+            }
+            if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
+
+            }
+        //Reserve
+            if (!rModel.getText().equals(sReserve.getReserveModel())){
+
+            }
+            if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
+
+            }
+            if (!rSN.getText().equals(sReserve.getReserveSN())){
+
+            }
+            if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
+
+            }
+            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+
+            }
+            if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
+
+            }
+            if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
+
+            }
+        //AAD
+            if (!aModel.getText().equals(sAAD.getAadModel())){
+
+            }
+            if (!aSN.getText().equals(sAAD.getAadSN())){
+
+            }
+            if (!aDOM.getValue().equals(sAAD.getAadDOM())){
+
+            }
+            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+
+            }
+            if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
+
+            }
+            if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
+
+            }
+            if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
+
+            }
+        
+            if (!isAssembleInProcess() && !isNewSystem()){
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                 confirm.setTitle("Подтверждение изменений");
                 confirm.setHeaderText("Внести изменения в систему "+ selectedSystem.getSystemCode() +"?");
@@ -836,8 +918,8 @@ public class SystemDetails extends Application {
                         noChange.setContentText("Изменения не сохранены!");
                         noChange.showAndWait();
                     }
-            }else{
-        //assemble system - need to add check all elements on the place
+            }else if (isAssembleInProcess()){
+        //assemble system - need to add check all elements on the place and prevent any changes
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                 confirm.setTitle("Подтверждение изменений");
                 confirm.setHeaderText("Собрать систему "+ selectedSystem.getSystemCode() +"?");
@@ -853,6 +935,111 @@ public class SystemDetails extends Application {
                     } else if (option.get() == yes) {
                         dr.assembleSkydiveSystem(selectedSystem, getNewCanopy(), getNewReserve(), getNewAAD());
                         details.getScene().getWindow().hide();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+            }else{
+            //Add new system    
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Добавить систему "+ selectedSystem.getSystemCode() +"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                //Container
+                        if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                            
+                        }
+                        if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                            
+                        }
+                        if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                            
+                        }
+                        if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                            
+                        }
+                        if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                            
+                        }
+                //Canopy
+                        if (!cModel.getText().equals(sCanopy.getCanopyModel())){
+                            
+                        }
+                        if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
+                            
+                        }
+                        if (!cSN.getText().equals(sCanopy.getCanopySN())){
+                            
+                        }
+                        if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
+                            
+                        }
+                        if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+                            
+                        }
+                        if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
+                            
+                        }
+                //Reserve
+                        if (!rModel.getText().equals(sReserve.getReserveModel())){
+                            
+                        }
+                        if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
+                            
+                        }
+                        if (!rSN.getText().equals(sReserve.getReserveSN())){
+                            
+                        }
+                        if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
+                            
+                        }
+                        if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+                            
+                        }
+                        if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
+                            
+                        }
+                        if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
+                            
+                        }
+                //AAD
+                        if (!aModel.getText().equals(sAAD.getAadModel())){
+                            
+                        }
+                        if (!aSN.getText().equals(sAAD.getAadSN())){
+                            
+                        }
+                        if (!aDOM.getValue().equals(sAAD.getAadDOM())){
+                            
+                        }
+                        if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+                            
+                        }
+                        if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
+                            
+                        }
+                        if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
+                            
+                        }
+                        if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
+                            
+                        }
+                    
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(Alert.AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");

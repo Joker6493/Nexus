@@ -400,13 +400,13 @@ public class DataRelay {
             getConn().commit();
             getConn().close();
             //if added also new elements - insert them
-            if (ss.getCanopyID()!=0){
+            if (ss.getCanopyID()==0){
                 addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
             }
-            if (ss.getReserveID()!=0){
+            if (ss.getReserveID()==0){
                 addReserve(new Reserve(ss.getSystemID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID()));
             }
-            if (ss.getAadID()!=0){
+            if (ss.getAadID()==0){
                 addAAD(new AAD(ss.getSystemID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID()));
             }
         } catch (Exception e) {
