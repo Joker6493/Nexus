@@ -29,7 +29,14 @@ public class DataRelay {
     private Connection conn;
     private Statement stmt;
     private boolean result;
+    private int newID;
 
+    public int getNewID() {
+        return newID;
+    }
+    public void setNewID(int newID) {
+        this.newID = newID;
+    }
     public boolean isResult() {
         return result;
     }
@@ -399,7 +406,7 @@ public class DataRelay {
             stmt.close();
             getConn().commit();
             getConn().close();
-            //if added also new elements - insert them
+            //if added also new elements - insert them, if element was chosen - skip. finally assemble system (getting element's ID mechanizm required)
             if (ss.getCanopyID()==0){
                 addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
             }

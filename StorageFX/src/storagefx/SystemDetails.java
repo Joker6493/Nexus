@@ -128,6 +128,7 @@ public class SystemDetails extends Application {
         Label containerGridName = new Label("Ранец и подвесная система");
         TextField sCode = new TextField(selectedSystem.getSystemCode());
         sCode.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            sCode.getStyleClass().clear();
             if (newValue.length()>6) {
                 sCode.setText(oldValue);
             }
@@ -136,6 +137,7 @@ public class SystemDetails extends Application {
         Label sModelLabel = new Label("Модель: ");
         TextField sModel = new TextField(selectedSystem.getSystemModel());
         sModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            sModel.getStyleClass().clear();
             if (newValue.length()>50) {
                 sModel.setText(oldValue);
             }
@@ -144,6 +146,7 @@ public class SystemDetails extends Application {
         Label sSNLabel = new Label("Серийный номер: ");
         TextField sSN = new TextField(selectedSystem.getSystemSN());
         sSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            sSN.getStyleClass().clear();
             if (newValue.length()>50) {
                 sSN.setText(oldValue);
             }
@@ -154,6 +157,7 @@ public class SystemDetails extends Application {
         sDOM.setShowWeekNumbers(true);
         sDOM.setEditable(editStatus);
         sDOM.setOnMouseClicked(e -> {
+            sDOM.getStyleClass().clear();
             if(!sDOM.isEditable()){
                 sDOM.hide();
             }
@@ -185,6 +189,9 @@ public class SystemDetails extends Application {
                 }
             }
         });
+        sManufacturerName.setOnMouseClicked(e -> {
+            sManufacturerName.getStyleClass().clear();
+        });
         sManufacturerName.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
         sManufacturerName.setDisable(!editStatus);
         containerGrid.add(containerGridName, 0, 0);
@@ -207,6 +214,7 @@ public class SystemDetails extends Application {
         Label cModelLabel = new Label("Модель: ");
         TextField cModel = new TextField(sCanopy.getCanopyModel());
         cModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            cModel.getStyleClass().clear();
             if (newValue.length()>50) {
                 cModel.setText(oldValue);
             }
@@ -215,6 +223,7 @@ public class SystemDetails extends Application {
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField cSize = new TextField (Integer.toString(sCanopy.getCanopySize()));
         cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            cSize.getStyleClass().clear();
             if (!newValue.matches("\\d{0,3}")) {
                 cSize.setText(oldValue);
             }
@@ -223,6 +232,7 @@ public class SystemDetails extends Application {
         Label cSNLabel = new Label("Серийный номер: ");
         TextField cSN = new TextField(sCanopy.getCanopySN());
         cSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            cSN.getStyleClass().clear();
             if (newValue.length()>20) {
                 cSN.setText(oldValue);
             }
@@ -233,6 +243,7 @@ public class SystemDetails extends Application {
         cDOM.setShowWeekNumbers(true);
         cDOM.setEditable(editStatus);
         cDOM.setOnMouseClicked(e -> {
+            cDOM.getStyleClass().clear();
             if(!cDOM.isEditable()){
                 cDOM.hide();
             }
@@ -263,11 +274,15 @@ public class SystemDetails extends Application {
                 }
             }
         });
+        cManufacturerName.setOnMouseClicked(e -> {
+            cManufacturerName.getStyleClass().clear();
+            });
         cManufacturerName.getSelectionModel().select(sCanopy.getCanopyManufacturerID()-1);
         cManufacturerName.setDisable(!editStatus);
         Label cJumpsLabel = new Label ("Прыжков: ");
         TextField cJumps = new TextField (Integer.toString(sCanopy.getCanopyJumps()));
         cJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            cJumps.getStyleClass().clear();
             if (!newValue.matches("\\d{0,4}")) {
                 cJumps.setText(oldValue);
             }
@@ -346,6 +361,7 @@ public class SystemDetails extends Application {
         Label rModelLabel = new Label("Модель: ");
         TextField rModel = new TextField(sReserve.getReserveModel());
         rModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            rModel.getStyleClass().clear();
             if (newValue.length()>50) {
                 rModel.setText(oldValue);
             }
@@ -354,6 +370,7 @@ public class SystemDetails extends Application {
         Label rSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField rSize = new TextField (Integer.toString(sReserve.getReserveSize()));
         rSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            rSize.getStyleClass().clear();
             if (!newValue.matches("\\d{0,3}")) {
                 rSize.setText(oldValue);
             }
@@ -362,6 +379,7 @@ public class SystemDetails extends Application {
         Label rSNLabel = new Label("Серийный номер: ");
         TextField rSN = new TextField(sReserve.getReserveSN());
         rSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            rSN.getStyleClass().clear();
             if (newValue.length()>20) {
                 rSN.setText(oldValue);
             }
@@ -372,6 +390,7 @@ public class SystemDetails extends Application {
         rDOM.setShowWeekNumbers(true);
         rDOM.setEditable(editStatus);
         rDOM.setOnMouseClicked(e -> {
+            rDOM.getStyleClass().clear();
             if(!rDOM.isEditable()){
                 rDOM.hide();
             }
@@ -402,11 +421,15 @@ public class SystemDetails extends Application {
                 }
             }
         });
+        rManufacturerName.setOnMouseClicked(e -> {
+            rManufacturerName.getStyleClass().clear();
+        });
         rManufacturerName.getSelectionModel().select(sReserve.getReserveManufacturerID()-1);
         rManufacturerName.setDisable(!editStatus);
         Label rJumpsLabel = new Label ("Применений: ");
         TextField rJumps = new TextField (Integer.toString(sReserve.getReserveJumps()));
         rJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            rJumps.getStyleClass().clear();
             if (!newValue.matches("\\d{0,4}")) {
                 rJumps.setText(oldValue);
             }
@@ -417,6 +440,7 @@ public class SystemDetails extends Application {
         rPackDate.setShowWeekNumbers(true);
         rPackDate.setEditable(editStatus);
         rPackDate.setOnMouseClicked(e -> {
+            rPackDate.getStyleClass().clear();
             if(!rPackDate.isEditable()){
                 rPackDate.hide();
             }
@@ -498,6 +522,7 @@ public class SystemDetails extends Application {
         Label aModelLabel = new Label("Модель: ");
         TextField aModel = new TextField(sAAD.getAadModel());
         aModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            aModel.getStyleClass().clear();
             if (newValue.length()>50) {
                 aModel.setText(oldValue);
             }
@@ -506,6 +531,7 @@ public class SystemDetails extends Application {
         Label aSNLabel = new Label("Серийный номер: ");
         TextField aSN = new TextField(sAAD.getAadSN());
         aSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            aSN.getStyleClass().clear();
             if (newValue.length()>20) {
                 aSN.setText(oldValue);
             }
@@ -516,6 +542,7 @@ public class SystemDetails extends Application {
         aDOM.setShowWeekNumbers(true);
         aDOM.setEditable(editStatus);
         aDOM.setOnMouseClicked(e -> {
+            aDOM.getStyleClass().clear();
             if(!aDOM.isEditable()){
                 aDOM.hide();
             }
@@ -546,11 +573,15 @@ public class SystemDetails extends Application {
                 }
             }
         });
+        aManufacturerName.setOnMouseClicked(e -> {
+            aManufacturerName.getStyleClass().clear();
+        });
         aManufacturerName.getSelectionModel().select(sAAD.getAadManufacturerID()-1);
         aManufacturerName.setDisable(!editStatus);
         Label aJumpsLabel = new Label ("Прыжков: ");
         TextField aJumps = new TextField (Integer.toString(sAAD.getAadJumps()));
         aJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            aJumps.getStyleClass().clear();
             if (!newValue.matches("\\d{0,4}")) {
                 aJumps.setText(oldValue);
             }
@@ -561,6 +592,7 @@ public class SystemDetails extends Application {
         aNextRegl.setShowWeekNumbers(true);
         aNextRegl.setEditable(editStatus);
         aNextRegl.setOnMouseClicked(e -> {
+            aNextRegl.getStyleClass().clear();
             if(!aNextRegl.isEditable()){
                 aNextRegl.hide();
             }
@@ -569,6 +601,7 @@ public class SystemDetails extends Application {
         Label aSavedLabel = new Label ("Количество применений: ");
         TextField aSaved = new TextField (Integer.toString(sAAD.getAadSaved()));
         aSaved.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            aSaved.getStyleClass().clear();
             if (!newValue.matches("\\d{0,4}")) {
                 aSaved.setText(oldValue);
             }
@@ -685,374 +718,329 @@ public class SystemDetails extends Application {
         //Container
             boolean emptyErr = true;
             if (sCode.getText().isEmpty()){
-                
+                emptyErr = false;
+                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (sModel.getText().equals(selectedSystem.getSystemModel())){
-                
+            if (sModel.getText().isEmpty()){
+                emptyErr = false;
+                sModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (sSN.getText().equals(selectedSystem.getSystemSN())){
-                
+            if (sSN.getText().isEmpty()){
+                emptyErr = false;
+                sSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                
+            if (sDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                sDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()==selectedSystem.getSystemManufacturerID()){
-                
+            if (sManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                sManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
         //Canopy
-            if (!cModel.getText().equals(sCanopy.getCanopyModel())){
-
+            if (!cModel.getText().isEmpty()){
+                emptyErr = false;
+                cModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
-
+            if (!cSize.getText().isEmpty()){
+                emptyErr = false;
+                cSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cSN.getText().equals(sCanopy.getCanopySN())){
-
+            if (!cSN.getText().isEmpty()){
+                emptyErr = false;
+                cSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
-
+            if (!cDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                cDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
-
+            if (cManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                cManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
-
+            if (!cJumps.getText().isEmpty()){
+                emptyErr = false;
+                cJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
         //Reserve
-            if (!rModel.getText().equals(sReserve.getReserveModel())){
-
+            if (!rModel.getText().isEmpty()){
+                emptyErr = false;
+                rModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
-
+            if (!rSize.getText().isEmpty()){
+                emptyErr = false;
+                rSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rSN.getText().equals(sReserve.getReserveSN())){
-
+            if (!rSN.getText().isEmpty()){
+                emptyErr = false;
+                rSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
-
+            if (!rDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                rDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
-
+            if (rManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                rManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
-
+            if (!rJumps.getText().isEmpty()){
+                emptyErr = false;
+                rJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
-
+            if (!rPackDate.getValue().toString().isEmpty()){
+                emptyErr = false;
+                rPackDate.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
         //AAD
-            if (!aModel.getText().equals(sAAD.getAadModel())){
-
+            if (!aModel.getText().isEmpty()){
+                emptyErr = false;
+                aModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aSN.getText().equals(sAAD.getAadSN())){
-
+            if (!aSN.getText().isEmpty()){
+                emptyErr = false;
+                aSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aDOM.getValue().equals(sAAD.getAadDOM())){
-
+            if (!aDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                aDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
-
+            if (aManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
-
+            if (!aJumps.getText().isEmpty()){
+                emptyErr = false;
+                aJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
-
+            if (!aNextRegl.getValue().toString().isEmpty()){
+                emptyErr = false;
+                aNextRegl.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
-
+            if (!aSaved.getText().isEmpty()){
+                emptyErr = false;
+                aSaved.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        
-            if (!isAssembleInProcess() && !isNewSystem()){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Внести изменения в систему "+ selectedSystem.getSystemCode() +"?");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                //Container
-                        ArrayList <String> systemNewParams = new ArrayList<>();
-                        if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                            systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
-                        }
-                        if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                            systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
-                        }
-                        if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                            systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
-                        }
-                        if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                            systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
-                        }
-                        if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
-                            systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-                        }
-                    //Apply changes    
-                        if (systemNewParams.isEmpty()) {
-                    //Nothing changed, do nothing
-                        }else{
-                            updParams = systemNewParams.get(0);
-                            int i = systemNewParams.size()-1;
-                            while (i>0){
-                                updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
+            if (emptyErr){
+                if (!isAssembleInProcess() && !isNewSystem()){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Внести изменения в систему "+ selectedSystem.getSystemCode() +"?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                    //Container
+                            ArrayList <String> systemNewParams = new ArrayList<>();
+                            if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                                systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
                             }
-                            dr.editSkydiveSystem(selectedSystem, updParams);
-                        }
-                        systemNewParams.clear();
-                //Canopy
-                        ArrayList <String> canopyNewParams = new ArrayList<>();
-                        if (!cModel.getText().equals(sCanopy.getCanopyModel())){
-                            canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
-                        }
-                        if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
-                            canopyNewParams.add("canopy_size = "+cSize.getText());
-                        }
-                        if (!cSN.getText().equals(sCanopy.getCanopySN())){
-                            canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
-                        }
-                        if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
-                            canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
-                        }
-                        if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
-                            canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-                        }
-                        if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
-                            canopyNewParams.add("canopy_jumps = "+cJumps.getText());
-                        }
-                    //Apply changes    
-                        if (canopyNewParams.isEmpty()) {
-                    //Nothing changed, do nothing
-                        }else{
-                            updParams = canopyNewParams.get(0);
-                            int i = canopyNewParams.size()-1;
-                            while (i>0){
-                                updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
+                            if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                                systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
                             }
-                            dr.editCanopy(sCanopy, updParams);
-                        }
-                        canopyNewParams.clear();
-                //Reserve
-                        ArrayList <String> reserveNewParams = new ArrayList<>();
-                        if (!rModel.getText().equals(sReserve.getReserveModel())){
-                            reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
-                        }
-                        if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
-                            reserveNewParams.add("reserve_size = "+rSize.getText());
-                        }
-                        if (!rSN.getText().equals(sReserve.getReserveSN())){
-                            reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
-                        }
-                        if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
-                            reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
-                        }
-                        if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
-                            reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-                        }
-                        if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
-                            reserveNewParams.add("reserve_jumps = "+rJumps.getText());
-                        }
-                        if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
-                            reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
-                        }
-                    //Apply changes    
-                        if (reserveNewParams.isEmpty()) {
-                    //Nothing changed, do nothing
-                        }else{
-                            updParams = reserveNewParams.get(0);
-                            int i = reserveNewParams.size()-1;
-                            while (i>0){
-                                updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
+                            if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                                systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
                             }
-                            dr.editReserve(sReserve, updParams);
-                        }
-                        reserveNewParams.clear();
-                //AAD
-                        ArrayList <String> aadNewParams = new ArrayList<>();
-                        if (!aModel.getText().equals(sAAD.getAadModel())){
-                            aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
-                        }
-                        if (!aSN.getText().equals(sAAD.getAadSN())){
-                            aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
-                        }
-                        if (!aDOM.getValue().equals(sAAD.getAadDOM())){
-                            aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
-                        }
-                        if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
-                            aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
-                        }
-                        if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
-                            aadNewParams.add("aad_jumps = "+aJumps.getText());
-                        }
-                        if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
-                            aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
-                        }
-                        if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
-                            aadNewParams.add("aad_saved = "+aSaved.getText());
-                        }
-                    //Apply changes    
-                        if (aadNewParams.isEmpty()) {
-                    //Nothing changed, do nothing
-                        }else{
-                            updParams = aadNewParams.get(0);
-                            int i = aadNewParams.size()-1;
-                            while (i>0){
-                                updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                            if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                                systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
                             }
-                            dr.editAAD(sAAD, updParams);
+                            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                                systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            }
+                        //Apply changes    
+                            if (systemNewParams.isEmpty()) {
+                        //Nothing changed, do nothing
+                            }else{
+                                updParams = systemNewParams.get(0);
+                                int i = systemNewParams.size()-1;
+                                while (i>0){
+                                    updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
+                                }
+                                dr.editSkydiveSystem(selectedSystem, updParams);
+                            }
+                            systemNewParams.clear();
+                    //Canopy
+                            ArrayList <String> canopyNewParams = new ArrayList<>();
+                            if (!cModel.getText().equals(sCanopy.getCanopyModel())){
+                                canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
+                            }
+                            if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
+                                canopyNewParams.add("canopy_size = "+cSize.getText());
+                            }
+                            if (!cSN.getText().equals(sCanopy.getCanopySN())){
+                                canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
+                            }
+                            if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
+                                canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
+                            }
+                            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+                                canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            }
+                            if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
+                                canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+                            }
+                        //Apply changes    
+                            if (canopyNewParams.isEmpty()) {
+                        //Nothing changed, do nothing
+                            }else{
+                                updParams = canopyNewParams.get(0);
+                                int i = canopyNewParams.size()-1;
+                                while (i>0){
+                                    updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
+                                }
+                                dr.editCanopy(sCanopy, updParams);
+                            }
+                            canopyNewParams.clear();
+                    //Reserve
+                            ArrayList <String> reserveNewParams = new ArrayList<>();
+                            if (!rModel.getText().equals(sReserve.getReserveModel())){
+                                reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
+                            }
+                            if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
+                                reserveNewParams.add("reserve_size = "+rSize.getText());
+                            }
+                            if (!rSN.getText().equals(sReserve.getReserveSN())){
+                                reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
+                            }
+                            if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
+                                reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
+                            }
+                            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+                                reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            }
+                            if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
+                                reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+                            }
+                            if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
+                                reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
+                            }
+                        //Apply changes    
+                            if (reserveNewParams.isEmpty()) {
+                        //Nothing changed, do nothing
+                            }else{
+                                updParams = reserveNewParams.get(0);
+                                int i = reserveNewParams.size()-1;
+                                while (i>0){
+                                    updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
+                                }
+                                dr.editReserve(sReserve, updParams);
+                            }
+                            reserveNewParams.clear();
+                    //AAD
+                            ArrayList <String> aadNewParams = new ArrayList<>();
+                            if (!aModel.getText().equals(sAAD.getAadModel())){
+                                aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
+                            }
+                            if (!aSN.getText().equals(sAAD.getAadSN())){
+                                aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
+                            }
+                            if (!aDOM.getValue().equals(sAAD.getAadDOM())){
+                                aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
+                            }
+                            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+                                aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            }
+                            if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
+                                aadNewParams.add("aad_jumps = "+aJumps.getText());
+                            }
+                            if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
+                                aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
+                            }
+                            if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
+                                aadNewParams.add("aad_saved = "+aSaved.getText());
+                            }
+                        //Apply changes    
+                            if (aadNewParams.isEmpty()) {
+                        //Nothing changed, do nothing
+                            }else{
+                                updParams = aadNewParams.get(0);
+                                int i = aadNewParams.size()-1;
+                                while (i>0){
+                                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                                }
+                                dr.editAAD(sAAD, updParams);
+                            }
+                            aadNewParams.clear();
+                        } else if (option.get() == no) {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        } else {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
                         }
-                        aadNewParams.clear();
-                    } else if (option.get() == no) {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    } else {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    }
-            }else if (isAssembleInProcess()){
-        //assemble system - need to add check all elements on the place and prevent any changes
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Собрать систему "+ selectedSystem.getSystemCode() +"?");
-                confirm.setContentText("Купол ОП: " + getNewCanopy().getCanopyModel() +"-"+ getNewCanopy().getCanopySize()+"\n"+
-                                       "Купол ПЗ: " + getNewReserve().getReserveModel() +"-"+ getNewReserve().getReserveSize() +"\n"+
-                                       "Прибор: " + getNewAAD().getAadModel() +" № "+ getNewAAD().getAadSN());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        dr.assembleSkydiveSystem(selectedSystem, getNewCanopy(), getNewReserve(), getNewAAD());
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    } else {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    }
+                }else if (isAssembleInProcess()){
+            //assemble system - need to add check all elements on the place and prevent any changes
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Собрать систему "+ selectedSystem.getSystemCode() +"?");
+                    confirm.setContentText("Купол ОП: " + getNewCanopy().getCanopyModel() +"-"+ getNewCanopy().getCanopySize()+"\n"+
+                                           "Купол ПЗ: " + getNewReserve().getReserveModel() +"-"+ getNewReserve().getReserveSize() +"\n"+
+                                           "Прибор: " + getNewAAD().getAadModel() +" № "+ getNewAAD().getAadSN());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            dr.assembleSkydiveSystem(selectedSystem, getNewCanopy(), getNewReserve(), getNewAAD());
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        } else {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        }
+                }else{
+                //Add new system    
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить систему "+ selectedSystem.getSystemCode() +"?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                        if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                    //Add new system
+                            
+                            
+                        } else if (option.get() == no) {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        } else {
+                            Alert noChange = new Alert(Alert.AlertType.INFORMATION);
+                            noChange.setTitle("Внимание!");
+                            noChange.setHeaderText(null);
+                            noChange.setContentText("Изменения не сохранены!");
+                            noChange.showAndWait();
+                        }
+                }
             }else{
-            //Add new system    
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Добавить систему "+ selectedSystem.getSystemCode() +"?");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                    if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                //Container
-                        if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                            
-                        }
-                        if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                            
-                        }
-                        if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                            
-                        }
-                        if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                            
-                        }
-                        if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
-                            
-                        }
-                //Canopy
-                        if (!cModel.getText().equals(sCanopy.getCanopyModel())){
-                            
-                        }
-                        if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
-                            
-                        }
-                        if (!cSN.getText().equals(sCanopy.getCanopySN())){
-                            
-                        }
-                        if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
-                            
-                        }
-                        if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
-                            
-                        }
-                        if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
-                            
-                        }
-                //Reserve
-                        if (!rModel.getText().equals(sReserve.getReserveModel())){
-                            
-                        }
-                        if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
-                            
-                        }
-                        if (!rSN.getText().equals(sReserve.getReserveSN())){
-                            
-                        }
-                        if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
-                            
-                        }
-                        if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
-                            
-                        }
-                        if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
-                            
-                        }
-                        if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
-                            
-                        }
-                //AAD
-                        if (!aModel.getText().equals(sAAD.getAadModel())){
-                            
-                        }
-                        if (!aSN.getText().equals(sAAD.getAadSN())){
-                            
-                        }
-                        if (!aDOM.getValue().equals(sAAD.getAadDOM())){
-                            
-                        }
-                        if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
-                            
-                        }
-                        if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
-                            
-                        }
-                        if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
-                            
-                        }
-                        if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
-                            
-                        }
-                    
-                    } else if (option.get() == no) {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    } else {
-                        Alert noChange = new Alert(Alert.AlertType.INFORMATION);
-                        noChange.setTitle("Внимание!");
-                        noChange.setHeaderText(null);
-                        noChange.setContentText("Изменения не сохранены!");
-                        noChange.showAndWait();
-                    }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         Button closeBtn = new Button("Закрыть");
