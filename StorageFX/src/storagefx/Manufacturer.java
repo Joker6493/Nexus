@@ -46,8 +46,8 @@ public class Manufacturer {
         return manufacturerEmail;
     }
     //Set methods
-    public void setManufacturerID (){
-        //In process    
+    public void setManufacturerID (int manufacturerID){
+        this.manufacturerID = manufacturerID;    
     }
     public void setManufacturerName (String manufacturerName){
         this.manufacturerName = manufacturerName;

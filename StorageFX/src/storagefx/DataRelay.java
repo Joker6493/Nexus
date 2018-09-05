@@ -34,7 +34,7 @@ public class DataRelay {
     public int getNewID() {
         return newID;
     }
-    public void setNewID(int newID) {
+    public void setNewID (int newID) {
         this.newID = newID;
     }
     public boolean isResult() {
@@ -390,8 +390,27 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
-            //insert system only
-            PreparedStatement stmt = conn.prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)");
+            //first insert new canopy, reserve and aad (if nesessary)
+            Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
+            Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
+            AAD newAAD = new AAD(ss.getSystemID(), ss.getAadID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID());
+            if (newCanopy.getCanopyID()==0){
+                addCanopy(newCanopy);
+            }
+            ss.setCanopyID(getNewID());
+            newCanopy.setCanopyID(getNewID());
+            if (newReserve.getReserveID()==0){
+                addReserve(newReserve);
+            }
+            ss.setReserveID(getNewID());
+            newReserve.setReserveID(getNewID());
+            if (newAAD.getAadID()==0){
+                addAAD(newAAD);
+            }
+            ss.setAadID(getNewID());
+            newAAD.setAadID(getNewID());
+            //insert system
+            PreparedStatement stmt = conn.prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, ss.getSystemCode());
             stmt.setInt(2, ss.getSystemManufacturerID());
             stmt.setString(3, ss.getSystemModel());
@@ -403,19 +422,17 @@ public class DataRelay {
             stmt.setInt(9, 0);
             stmt.setInt(10, ss.getStockID());
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));            
             stmt.close();
             getConn().commit();
             getConn().close();
-            //if added also new elements - insert them, if element was chosen - skip. finally assemble system (getting element's ID mechanizm required)
-            if (ss.getCanopyID()==0){
-                addCanopy(new Canopy(ss.getSystemID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID()));
-            }
-            if (ss.getReserveID()==0){
-                addReserve(new Reserve(ss.getSystemID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID()));
-            }
-            if (ss.getAadID()==0){
-                addAAD(new AAD(ss.getSystemID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID()));
-            }
+            ss.setSystemID(getNewID());
+            //finally assemble system (getting element's ID mechanizm required)
+            assembleSkydiveSystem(ss, newCanopy, newReserve, newAAD);
+            
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
@@ -431,7 +448,7 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into CANOPY_INFO (SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into CANOPY_INFO (SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, c.getSystemID());
             stmt.setInt(2, c.getCanopyManufacturerID());
             stmt.setString(3, c.getCanopyModel());
@@ -442,9 +459,14 @@ public class DataRelay {
             stmt.setInt(8, 0);
             stmt.setInt(9, c.getStockID());
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));
             stmt.close();
             getConn().commit();
-            getConn().close();          
+            getConn().close();  
+            c.setCanopyID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());;
 //            e.printStackTrace();
@@ -460,7 +482,7 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into RESERVE_INFO (SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into RESERVE_INFO (SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, r.getSystemID());
             stmt.setInt(2, r.getReserveManufacturerID());
             stmt.setString(3, r.getReserveModel());
@@ -472,9 +494,14 @@ public class DataRelay {
             stmt.setInt(9, 0);
             stmt.setInt(10, r.getStockID());
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));
             stmt.close();
             getConn().commit();
-            getConn().close();          
+            getConn().close(); 
+            r.setReserveID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
@@ -490,7 +517,7 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into AAD_INFO (SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into AAD_INFO (SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, aad.getSystemID());
             stmt.setInt(2, aad.getAadManufacturerID());
             stmt.setString(3, aad.getAadModel());
@@ -502,9 +529,14 @@ public class DataRelay {
             stmt.setInt(9, aad.getStockID());
             stmt.setInt(10, aad.getAadSaved());
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));
             stmt.close();
             getConn().commit();
-            getConn().close();         
+            getConn().close();
+            aad.setAadID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
@@ -520,13 +552,18 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCK_NAME,STATUS) values (?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCK_NAME,STATUS) values (?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, stock.getStockName());
             stmt.setInt(2, 0);
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));
             stmt.close();
             getConn().commit();
-            getConn().close();          
+            getConn().close();
+            stock.setStockID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
@@ -542,16 +579,21 @@ public class DataRelay {
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
             Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL,STATUS) values (?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL,STATUS) values (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, man.getManufacturerName());
             stmt.setString(2, man.getManufacturerCountry());
             stmt.setString(3, man.getManufacturerTelephone());
             stmt.setString(4, man.getManufacturerEmail());
             stmt.setInt(5, 0);
             stmt.execute();
+            //get ID of new inserted item
+            ResultSet keys = stmt.getGeneratedKeys();    
+            keys.next();  
+            setNewID(keys.getInt(1));
             stmt.close();
             getConn().commit();
-            getConn().close();          
+            getConn().close();
+            man.setManufacturerID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
 //            e.printStackTrace();
