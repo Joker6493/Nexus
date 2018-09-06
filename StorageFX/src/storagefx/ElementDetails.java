@@ -252,68 +252,97 @@ public class ElementDetails extends Application {
         });
         saveBtn.setOnAction((ActionEvent event) -> {
         //check fields for changing, creating update query
-        //Container
-            ArrayList <String> systemNewParams = new ArrayList<>();
-            if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
+        boolean emptyErr = true;
+            if (sCode.getText().isEmpty()){
+                emptyErr = false;
+                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
+            if (sModel.getText().isEmpty()){
+                emptyErr = false;
+                sModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
+            if (sSN.getText().isEmpty()){
+                emptyErr = false;
+                sSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
+            if (sDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                sDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
-                systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            if (sManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                sManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (systemNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //Container
+                ArrayList <String> systemNewParams = new ArrayList<>();
+                if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                    systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
+                }
+                if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                    systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
+                }
+                if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                    systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
+                }
+                if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                    systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
+                }
+                if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                    systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                }
+            //Apply changes    
+                if (systemNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = systemNewParams.get(0);
+                    int i = systemNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("Ранец " + selectedSystem.getSystemCode());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editSkydiveSystem(ss, updParams);
+                        systemNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = systemNewParams.get(0);
-                int i = systemNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("Ранец " + selectedSystem.getSystemCode());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editSkydiveSystem(ss, updParams);
-                    systemNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
             
         });
@@ -321,21 +350,40 @@ public class ElementDetails extends Application {
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                    changed = true;
+                }
+                if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                    changed = true;
+                }
+                if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                    changed = true;
+                }
+                if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                    changed = true;
+                }
+                if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
@@ -450,92 +498,148 @@ public class ElementDetails extends Application {
             cManufacturerName.getSelectionModel().select(c.getCanopyManufacturerID()-1);
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //Canopy
-            ArrayList <String> canopyNewParams = new ArrayList<>();
-            if (!cModel.getText().equals(c.getCanopyModel())){
-                canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
+            
+            boolean emptyErr = true;
+            if (!cModel.getText().isEmpty()){
+                emptyErr = false;
+                cModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cSize.getText().equals(Integer.toString(c.getCanopySize()))){
-                canopyNewParams.add("canopy_size = "+cSize.getText());
+            if (!cSize.getText().isEmpty()){
+                emptyErr = false;
+                cSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cSN.getText().equals(c.getCanopySN())){
-                canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
+            if (!cSN.getText().isEmpty()){
+                emptyErr = false;
+                cSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cDOM.getValue().equals(c.getCanopyDOM())){
-                canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
+            if (!cDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                cDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=c.getCanopyManufacturerID()){
-                canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            if (cManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                cManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!cJumps.getText().equals(Integer.toString(c.getCanopyJumps()))){
-                canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+            if (!cJumps.getText().isEmpty()){
+                emptyErr = false;
+                cJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (canopyNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //Canopy
+                ArrayList <String> canopyNewParams = new ArrayList<>();
+                if (!cModel.getText().equals(c.getCanopyModel())){
+                    canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
+                }
+                if (!cSize.getText().equals(Integer.toString(c.getCanopySize()))){
+                    canopyNewParams.add("canopy_size = "+cSize.getText());
+                }
+                if (!cSN.getText().equals(c.getCanopySN())){
+                    canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
+                }
+                if (!cDOM.getValue().equals(c.getCanopyDOM())){
+                    canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
+                }
+                if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=c.getCanopyManufacturerID()){
+                    canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                }
+                if (!cJumps.getText().equals(Integer.toString(c.getCanopyJumps()))){
+                    canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+                }
+            //Apply changes    
+                if (canopyNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = canopyNewParams.get(0);
+                    int i = canopyNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("Купол " + c.getCanopyModel()+"-"+c.getCanopySize());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editCanopy(c, updParams);
+                        canopyNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = canopyNewParams.get(0);
-                int i = canopyNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("Купол " + c.getCanopyModel()+"-"+c.getCanopySize());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editCanopy(c, updParams);
-                    canopyNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!cModel.getText().equals(c.getCanopyModel())){
+                    changed = true;
+                }
+                if (!cSize.getText().equals(Integer.toString(c.getCanopySize()))){
+                    changed = true;
+                }
+                if (!cSN.getText().equals(c.getCanopySN())){
+                    changed = true;
+                }
+                if (!cDOM.getValue().equals(c.getCanopyDOM())){
+                    changed = true;
+                }
+                if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=c.getCanopyManufacturerID()){
+                    changed = true;
+                }
+                if (!cJumps.getText().equals(Integer.toString(c.getCanopyJumps()))){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
@@ -662,74 +766,113 @@ public class ElementDetails extends Application {
             rPackDate.setValue(r.getReservePackDate()); 
         });
         saveBtn.setOnAction((ActionEvent event) -> {
+            
+            boolean emptyErr = true;
         //Reserve
-            ArrayList <String> reserveNewParams = new ArrayList<>();
-            if (!rModel.getText().equals(r.getReserveModel())){
-                reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
+            if (!rModel.getText().isEmpty()){
+                emptyErr = false;
+                rModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rSize.getText().equals(Integer.toString(r.getReserveSize()))){
-                reserveNewParams.add("reserve_size = "+rSize.getText());
+            if (!rSize.getText().isEmpty()){
+                emptyErr = false;
+                rSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rSN.getText().equals(r.getReserveSN())){
-                reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
+            if (!rSN.getText().isEmpty()){
+                emptyErr = false;
+                rSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rDOM.getValue().equals(r.getReserveDOM())){
-                reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
+            if (!rDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                rDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=r.getReserveManufacturerID()){
-                reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            if (rManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                rManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
-                reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+            if (!rJumps.getText().isEmpty()){
+                emptyErr = false;
+                rJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!rPackDate.getValue().equals(r.getReservePackDate())){
-                reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
+            if (!rPackDate.getValue().toString().isEmpty()){
+                emptyErr = false;
+                rPackDate.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (reserveNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //Reserve
+                ArrayList <String> reserveNewParams = new ArrayList<>();
+                if (!rModel.getText().equals(r.getReserveModel())){
+                    reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
+                }
+                if (!rSize.getText().equals(Integer.toString(r.getReserveSize()))){
+                    reserveNewParams.add("reserve_size = "+rSize.getText());
+                }
+                if (!rSN.getText().equals(r.getReserveSN())){
+                    reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
+                }
+                if (!rDOM.getValue().equals(r.getReserveDOM())){
+                    reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
+                }
+                if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=r.getReserveManufacturerID()){
+                    reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                }
+                if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
+                    reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+                }
+                if (!rPackDate.getValue().equals(r.getReservePackDate())){
+                    reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
+                }
+            //Apply changes    
+                if (reserveNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = reserveNewParams.get(0);
+                    int i = reserveNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("ПЗ " + r.getReserveModel()+"-"+r.getReserveSize());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editReserve(r, updParams);
+                        reserveNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = reserveNewParams.get(0);
-                int i = reserveNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("ПЗ " + r.getReserveModel()+"-"+r.getReserveSize());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editReserve(r, updParams);
-                    reserveNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         
@@ -737,21 +880,46 @@ public class ElementDetails extends Application {
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!rModel.getText().equals(r.getReserveModel())){
+                    changed = true;
+                }
+                if (!rSize.getText().equals(Integer.toString(r.getReserveSize()))){
+                    changed = true;
+                }
+                if (!rSN.getText().equals(r.getReserveSN())){
+                    changed = true;
+                }
+                if (!rDOM.getValue().equals(r.getReserveDOM())){
+                    changed = true;
+                }
+                if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=r.getReserveManufacturerID()){
+                    changed = true;
+                }
+                if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
+                    changed = true;
+                }
+                if (!rPackDate.getValue().equals(r.getReservePackDate())){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
@@ -879,95 +1047,159 @@ public class ElementDetails extends Application {
             aSaved.setText(Integer.toString(a.getAadSaved()));
         });
         saveBtn.setOnAction((ActionEvent event) -> {
+            
+            boolean emptyErr = true;
         //AAD
-            ArrayList <String> aadNewParams = new ArrayList<>();
-            if (!aModel.getText().equals(a.getAadModel())){
-                aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
+            if (!aModel.getText().isEmpty()){
+                emptyErr = false;
+                aModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aSN.getText().equals(a.getAadSN())){
-                aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
+            if (!aSN.getText().isEmpty()){
+                emptyErr = false;
+                aSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aDOM.getValue().equals(a.getAadDOM())){
-                aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
+            if (!aDOM.getValue().toString().isEmpty()){
+                emptyErr = false;
+                aDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=a.getAadManufacturerID()){
-                aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+            if (aManufacturerName.getSelectionModel().isEmpty()){
+                emptyErr = false;
+                aManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aJumps.getText().equals(Integer.toString(a.getAadJumps()))){
-                aadNewParams.add("aad_jumps = "+aJumps.getText());
+            if (!aJumps.getText().isEmpty()){
+                emptyErr = false;
+                aJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aNextRegl.getValue().equals(a.getAadNextRegl())){
-                aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
+            if (!aNextRegl.getValue().toString().isEmpty()){
+                emptyErr = false;
+                aNextRegl.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!aSaved.getText().equals(Integer.toString(a.getAadSaved()))){
-                aadNewParams.add("aad_saved = "+aSaved.getText());
+            if (!aSaved.getText().isEmpty()){
+                emptyErr = false;
+                aSaved.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (aadNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //AAD
+                ArrayList <String> aadNewParams = new ArrayList<>();
+                if (!aModel.getText().equals(a.getAadModel())){
+                    aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
+                }
+                if (!aSN.getText().equals(a.getAadSN())){
+                    aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
+                }
+                if (!aDOM.getValue().equals(a.getAadDOM())){
+                    aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
+                }
+                if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=a.getAadManufacturerID()){
+                    aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                }
+                if (!aJumps.getText().equals(Integer.toString(a.getAadJumps()))){
+                    aadNewParams.add("aad_jumps = "+aJumps.getText());
+                }
+                if (!aNextRegl.getValue().equals(a.getAadNextRegl())){
+                    aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
+                }
+                if (!aSaved.getText().equals(Integer.toString(a.getAadSaved()))){
+                    aadNewParams.add("aad_saved = "+aSaved.getText());
+                }
+            //Apply changes    
+                if (aadNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = aadNewParams.get(0);
+                    int i = aadNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("ПЗ " + a.getAadModel()+" № "+a.getAadSN());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editAAD(a, updParams);
+                        aadNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = aadNewParams.get(0);
-                int i = aadNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("ПЗ " + a.getAadModel()+" № "+a.getAadSN());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editAAD(a, updParams);
-                    aadNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!aModel.getText().equals(a.getAadModel())){
+                    changed = true;
+                }
+                if (!aSN.getText().equals(a.getAadSN())){
+                    changed = true;
+                }
+                if (!aDOM.getValue().equals(a.getAadDOM())){
+                    changed = true;
+                }
+                if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=a.getAadManufacturerID()){
+                    changed = true;
+                }
+                if (!aJumps.getText().equals(Integer.toString(a.getAadJumps()))){
+                    changed = true;
+                }
+                if (!aNextRegl.getValue().equals(a.getAadNextRegl())){
+                    changed = true;
+                }
+                if (!aSaved.getText().equals(Integer.toString(a.getAadSaved()))){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
@@ -1002,77 +1234,98 @@ public class ElementDetails extends Application {
             stockName.setText(stock.getStockName());
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //Stock
-            ArrayList <String> stockNewParams = new ArrayList<>();
-            if (!stockName.getText().equals(stock.getStockName())){
-                stockNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
+            
+            boolean emptyErr = true;
+            if (stockName.getText().isEmpty()){
+                emptyErr = false;
+                stockName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (stockNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //Stock
+                ArrayList <String> stockNewParams = new ArrayList<>();
+                if (!stockName.getText().equals(stock.getStockName())){
+                    stockNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
+                }
+            //Apply changes    
+                if (stockNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = stockNewParams.get(0);
+                    int i = stockNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(stockNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("Склад " + stock.getStockName());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editStock(stock, updParams);
+                        stockNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = stockNewParams.get(0);
-                int i = stockNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(stockNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("Склад " + stock.getStockName());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editStock(stock, updParams);
-                    stockNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!stockName.getText().equals(stock.getStockName())){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
@@ -1141,86 +1394,127 @@ public class ElementDetails extends Application {
             manufacturerEmail.setText(man.getManufacturerEmail());
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-        //Manufacturer
-            ArrayList <String> manufacturerNewParams = new ArrayList<>();
-            if (!manufacturerName.getText().equals(man.getManufacturerName())){
-                manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+            boolean emptyErr = true;
+            if (manufacturerName.getText().isEmpty()){
+                emptyErr = false;
+                manufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
-                manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+            if (manufacturerCountry.getText().isEmpty()){
+                emptyErr = false;
+                manufacturerCountry.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
-                manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+            if (manufacturerTelephone.getText().isEmpty()){
+                emptyErr = false;
+                manufacturerTelephone.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-            if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
-                manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+            if (manufacturerEmail.getText().isEmpty()){
+                emptyErr = false;
+                manufacturerEmail.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
-        //Apply changes    
-            if (manufacturerNewParams.isEmpty()) {
-                //Ничего не меялось
-                Alert noChange = new Alert(AlertType.INFORMATION);
-                noChange.setTitle("Внимание!");
-                noChange.setHeaderText(null);
-                noChange.setContentText("Изменений в параметрах нет!");
-                noChange.showAndWait();
+            if (emptyErr){
+            //Manufacturer
+                ArrayList <String> manufacturerNewParams = new ArrayList<>();
+                if (!manufacturerName.getText().equals(man.getManufacturerName())){
+                    manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+                }
+                if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
+                    manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+                }
+                if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
+                    manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+                }
+                if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
+                    manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+                }
+            //Apply changes    
+                if (manufacturerNewParams.isEmpty()) {
+                    //Ничего не меялось
+                    Alert noChange = new Alert(AlertType.INFORMATION);
+                    noChange.setTitle("Внимание!");
+                    noChange.setHeaderText(null);
+                    noChange.setContentText("Изменений в параметрах нет!");
+                    noChange.showAndWait();
+                }else{
+                    updParams = manufacturerNewParams.get(0);
+                    int i = manufacturerNewParams.size()-1;
+                    while (i>0){
+                        updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
+                    }
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
+                    confirm.setContentText("Склад " + man.getManufacturerName());
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.editManufacturer(man, updParams);
+                        manufacturerNewParams.clear();
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
+                }
             }else{
-                updParams = manufacturerNewParams.get(0);
-                int i = manufacturerNewParams.size()-1;
-                while (i>0){
-                    updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
-                }
-                Alert confirm = new Alert(AlertType.CONFIRMATION);
-                confirm.setTitle("Подтверждение изменений");
-                confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                confirm.setContentText("Склад " + man.getManufacturerName());
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Параметры не изменены!");
-                    noChange.showAndWait();
-                } else if (option.get() == yes) {
-                    dr.editManufacturer(man, updParams);
-                    manufacturerNewParams.clear();
-                } else if (option.get() == no) {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                } else {
-                    Alert noChange = new Alert(AlertType.INFORMATION);
-                    noChange.setTitle("Внимание!");
-                    noChange.setHeaderText(null);
-                    noChange.setContentText("Изменения не сохранены!");
-                    noChange.showAndWait();
-                }
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Одно или несколько обязательных значений не заполнены. \nПроверьте правильность заполнения значений и повторите попытку.");
+                emptyWarn.showAndWait();
             }
         });
         Button closeBtn = new Button("Закрыть");
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                if (!manufacturerName.getText().equals(man.getManufacturerName())){
+                    changed = true;
+                }
+                if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
+                    changed = true;
+                }
+                if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
+                    changed = true;
+                }
+                if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         

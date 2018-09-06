@@ -806,7 +806,7 @@ public class SystemDetails extends Application {
             }
             if (aManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
             }
             if (!aJumps.getText().isEmpty()){
                 emptyErr = false;
@@ -1047,21 +1047,104 @@ public class SystemDetails extends Application {
         closeBtn.setCancelButton(true);
         closeBtn.setOnAction((ActionEvent event) -> {
             if (editStatus == true){
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.setTitle("Закрыть окно?");
-                confirm.setHeaderText("Не сохраненные изменения будут потеряны");
-                ButtonType yes = new ButtonType("Да");
-                ButtonType no = new ButtonType("Нет");
-                confirm.getButtonTypes().clear();
-                confirm.getButtonTypes().addAll(yes, no);
-                Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                    } else if (option.get() == yes) {
-                        details.getScene().getWindow().hide();
-                    } else if (option.get() == no) {
-                    } else {
+                boolean changed = false;
+                //Container
+                if (!sCode.getText().equals(selectedSystem.getSystemCode())){
+                    changed = true;
+                }
+                if (!sModel.getText().equals(selectedSystem.getSystemModel())){
+                    changed = true;
+                }
+                if (!sSN.getText().equals(selectedSystem.getSystemSN())){
+                    changed = true;
+                }
+                if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
+                    changed = true;
+                }
+                if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
+                    changed = true;
+                }
+                //Canopy
+                if (!cModel.getText().equals(sCanopy.getCanopyModel())){
+                    changed = true;
+                }
+                if (!cSize.getText().equals(Integer.toString(sCanopy.getCanopySize()))){
+                    changed = true;
+                }
+                if (!cSN.getText().equals(sCanopy.getCanopySN())){
+                    changed = true;
+                }
+                if (!cDOM.getValue().equals(sCanopy.getCanopyDOM())){
+                    changed = true;
+                }
+                if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sCanopy.getCanopyManufacturerID()){
+                    changed = true;
+                }
+                if (!cJumps.getText().equals(Integer.toString(sCanopy.getCanopyJumps()))){
+                    changed = true;
+                }
+                //Reserve
+                if (!rModel.getText().equals(sReserve.getReserveModel())){
+                    changed = true;
+                }
+                if (!rSize.getText().equals(Integer.toString(sReserve.getReserveSize()))){
+                    changed = true;
+                }
+                if (!rSN.getText().equals(sReserve.getReserveSN())){
+                    changed = true;
+                }
+                if (!rDOM.getValue().equals(sReserve.getReserveDOM())){
+                    changed = true;
+                }
+                if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sReserve.getReserveManufacturerID()){
+                    changed = true;
+                }
+                if (!rJumps.getText().equals(Integer.toString(sReserve.getReserveJumps()))){
+                    changed = true;
+                }
+                if (!rPackDate.getValue().equals(sReserve.getReservePackDate())){
+                    changed = true;
+                }
+                //AAD
+                if (!aModel.getText().equals(sAAD.getAadModel())){
+                    changed = true;
+                }
+                if (!aSN.getText().equals(sAAD.getAadSN())){
+                    changed = true;
+                }
+                if (!aDOM.getValue().equals(sAAD.getAadDOM())){
+                    changed = true;
+                }
+                if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=sAAD.getAadManufacturerID()){
+                    changed = true;
+                }
+                if (!aJumps.getText().equals(Integer.toString(sAAD.getAadJumps()))){
+                    changed = true;
+                }
+                if (!aNextRegl.getValue().equals(sAAD.getAadNextRegl())){
+                    changed = true;
+                }
+                if (!aSaved.getText().equals(Integer.toString(sAAD.getAadSaved()))){
+                    changed = true;
+                }
+                if (changed){
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Закрыть окно?");
+                    confirm.setHeaderText("Не сохраненные изменения будут потеряны");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        } else if (option.get() == yes) {
+                            details.getScene().getWindow().hide();
+                        } else if (option.get() == no) {
+                        } else {
                     }
-                details.getScene().getWindow().hide();
+                }
+            }else{
+                details.getScene().getWindow().hide();                
             }
         });
         
