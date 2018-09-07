@@ -396,21 +396,24 @@ public class DataRelay {
             AAD newAAD = new AAD(ss.getSystemID(), ss.getAadID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID());
             if (newCanopy.getCanopyID()==0){
                 addCanopy(newCanopy);
+                ss.setCanopyID(getNewID());
+                newCanopy.setCanopyID(getNewID());
             }
-            ss.setCanopyID(getNewID());
-            newCanopy.setCanopyID(getNewID());
             if (newReserve.getReserveID()==0){
                 addReserve(newReserve);
+                ss.setReserveID(getNewID());
+                newReserve.setReserveID(getNewID());
             }
-            ss.setReserveID(getNewID());
-            newReserve.setReserveID(getNewID());
             if (newAAD.getAadID()==0){
                 addAAD(newAAD);
+                ss.setAadID(getNewID());
+                newAAD.setAadID(getNewID());
             }
-            ss.setAadID(getNewID());
-            newAAD.setAadID(getNewID());
             //insert system
-            PreparedStatement stmt = conn.prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            if (getConn().isClosed()){
+                setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            }
+            PreparedStatement stmt = getConn().prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, ss.getSystemCode());
             stmt.setInt(2, ss.getSystemManufacturerID());
             stmt.setString(3, ss.getSystemModel());

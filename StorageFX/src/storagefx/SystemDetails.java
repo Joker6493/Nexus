@@ -128,7 +128,7 @@ public class SystemDetails extends Application {
         Label containerGridName = new Label("Ранец и подвесная система");
         TextField sCode = new TextField(selectedSystem.getSystemCode());
         sCode.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            sCode.getStyleClass().clear();
+            sCode.setStyle("");
             if (newValue.length()>6) {
                 sCode.setText(oldValue);
             }
@@ -137,7 +137,7 @@ public class SystemDetails extends Application {
         Label sModelLabel = new Label("Модель: ");
         TextField sModel = new TextField(selectedSystem.getSystemModel());
         sModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            sModel.getStyleClass().clear();
+            sModel.setStyle("");
             if (newValue.length()>50) {
                 sModel.setText(oldValue);
             }
@@ -146,7 +146,7 @@ public class SystemDetails extends Application {
         Label sSNLabel = new Label("Серийный номер: ");
         TextField sSN = new TextField(selectedSystem.getSystemSN());
         sSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            sSN.getStyleClass().clear();
+            sSN.setStyle("");
             if (newValue.length()>50) {
                 sSN.setText(oldValue);
             }
@@ -157,7 +157,7 @@ public class SystemDetails extends Application {
         sDOM.setShowWeekNumbers(true);
         sDOM.setEditable(editStatus);
         sDOM.setOnMouseClicked(e -> {
-            sDOM.getStyleClass().clear();
+            sDOM.setStyle("");
             if(!sDOM.isEditable()){
                 sDOM.hide();
             }
@@ -190,7 +190,7 @@ public class SystemDetails extends Application {
             }
         });
         sManufacturerName.setOnMouseClicked(e -> {
-            sManufacturerName.getStyleClass().clear();
+            sManufacturerName.setStyle("");
         });
         sManufacturerName.getSelectionModel().select(selectedSystem.getSystemManufacturerID()-1);
         sManufacturerName.setDisable(!editStatus);
@@ -214,7 +214,7 @@ public class SystemDetails extends Application {
         Label cModelLabel = new Label("Модель: ");
         TextField cModel = new TextField(sCanopy.getCanopyModel());
         cModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            cModel.getStyleClass().clear();
+            cModel.setStyle("");
             if (newValue.length()>50) {
                 cModel.setText(oldValue);
             }
@@ -223,7 +223,7 @@ public class SystemDetails extends Application {
         Label cSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField cSize = new TextField (Integer.toString(sCanopy.getCanopySize()));
         cSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            cSize.getStyleClass().clear();
+            cSize.setStyle("");
             if (!newValue.matches("\\d{0,3}")) {
                 cSize.setText(oldValue);
             }
@@ -232,7 +232,7 @@ public class SystemDetails extends Application {
         Label cSNLabel = new Label("Серийный номер: ");
         TextField cSN = new TextField(sCanopy.getCanopySN());
         cSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            cSN.getStyleClass().clear();
+            cSN.setStyle("");
             if (newValue.length()>20) {
                 cSN.setText(oldValue);
             }
@@ -243,7 +243,7 @@ public class SystemDetails extends Application {
         cDOM.setShowWeekNumbers(true);
         cDOM.setEditable(editStatus);
         cDOM.setOnMouseClicked(e -> {
-            cDOM.getStyleClass().clear();
+            cDOM.setStyle("");
             if(!cDOM.isEditable()){
                 cDOM.hide();
             }
@@ -275,14 +275,14 @@ public class SystemDetails extends Application {
             }
         });
         cManufacturerName.setOnMouseClicked(e -> {
-            cManufacturerName.getStyleClass().clear();
+            cManufacturerName.setStyle("");
             });
         cManufacturerName.getSelectionModel().select(sCanopy.getCanopyManufacturerID()-1);
         cManufacturerName.setDisable(!editStatus);
         Label cJumpsLabel = new Label ("Прыжков: ");
         TextField cJumps = new TextField (Integer.toString(sCanopy.getCanopyJumps()));
         cJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            cJumps.getStyleClass().clear();
+            cJumps.setStyle("");
             if (!newValue.matches("\\d{0,4}")) {
                 cJumps.setText(oldValue);
             }
@@ -318,6 +318,7 @@ public class SystemDetails extends Application {
                 cManufacturerName.getSelectionModel().select(getNewCanopy().getCanopyManufacturerID()-1);
                 if (!isAssembleInProcess()){
             //Updating canopy data in skydive system
+                    selectedSystem.setCanopyID(getNewCanopy().getCanopyID());
                     selectedSystem.setCanopyModel(getNewCanopy().getCanopyModel());
                     selectedSystem.setCanopySize(getNewCanopy().getCanopySize());
                     selectedSystem.setCanopySN(getNewCanopy().getCanopySN());
@@ -325,6 +326,7 @@ public class SystemDetails extends Application {
                     selectedSystem.setCanopyJumps(getNewCanopy().getCanopyJumps());
                     selectedSystem.setCanopyManufacturerID(getNewCanopy().getCanopyManufacturerID());
                     selectedSystem.setCanopyManufacturerName(getNewCanopy().getCanopyManufacturerName());
+                    sCanopy.setCanopyID(getNewCanopy().getCanopyID());
                     sCanopy.setCanopyModel(getNewCanopy().getCanopyModel());
                     sCanopy.setCanopySize(getNewCanopy().getCanopySize());
                     sCanopy.setCanopySN(getNewCanopy().getCanopySN());
@@ -361,7 +363,7 @@ public class SystemDetails extends Application {
         Label rModelLabel = new Label("Модель: ");
         TextField rModel = new TextField(sReserve.getReserveModel());
         rModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            rModel.getStyleClass().clear();
+            rModel.setStyle("");
             if (newValue.length()>50) {
                 rModel.setText(oldValue);
             }
@@ -370,7 +372,7 @@ public class SystemDetails extends Application {
         Label rSizeLabel = new Label ("Размер купола, кв.фут: ");
         TextField rSize = new TextField (Integer.toString(sReserve.getReserveSize()));
         rSize.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            rSize.getStyleClass().clear();
+            rSize.setStyle("");
             if (!newValue.matches("\\d{0,3}")) {
                 rSize.setText(oldValue);
             }
@@ -379,7 +381,7 @@ public class SystemDetails extends Application {
         Label rSNLabel = new Label("Серийный номер: ");
         TextField rSN = new TextField(sReserve.getReserveSN());
         rSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            rSN.getStyleClass().clear();
+            rSN.setStyle("");
             if (newValue.length()>20) {
                 rSN.setText(oldValue);
             }
@@ -390,7 +392,7 @@ public class SystemDetails extends Application {
         rDOM.setShowWeekNumbers(true);
         rDOM.setEditable(editStatus);
         rDOM.setOnMouseClicked(e -> {
-            rDOM.getStyleClass().clear();
+            rDOM.setStyle("");
             if(!rDOM.isEditable()){
                 rDOM.hide();
             }
@@ -422,14 +424,14 @@ public class SystemDetails extends Application {
             }
         });
         rManufacturerName.setOnMouseClicked(e -> {
-            rManufacturerName.getStyleClass().clear();
+            rManufacturerName.setStyle("");
         });
         rManufacturerName.getSelectionModel().select(sReserve.getReserveManufacturerID()-1);
         rManufacturerName.setDisable(!editStatus);
         Label rJumpsLabel = new Label ("Применений: ");
         TextField rJumps = new TextField (Integer.toString(sReserve.getReserveJumps()));
         rJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            rJumps.getStyleClass().clear();
+            rJumps.setStyle("");
             if (!newValue.matches("\\d{0,4}")) {
                 rJumps.setText(oldValue);
             }
@@ -440,7 +442,7 @@ public class SystemDetails extends Application {
         rPackDate.setShowWeekNumbers(true);
         rPackDate.setEditable(editStatus);
         rPackDate.setOnMouseClicked(e -> {
-            rPackDate.getStyleClass().clear();
+            rPackDate.setStyle("");
             if(!rPackDate.isEditable()){
                 rPackDate.hide();
             }
@@ -476,6 +478,7 @@ public class SystemDetails extends Application {
                 rPackDate.setValue(getNewReserve().getReservePackDate());
                 if (!isAssembleInProcess()){
             //Updating reserve data in skydive system
+                    selectedSystem.setReserveID(getNewReserve().getReserveID());
                     selectedSystem.setReserveModel(getNewReserve().getReserveModel());
                     selectedSystem.setReserveSize(getNewReserve().getReserveSize());
                     selectedSystem.setReserveSN(getNewReserve().getReserveSN());
@@ -484,6 +487,7 @@ public class SystemDetails extends Application {
                     selectedSystem.setReservePackDate(getNewReserve().getReservePackDate());
                     selectedSystem.setReserveManufacturerID(getNewReserve().getReserveManufacturerID());
                     selectedSystem.setReserveManufacturerName(getNewReserve().getReserveManufacturerName());
+                    sReserve.setReserveID(getNewReserve().getReserveID());
                     sReserve.setReserveModel(getNewReserve().getReserveModel());
                     sReserve.setReserveSize(getNewReserve().getReserveSize());
                     sReserve.setReserveSN(getNewReserve().getReserveSN());
@@ -522,7 +526,7 @@ public class SystemDetails extends Application {
         Label aModelLabel = new Label("Модель: ");
         TextField aModel = new TextField(sAAD.getAadModel());
         aModel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            aModel.getStyleClass().clear();
+            aModel.setStyle("");
             if (newValue.length()>50) {
                 aModel.setText(oldValue);
             }
@@ -531,7 +535,7 @@ public class SystemDetails extends Application {
         Label aSNLabel = new Label("Серийный номер: ");
         TextField aSN = new TextField(sAAD.getAadSN());
         aSN.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            aSN.getStyleClass().clear();
+            aSN.setStyle("");
             if (newValue.length()>20) {
                 aSN.setText(oldValue);
             }
@@ -542,7 +546,7 @@ public class SystemDetails extends Application {
         aDOM.setShowWeekNumbers(true);
         aDOM.setEditable(editStatus);
         aDOM.setOnMouseClicked(e -> {
-            aDOM.getStyleClass().clear();
+            aDOM.setStyle("");
             if(!aDOM.isEditable()){
                 aDOM.hide();
             }
@@ -574,14 +578,14 @@ public class SystemDetails extends Application {
             }
         });
         aManufacturerName.setOnMouseClicked(e -> {
-            aManufacturerName.getStyleClass().clear();
+            aManufacturerName.setStyle("");
         });
         aManufacturerName.getSelectionModel().select(sAAD.getAadManufacturerID()-1);
         aManufacturerName.setDisable(!editStatus);
         Label aJumpsLabel = new Label ("Прыжков: ");
         TextField aJumps = new TextField (Integer.toString(sAAD.getAadJumps()));
         aJumps.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            aJumps.getStyleClass().clear();
+            aJumps.setStyle("");
             if (!newValue.matches("\\d{0,4}")) {
                 aJumps.setText(oldValue);
             }
@@ -592,7 +596,7 @@ public class SystemDetails extends Application {
         aNextRegl.setShowWeekNumbers(true);
         aNextRegl.setEditable(editStatus);
         aNextRegl.setOnMouseClicked(e -> {
-            aNextRegl.getStyleClass().clear();
+            aNextRegl.setStyle("");
             if(!aNextRegl.isEditable()){
                 aNextRegl.hide();
             }
@@ -601,7 +605,7 @@ public class SystemDetails extends Application {
         Label aSavedLabel = new Label ("Количество применений: ");
         TextField aSaved = new TextField (Integer.toString(sAAD.getAadSaved()));
         aSaved.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            aSaved.getStyleClass().clear();
+            aSaved.setStyle("");
             if (!newValue.matches("\\d{0,4}")) {
                 aSaved.setText(oldValue);
             }
@@ -637,6 +641,7 @@ public class SystemDetails extends Application {
                 aSaved.setText(Integer.toString(getNewAAD().getAadSaved()));
                 if (!isAssembleInProcess()){
             //Updating aad data in skydive system
+                    selectedSystem.setAadID(getNewAAD().getAadID());
                     selectedSystem.setAadModel(getNewAAD().getAadModel());
                     selectedSystem.setAadSN(getNewAAD().getAadSN());
                     selectedSystem.setAadDOM(getNewAAD().getAadDOM());
@@ -645,6 +650,7 @@ public class SystemDetails extends Application {
                     selectedSystem.setAadSaved(getNewAAD().getAadSaved());
                     selectedSystem.setAadManufacturerID(getNewAAD().getAadManufacturerID());
                     selectedSystem.setAadManufacturerName(getNewAAD().getAadManufacturerName());
+                    sAAD.setAadID(getNewAAD().getAadID());
                     sAAD.setAadModel(getNewAAD().getAadModel());
                     sAAD.setAadSN(getNewAAD().getAadSN());
                     sAAD.setAadDOM(getNewAAD().getAadDOM());
@@ -719,106 +725,106 @@ public class SystemDetails extends Application {
             boolean emptyErr = true;
             if (sCode.getText().isEmpty()){
                 emptyErr = false;
-                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sCode.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sModel.getText().isEmpty()){
                 emptyErr = false;
-                sModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sSN.getText().isEmpty()){
                 emptyErr = false;
-                sSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                sDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                sManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
         //Canopy
-            if (!cModel.getText().isEmpty()){
+            if (cModel.getText().isEmpty()){
                 emptyErr = false;
-                cModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!cSize.getText().isEmpty()){
+            if (cSize.getText().isEmpty()){
                 emptyErr = false;
-                cSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!cSN.getText().isEmpty()){
+            if (cSN.getText().isEmpty()){
                 emptyErr = false;
-                cSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!cDOM.getValue().toString().isEmpty()){
+            if (cDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                cDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (cManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                cManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!cJumps.getText().isEmpty()){
+            if (cJumps.getText().isEmpty()){
                 emptyErr = false;
-                cJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
         //Reserve
-            if (!rModel.getText().isEmpty()){
+            if (rModel.getText().isEmpty()){
                 emptyErr = false;
-                rModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!rSize.getText().isEmpty()){
+            if (rSize.getText().isEmpty()){
                 emptyErr = false;
-                rSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!rSN.getText().isEmpty()){
+            if (rSN.getText().isEmpty()){
                 emptyErr = false;
-                rSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!rDOM.getValue().toString().isEmpty()){
+            if (rDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (rManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                rManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!rJumps.getText().isEmpty()){
+            if (rJumps.getText().isEmpty()){
                 emptyErr = false;
-                rJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!rPackDate.getValue().toString().isEmpty()){
+            if (rPackDate.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rPackDate.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rPackDate.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
         //AAD
-            if (!aModel.getText().isEmpty()){
+            if (aModel.getText().isEmpty()){
                 emptyErr = false;
-                aModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!aSN.getText().isEmpty()){
+            if (aSN.getText().isEmpty()){
                 emptyErr = false;
-                aSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!aDOM.getValue().toString().isEmpty()){
+            if (aDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (aManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                aManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!aJumps.getText().isEmpty()){
+            if (aJumps.getText().isEmpty()){
                 emptyErr = false;
-                aJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!aNextRegl.getValue().toString().isEmpty()){
+            if (aNextRegl.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aNextRegl.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aNextRegl.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
-            if (!aSaved.getText().isEmpty()){
+            if (aSaved.getText().isEmpty()){
                 emptyErr = false;
-                aSaved.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aSaved.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
                 if (!isAssembleInProcess() && !isNewSystem()){
@@ -1010,7 +1016,7 @@ public class SystemDetails extends Application {
                 //Add new system    
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
-                    confirm.setHeaderText("Добавить систему "+ selectedSystem.getSystemCode() +"?");
+                    confirm.setHeaderText("Добавить систему "+ sCode.getText() +"?");
                     ButtonType yes = new ButtonType("Да");
                     ButtonType no = new ButtonType("Нет");
                     confirm.getButtonTypes().clear();
@@ -1019,7 +1025,7 @@ public class SystemDetails extends Application {
                         if (option.get() == null) {
                         } else if (option.get() == yes) {
                     //Add new system
-                            
+                            dr.addSkydiveSystem(selectedSystem);
                             
                         } else if (option.get() == no) {
                             Alert noChange = new Alert(Alert.AlertType.INFORMATION);
