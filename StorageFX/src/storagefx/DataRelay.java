@@ -10,6 +10,7 @@ package storagefx;
  * @author dboro
  */
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -67,9 +69,9 @@ public class DataRelay {
     public void setStock(int stock) {
         this.stock = stock;
     }
-
-    private ResultSet getData (String Query){
-        ResultSet rs = null;
+    
+    private Connection openConn(){
+        Connection conn = null;
         try {
             //Call a method dynamically (Reflection)
             Class params[] = {};
@@ -77,12 +79,35 @@ public class DataRelay {
             Class mysql = Class.forName("utils.SAMConn");
             Object mysqlClass = mysql.newInstance();
             Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+        }catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            System.out.println("Ошибка соединения с сервером:" + e.getMessage());
+//            e.printStackTrace();
+        }
+        return conn;
+    }
+    
+    private void closeConn (){
+        try{
+            getConn().close();
+        } catch (SQLException e) {
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+//            e.printStackTrace();
+        }
+        
+    }
+
+    private ResultSet getData (String Query){
+        ResultSet rs = null;
+        try {
+            setConn(openConn());
             Statement st = conn.createStatement();
             rs = st.executeQuery(Query);
         } catch (Exception e) {
-            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
 //            e.printStackTrace();
+        }finally{
+            closeConn();
         }
         return rs;
     }
@@ -90,18 +115,12 @@ public class DataRelay {
     private void addQuery (String Query){
         try {
             if (getStmt()==null){
-            //Call a method dynamically (Reflection)
-                Class params[] = {};
-                Object paramsObj[] = {};
-                Class mysql = Class.forName("utils.SAMConn");
-                Object mysqlClass = mysql.newInstance();
-                Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-                setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+                setConn(openConn());
                 setStmt(getConn().createStatement());
             }
             getStmt().addBatch(Query);
         } catch (Exception e) {
-            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
 //            e.printStackTrace();
         }
     }
@@ -111,25 +130,19 @@ public class DataRelay {
             int[] count = stmt.executeBatch();
             stmt.close();
             getConn().commit();
-            getConn().close();
             setStmt(null);
             setResult(true);
         }catch (BatchUpdateException e) {
             System.out.println("Ошибка при выполнении запроса:" + e.getMessage());
-            System.out.println("Выполнено:" + e.getUpdateCounts());
+            System.out.println("Выполнено:" + Arrays.toString(e.getUpdateCounts()));
             getConn().rollback();
-            getConn().close();
             setStmt(null);
             setResult(false);
+        }finally{
+            closeConn();
         }
     }
-    
-    private void closeDB (Connection bdcon, Statement stmt, ResultSet rs) throws SQLException{
-        rs.close();
-        stmt.close();
-        bdcon.close();
-    }
-    
+        
     protected ObservableList<SkydiveSystem> getSystemsList() {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
         try{
@@ -186,9 +199,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
         return list;
@@ -216,9 +231,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
         return list;
@@ -247,9 +264,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<Canopy> list = FXCollections.observableList(indexList);
         return list;
@@ -279,9 +298,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<Reserve> list = FXCollections.observableList(indexList);
         return list;
@@ -312,9 +333,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<AAD> list = FXCollections.observableList(indexList);
         return list;
@@ -338,9 +361,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<Manufacturer> list = FXCollections.observableList(indexList);
         return list;
@@ -361,9 +386,11 @@ public class DataRelay {
             }
             Statement stmt = rs.getStatement();
             Connection bdcon = stmt.getConnection();
-            closeDB(bdcon, stmt, rs);
+            rs.close();
+            stmt.close();
+            bdcon.close();
         }catch(SQLException e){
-            
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
         }
         ObservableList<Stock> list = FXCollections.observableList(stockList);
         return list;
@@ -383,13 +410,9 @@ public class DataRelay {
     
     protected void addSkydiveSystem(SkydiveSystem ss) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             //first insert new canopy, reserve and aad (if nesessary)
             Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
             Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
@@ -411,7 +434,7 @@ public class DataRelay {
             }
             //insert system
             if (getConn().isClosed()){
-                setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+                setConn(openConn());
             }
             PreparedStatement stmt = getConn().prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, ss.getSystemCode());
@@ -444,13 +467,9 @@ public class DataRelay {
     
     protected void addCanopy(Canopy c) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             PreparedStatement stmt = conn.prepareStatement("Insert into CANOPY_INFO (SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, c.getSystemID());
             stmt.setInt(2, c.getCanopyManufacturerID());
@@ -478,13 +497,9 @@ public class DataRelay {
     
     protected void addReserve(Reserve r) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             PreparedStatement stmt = conn.prepareStatement("Insert into RESERVE_INFO (SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, r.getSystemID());
             stmt.setInt(2, r.getReserveManufacturerID());
@@ -513,13 +528,9 @@ public class DataRelay {
     
     protected void addAAD(AAD aad) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             PreparedStatement stmt = conn.prepareStatement("Insert into AAD_INFO (SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, aad.getSystemID());
             stmt.setInt(2, aad.getAadManufacturerID());
@@ -548,13 +559,9 @@ public class DataRelay {
     
     protected void addStock(Stock stock) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCK_NAME,STATUS) values (?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, stock.getStockName());
             stmt.setInt(2, 0);
@@ -575,13 +582,9 @@ public class DataRelay {
     
     protected void addManufacturer(Manufacturer man) {
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            Connection conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
+            if (getConn().isClosed()){
+                setConn(openConn());
+            }
             PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL,STATUS) values (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, man.getManufacturerName());
             stmt.setString(2, man.getManufacturerCountry());

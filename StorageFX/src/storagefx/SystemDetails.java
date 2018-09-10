@@ -1025,6 +1025,35 @@ public class SystemDetails extends Application {
                         if (option.get() == null) {
                         } else if (option.get() == yes) {
                     //Add new system
+                        //Container
+                            selectedSystem.setSystemCode(sCode.getText());
+                            selectedSystem.setSystemModel(sModel.getText());
+                            selectedSystem.setSystemSN(sSN.getText());
+                            selectedSystem.setSystemDOM(sDOM.getValue());
+                            selectedSystem.setSystemManufacturerID(sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                        //Canopy
+                            selectedSystem.setCanopyModel(cModel.getText());
+                            selectedSystem.setCanopySize(Integer.valueOf(cSize.getText()));
+                            selectedSystem.setCanopySN(cSN.getText());
+                            selectedSystem.setCanopyDOM(cDOM.getValue());
+                            selectedSystem.setCanopyManufacturerID(cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            selectedSystem.setCanopyJumps(Integer.valueOf(cJumps.getText()));
+                        //Reserve
+                            selectedSystem.setReserveModel(rModel.getText());    
+                            selectedSystem.setReserveSize(Integer.valueOf(rSize.getText()));
+                            selectedSystem.setReserveSN(rSN.getText());
+                            selectedSystem.setReserveDOM(rDOM.getValue());
+                            selectedSystem.setReserveManufacturerID(rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            selectedSystem.setReserveJumps(Integer.valueOf(rJumps.getText()));
+                            selectedSystem.setReservePackDate(rPackDate.getValue());
+                        //AAD
+                            selectedSystem.setAadModel(aModel.getText());
+                            selectedSystem.setAadSN(aSN.getText());
+                            selectedSystem.setAadDOM(aDOM.getValue());
+                            selectedSystem.setAadManufacturerID(aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                            selectedSystem.setAadJumps(Integer.valueOf(aJumps.getText()));
+                            selectedSystem.setAadNextRegl(aNextRegl.getValue());
+                            selectedSystem.setAadSaved(Integer.valueOf(aSaved.getText()));
                             dr.addSkydiveSystem(selectedSystem);
                             
                         } else if (option.get() == no) {
