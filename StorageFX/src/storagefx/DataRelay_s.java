@@ -25,7 +25,7 @@ import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class DataRelay {
+public class DataRelay_s {
     private int status = 0;
     private int stock = 2;
     private Connection conn;
