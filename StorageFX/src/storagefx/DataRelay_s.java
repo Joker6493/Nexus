@@ -699,22 +699,39 @@ public class DataRelay_s {
     }
     
     protected void editManufacturer(Manufacturer man, String updParams) {
-        String updateQuery = "Update manufacturer_info set " + updParams + " where manufacturerid = "+man.getManufacturerID();
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editManufacturer(?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, man.getManufacturerID());
+            stmt.setString(2, man.getManufacturerName());
+            stmt.setString(3, man.getManufacturerCountry());
+            stmt.setString(4, man.getManufacturerTelephone());
+            stmt.setString(5, man.getManufacturerEmail());
+            stmt.setInt(6, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
         }
     }
     
     protected void editStock (Stock stock, String updParams) {
-        String updateQuery = "Update stock_info set " + updParams + " where stockid = "+stock.getStockID();
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editStock(?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, stock.getStockID());
+            stmt.setString(2, stock.getStockName());
+            stmt.setInt(3, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
         }
     }
         
