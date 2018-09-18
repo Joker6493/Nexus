@@ -62,7 +62,7 @@ public class DataRelay {
     
     private void openConn(){
         try {
-            if (getConn().isClosed()){
+            if (getConn()==null || getConn().isClosed()){
         //Call a method dynamically (Reflection)
                 Class params[] = {};
                 Object paramsObj[] = {};
@@ -294,7 +294,7 @@ public class DataRelay {
         ArrayList<Manufacturer> indexList = new ArrayList<>();
         try{
             openConn();
-            String procedureCall = "{call getManufacturerList(?,?)}";
+            String procedureCall = "{call getManufacturerList(?)}";
             CallableStatement stmt = getConn().prepareCall(procedureCall);
             stmt.setInt(1,getStatus());
             ResultSet rs = stmt.executeQuery();
@@ -321,7 +321,7 @@ public class DataRelay {
         ArrayList<Stock> stockList = new ArrayList<>();
         try{
             openConn();
-            String procedureCall = "{call getStockList(?,?)}";
+            String procedureCall = "{call getStockList(?)}";
             CallableStatement stmt = getConn().prepareCall(procedureCall);
             stmt.setInt(1,getStatus());
             ResultSet rs = stmt.executeQuery();
