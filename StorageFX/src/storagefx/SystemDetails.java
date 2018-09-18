@@ -7,7 +7,6 @@ package storagefx;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -42,7 +41,6 @@ import javafx.stage.Stage;
 public class SystemDetails extends Application {
     private final SkydiveSystem selectedSystem;
     private boolean editStatus;
-    private String updParams;
     private DataRelay dr = new DataRelay();
     private String stageTitle;
     private int stockID;
@@ -95,13 +93,6 @@ public class SystemDetails extends Application {
     public void setStatus(int status) {
         this.status = status;
     }
-    public String getUpdParams() {
-        return updParams;
-    }
-    public void setUpdParams(String updParams) {
-        this.updParams = updParams;
-    }
-    
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     DateTimeFormatter mySQLFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     SystemDetails (SkydiveSystem selectedSystem, boolean editStatus){
@@ -208,7 +199,7 @@ public class SystemDetails extends Application {
         containerGrid.setPadding(new Insets(5));
         
     //Canopy
-        Canopy sCanopy = new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID());
+        Canopy sCanopy = new Canopy(selectedSystem.getSystemID(), selectedSystem.getCanopyID(),selectedSystem.getCanopyModel(), selectedSystem.getCanopySize(), selectedSystem.getCanopySN(), selectedSystem.getCanopyDOM(), selectedSystem.getCanopyJumps(), selectedSystem.getCanopyManufacturerID(), selectedSystem.getCanopyManufacturerName(), selectedSystem.getStockID());
         GridPane canopyGrid = new GridPane();
         Label canopyGridName = new Label("Основной парашют");
         Label cModelLabel = new Label("Модель: ");
@@ -357,7 +348,7 @@ public class SystemDetails extends Application {
         canopyGrid.setPadding(new Insets(5));
         
     //Reserve
-        Reserve sReserve = new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID());
+        Reserve sReserve = new Reserve(selectedSystem.getSystemID(), selectedSystem.getReserveID(), selectedSystem.getReserveModel(), selectedSystem.getReserveSize(), selectedSystem.getReserveSN(), selectedSystem.getReserveDOM(), selectedSystem.getReserveJumps(), selectedSystem.getReservePackDate(), selectedSystem.getReserveManufacturerID(), selectedSystem.getReserveManufacturerName(), selectedSystem.getStockID());
         GridPane reserveGrid = new GridPane();
         Label reserveGridName = new Label("Запасной парашют");
         Label rModelLabel = new Label("Модель: ");
@@ -520,7 +511,7 @@ public class SystemDetails extends Application {
         reserveGrid.setPadding(new Insets(5));
         
     //AAD
-        AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
+        AAD sAAD = new AAD(selectedSystem.getSystemID(), selectedSystem.getAadID(), selectedSystem.getAadModel(), selectedSystem.getAadSN(), selectedSystem.getAadDOM(), selectedSystem.getAadJumps(), selectedSystem.getAadNextRegl(), selectedSystem.getAadSaved(), selectedSystem.getAadManufacturerID(), selectedSystem.getAadManufacturerName(), selectedSystem.getStockID());
         GridPane aadGrid = new GridPane();
         Label aadGridName = new Label("Страхующий прибор");
         Label aModelLabel = new Label("Модель: ");

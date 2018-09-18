@@ -7,7 +7,6 @@ package storagefx;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +23,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -40,12 +38,10 @@ public class ElementDetails extends Application {
     private AAD selectedAAD;
     private Stock selectedStock;
     private Manufacturer selectedManufacturer;
-    private String elementType;
     private boolean editStatus;
     private String stageTitle;
     private Scene scene;
     private boolean assemble = false;
-    private String updParams;
     private DataRelay dr = new DataRelay();
     private int stockID;
     private int status;
@@ -61,13 +57,6 @@ public class ElementDetails extends Application {
     }
     public void setStatus(int status) {
         this.status = status;
-    }
-    public String getUpdParams() {
-        return updParams;
-    }
-
-    public void setUpdParams(String updParams) {
-        this.updParams = updParams;
     }
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     DateTimeFormatter mySQLFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -115,14 +104,12 @@ public class ElementDetails extends Application {
     ElementDetails (Manufacturer selectedManufacturer, boolean editStatus){
         this.selectedManufacturer = selectedManufacturer;
         this.stageTitle = "Производитель "+selectedManufacturer.getManufacturerName();
-        this.editStatus = editStatus;this.setStatus(getStatus());
-        this.setStockID(getStockID());
+        this.editStatus = editStatus;
         this.setStatus(getStatus());
         this.setStockID(getStockID());
         this.scene = new Scene(manufacturerDetail(selectedManufacturer));
     }
     ElementDetails (String elementType, int stockID){
-        this.elementType = elementType;
         this.editStatus = true;
         switch (elementType) {
             case "container":

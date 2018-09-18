@@ -217,7 +217,7 @@ public class AADList extends Application {
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
-            System.out.println("информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
+            System.out.println("Информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
             ElementDetails detail = new ElementDetails(selectedAAD, false);
             detail.setStatus(getStatus());
             detail.setStockID(getStockID());
@@ -260,7 +260,6 @@ public class AADList extends Application {
             StockList sl = new StockList();
             Scene sList = new Scene(sl.StockList(true));
             chooseWindow.setScene(sList);
-            
             chooseWindow.initModality(Modality.WINDOW_MODAL);
             chooseWindow.initOwner(index.getScene().getWindow());
             chooseWindow.showAndWait();
@@ -268,7 +267,7 @@ public class AADList extends Application {
                 Stock newStock = sl.getSelectedStock();
                 selectedAAD.setStockID(newStock.getStockID());
                 dr.editAAD(selectedAAD);
-                System.out.println("Система перемещена!");
+                System.out.println("Прибор перемещен!");
             //Updating skydive system list
                 selectedAAD.setStockID(newStock.getStockID());
                 aadTable.getItems().clear();

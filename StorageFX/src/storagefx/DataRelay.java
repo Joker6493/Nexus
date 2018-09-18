@@ -356,25 +356,6 @@ public class DataRelay {
     protected void addSkydiveSystem(SkydiveSystem ss) {
         try {
             openConn();
-            //first insert new canopy, reserve and aad (if nesessary)
-            Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
-            Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
-            AAD newAAD = new AAD(ss.getSystemID(), ss.getAadID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID());
-            if (newCanopy.getCanopyID()==0){
-                addCanopy(newCanopy);
-                ss.setCanopyID(getNewID());
-                newCanopy.setCanopyID(getNewID());
-            }
-            if (newReserve.getReserveID()==0){
-                addReserve(newReserve);
-                ss.setReserveID(getNewID());
-                newReserve.setReserveID(getNewID());
-            }
-            if (newAAD.getAadID()==0){
-                addAAD(newAAD);
-                ss.setAadID(getNewID());
-                newAAD.setAadID(getNewID());
-            }
             //insert system
             setNewID(0);
             String procedureCall = "{? = call addSkydiveSystem(?,?,?,?,?,?,?,?,?,?)}";
@@ -400,11 +381,29 @@ public class DataRelay {
                 return;
             }else{
                 getConn().commit();
+                ss.setSystemID(getNewID());
+            //insert new canopy, reserve and aad (if nesessary)
+                Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
+                Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
+                AAD newAAD = new AAD(ss.getSystemID(), ss.getAadID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID());
+                if (newCanopy.getCanopyID()==0){
+                    addCanopy(newCanopy);
+                    ss.setCanopyID(getNewID());
+                    newCanopy.setCanopyID(getNewID());
+                }
+                if (newReserve.getReserveID()==0){
+                    addReserve(newReserve);
+                    ss.setReserveID(getNewID());
+                    newReserve.setReserveID(getNewID());
+                }
+                if (newAAD.getAadID()==0){
+                    addAAD(newAAD);
+                    ss.setAadID(getNewID());
+                    newAAD.setAadID(getNewID());
+                }
+                //finally assemble system
+                assembleSkydiveSystem(ss, newCanopy, newReserve, newAAD);
             }
-            ss.setSystemID(getNewID());
-            //finally assemble system (getting element's ID mechanizm required)
-            assembleSkydiveSystem(ss, newCanopy, newReserve, newAAD);
-            
         } catch (SQLException e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
             rollbackConn();
@@ -961,6 +960,7 @@ public class DataRelay {
             stmt.setInt(2, c_Old.getCanopyID());
             stmt.setInt(3, c_New.getCanopyID());
             stmt.execute();
+            //System.out.println(stmt.getUpdateCount());
             stmt.close();
             getConn().commit();
         } catch (SQLException ex) {
