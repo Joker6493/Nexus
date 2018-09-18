@@ -316,8 +316,14 @@ public class StorageIndex extends Application {
             chooseWindow.showAndWait();
             if (sl.getSelectedStock() != null){
                 Stock newStock = sl.getSelectedStock();
-                String stockNew = "stockid = "+ newStock.getStockID();
-                dr.editSkydiveSystem(currentSystem, stockNew);
+                currentSystem.setStockID(newStock.getStockID());
+                Canopy sCanopy = new Canopy(currentSystem.getSystemID(), currentSystem.getCanopyID(), currentSystem.getCanopyModel(), currentSystem.getCanopySize(), currentSystem.getCanopySN(), currentSystem.getCanopyDOM(), currentSystem.getCanopyJumps(), currentSystem.getCanopyManufacturerID(), currentSystem.getCanopyManufacturerName(), currentSystem.getStockID());
+                dr.editCanopy(sCanopy);
+                Reserve sReserve = new Reserve(currentSystem.getSystemID(), currentSystem.getReserveID(), currentSystem.getReserveModel(), currentSystem.getReserveSize(), currentSystem.getReserveSN(), currentSystem.getReserveDOM(), currentSystem.getReserveJumps(), currentSystem.getReservePackDate(), currentSystem.getReserveManufacturerID(), currentSystem.getReserveManufacturerName(), currentSystem.getStockID());
+                dr.editReserve(sReserve);
+                AAD sAAD = new AAD(currentSystem.getSystemID(), currentSystem.getAadID(), currentSystem.getAadModel(), currentSystem.getAadSN(), currentSystem.getAadDOM(), currentSystem.getAadJumps(), currentSystem.getAadNextRegl(), currentSystem.getAadSaved(), currentSystem.getAadManufacturerID(), currentSystem.getAadManufacturerName(), currentSystem.getStockID());
+                dr.editAAD(sAAD);
+                dr.editSkydiveSystem(currentSystem);
                 System.out.println("Система перемещена!");
             //Updating skydive system list
                 currentSystem.setStockID(newStock.getStockID());
@@ -355,12 +361,12 @@ public class StorageIndex extends Application {
             Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
-                    dr.deleteSkydiveSystem(currentSystem);
+                    dr.setStatusSkydiveSystem(currentSystem,1);
                     indexStore.getItems().clear();
                     indexStore.setItems(dr.getSystemsList());
                 } else if (option.get() == containerOnly) {
                     dr.disassembleSkydiveSystem(currentSystem);
-                    dr.deleteContainer(currentSystem);
+                    dr.setStatusContainer(currentSystem,1);
                     indexStore.getItems().clear();
                     indexStore.setItems(dr.getSystemsList());
                 } else if (option.get() == no) {

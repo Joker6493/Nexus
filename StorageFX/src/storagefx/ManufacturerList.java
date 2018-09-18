@@ -72,7 +72,7 @@ public class ManufacturerList extends Application {
         manufacturerTelephone.setCellValueFactory(new PropertyValueFactory<>("manufacturerTelephone"));    
         manufacturerEmail.setCellValueFactory(new PropertyValueFactory<>("manufacturerEmail"));
         //Adding data and create scene
-        ObservableList<Manufacturer> indexList = dr.getManufactirerList();
+        ObservableList<Manufacturer> indexList = dr.getManufacturerList();
         manufacturerList.setItems(indexList);
         manufacturerList.setOnMouseClicked((MouseEvent click) -> {
             if (click.getClickCount() == 2) {
@@ -93,7 +93,7 @@ public class ManufacturerList extends Application {
             System.out.println("Идет обновление списка");
             //Some code here
             manufacturerList.getItems().clear();
-            manufacturerList.setItems(dr.getManufactirerList());
+            manufacturerList.setItems(dr.getManufacturerList());
             //indexStore.refresh();
             System.out.println("Обновление списка завершено");
         });
@@ -142,7 +142,7 @@ public class ManufacturerList extends Application {
         refreshList.setOnAction((ActionEvent e) -> {
             System.out.println("Идет обновление списка");
             manufacturerList.getItems().clear();
-            manufacturerList.setItems(dr.getManufactirerList());
+            manufacturerList.setItems(dr.getManufacturerList());
             System.out.println("Обновление списка завершено");
         });
         MenuItem editItem = new MenuItem("Редактировать");
@@ -170,10 +170,10 @@ public class ManufacturerList extends Application {
             //Refreshing indexList - in process
             Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
             System.out.println("Удалить производителя " + selectedManufacturer.getManufacturerName() + "?");
-            dr.deleteManufacturer(selectedManufacturer);
+            dr.setStatusManufacturer(selectedManufacturer,1);
             System.out.println("Производитель удален!");
             manufacturerList.getItems().clear();
-            manufacturerList.setItems(dr.getManufactirerList());
+            manufacturerList.setItems(dr.getManufacturerList());
         });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
         manufacturerList.setOnContextMenuRequested((ContextMenuEvent event) -> {

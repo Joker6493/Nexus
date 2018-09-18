@@ -266,8 +266,8 @@ public class AADList extends Application {
             chooseWindow.showAndWait();
             if (sl.getSelectedStock() != null){
                 Stock newStock = sl.getSelectedStock();
-                String stockNew = "stockid = "+ newStock.getStockID();
-                dr.editAAD(selectedAAD, stockNew);
+                selectedAAD.setStockID(newStock.getStockID());
+                dr.editAAD(selectedAAD);
                 System.out.println("Система перемещена!");
             //Updating skydive system list
                 selectedAAD.setStockID(newStock.getStockID());
@@ -289,7 +289,7 @@ public class AADList extends Application {
             Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
-                    dr.deleteAAD(getSelectedAAD());
+                    dr.setStatusAAD(getSelectedAAD(),1);
                     aadTable.getItems().clear();
                     aadTable.setItems(dr.getAadList());
                 } else if (option.get() == no) {

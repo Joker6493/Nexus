@@ -238,8 +238,8 @@ public class ReserveList extends Application {
             chooseWindow.showAndWait();
             if (sl.getSelectedStock() != null){
                 Stock newStock = sl.getSelectedStock();
-                String stockNew = "stockid = "+ newStock.getStockID();
-                dr.editReserve(selectedReserve, stockNew);
+                selectedReserve.setStockID(newStock.getStockID());
+                dr.editReserve(selectedReserve);
                 System.out.println("Система перемещена!");
             //Updating skydive system list
                 selectedReserve.setStockID(newStock.getStockID());
@@ -273,7 +273,7 @@ public class ReserveList extends Application {
             Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
-                    dr.deleteReserve(getSelectedReserve());
+                    dr.setStatusReserve(getSelectedReserve(),1);
                     reserveTable.getItems().clear();
                     reserveTable.setItems(dr.getReserveList());
                 } else if (option.get() == no) {

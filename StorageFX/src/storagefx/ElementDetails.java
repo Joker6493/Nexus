@@ -198,7 +198,7 @@ public class ElementDetails extends Application {
         
         Label sManufacturerNameLabel = new Label("Производитель: ");
         ComboBox <Manufacturer> sManufacturerName = new ComboBox<>();
-        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufacturerList();
         sManufacturerName.setItems(manufacturerList);
         sManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
             @Override
@@ -275,24 +275,29 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //Container
-                ArrayList <String> systemNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!sCode.getText().equals(selectedSystem.getSystemCode())){
-                    systemNewParams.add("system_code = "+"\""+sCode.getText()+"\"");
+                    selectedSystem.setSystemCode(sCode.getText());
+                    changeCheck = false;
                 }
                 if (!sModel.getText().equals(selectedSystem.getSystemModel())){
-                    systemNewParams.add("system_model = "+"\""+sModel.getText()+"\"");
+                    selectedSystem.setSystemModel(sModel.getText());
+                    changeCheck = false;
                 }
                 if (!sSN.getText().equals(selectedSystem.getSystemSN())){
-                    systemNewParams.add("system_sn = "+"\""+sSN.getText()+"\"");
+                    selectedSystem.setSystemSN(sSN.getText());
+                    changeCheck = false;
                 }
                 if (!sDOM.getValue().equals(selectedSystem.getSystemDOM())){
-                    systemNewParams.add("system_dom = "+"\'"+mySQLFormat.format(sDOM.getValue())+"\'");
+                    selectedSystem.setSystemDOM(sDOM.getValue());
+                    changeCheck = false;
                 }
                 if (sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=selectedSystem.getSystemManufacturerID()){
-                    systemNewParams.add("manufacturerid = "+sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    selectedSystem.setSystemManufacturerID(sManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (systemNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -300,11 +305,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = systemNewParams.get(0);
-                    int i = systemNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(systemNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -321,8 +321,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editSkydiveSystem(ss, updParams);
-                        systemNewParams.clear();
+                        dr.editSkydiveSystem(ss);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
@@ -434,7 +433,7 @@ public class ElementDetails extends Application {
         
         Label cManufacturerNameLabel = new Label("Производитель: ");
         ComboBox <Manufacturer> cManufacturerName = new ComboBox<>();
-        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufacturerList();
         cManufacturerName.setItems(manufacturerList);
         cManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
             @Override
@@ -526,27 +525,33 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //Canopy
-                ArrayList <String> canopyNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!cModel.getText().equals(c.getCanopyModel())){
-                    canopyNewParams.add("canopy_model = "+"\""+cModel.getText()+"\"");
+                    c.setCanopyModel(cModel.getText());
+                    changeCheck = false;
                 }
                 if (!cSize.getText().equals(Integer.toString(c.getCanopySize()))){
-                    canopyNewParams.add("canopy_size = "+cSize.getText());
+                    c.setCanopySize(Integer.valueOf(cSize.getText()));
+                    changeCheck = false;
                 }
                 if (!cSN.getText().equals(c.getCanopySN())){
-                    canopyNewParams.add("canopy_sn = "+"\""+cSN.getText()+"\"");
+                    c.setCanopySN(cSN.getText());
+                    changeCheck = false;
                 }
                 if (!cDOM.getValue().equals(c.getCanopyDOM())){
-                    canopyNewParams.add("canopy_dom = "+"\'"+mySQLFormat.format(cDOM.getValue())+"\'");
+                    c.setCanopyDOM(cDOM.getValue());
+                    changeCheck = false;
                 }
                 if (cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=c.getCanopyManufacturerID()){
-                    canopyNewParams.add("manufacturerid = "+cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    c.setCanopyManufacturerID(cManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    changeCheck = false;
                 }
                 if (!cJumps.getText().equals(Integer.toString(c.getCanopyJumps()))){
-                    canopyNewParams.add("canopy_jumps = "+cJumps.getText());
+                    c.setCanopyJumps(Integer.valueOf(cJumps.getText()));
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (canopyNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -554,11 +559,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = canopyNewParams.get(0);
-                    int i = canopyNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(canopyNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -575,8 +575,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editCanopy(c, updParams);
-                        canopyNewParams.clear();
+                        dr.editCanopy(c);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
@@ -690,7 +689,7 @@ public class ElementDetails extends Application {
         
         Label rManufacturerNameLabel = new Label("Производитель: ");
         ComboBox <Manufacturer> rManufacturerName = new ComboBox<>();
-        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufacturerList();
         rManufacturerName.setItems(manufacturerList);
         rManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
             @Override
@@ -799,30 +798,37 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //Reserve
-                ArrayList <String> reserveNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!rModel.getText().equals(r.getReserveModel())){
-                    reserveNewParams.add("reserve_model = "+"\""+rModel.getText()+"\"");
+                    r.setReserveModel(rModel.getText());
+                    changeCheck = false;
                 }
                 if (!rSize.getText().equals(Integer.toString(r.getReserveSize()))){
-                    reserveNewParams.add("reserve_size = "+rSize.getText());
+                    r.setReserveSize(Integer.valueOf(rSize.getText()));
+                    changeCheck = false;
                 }
                 if (!rSN.getText().equals(r.getReserveSN())){
-                    reserveNewParams.add("reserve_sn = "+"\""+rSN.getText()+"\"");
+                    r.setReserveSN(rSN.getText());
+                    changeCheck = false;
                 }
                 if (!rDOM.getValue().equals(r.getReserveDOM())){
-                    reserveNewParams.add("reserve_dom = "+"\'"+mySQLFormat.format(rDOM.getValue())+"\'");
+                    r.setReserveDOM(rDOM.getValue());
+                    changeCheck = false;
                 }
                 if (rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=r.getReserveManufacturerID()){
-                    reserveNewParams.add("manufacturerid = "+rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    r.setReserveManufacturerID(rManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    changeCheck = false;
                 }
                 if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
-                    reserveNewParams.add("reserve_jumps = "+rJumps.getText());
+                    r.setReserveJumps(Integer.valueOf(rJumps.getText()));
+                    changeCheck = false;
                 }
                 if (!rPackDate.getValue().equals(r.getReservePackDate())){
-                    reserveNewParams.add("reserve_packdate = "+"\'"+mySQLFormat.format(rPackDate.getValue())+"\'");
+                    r.setReservePackDate(rPackDate.getValue());
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (reserveNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -830,11 +836,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = reserveNewParams.get(0);
-                    int i = reserveNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(reserveNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -851,8 +852,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editReserve(r, updParams);
-                        reserveNewParams.clear();
+                        dr.editReserve(r);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
@@ -962,7 +962,7 @@ public class ElementDetails extends Application {
         
         Label aManufacturerNameLabel = new Label("Производитель: ");
         ComboBox <Manufacturer> aManufacturerName = new ComboBox<>();
-        ObservableList<Manufacturer> manufacturerList = dr.getManufactirerList();
+        ObservableList<Manufacturer> manufacturerList = dr.getManufacturerList();
         aManufacturerName.setItems(manufacturerList);
         aManufacturerName.setCellFactory(p -> new ListCell <Manufacturer> () {
             @Override
@@ -1080,30 +1080,37 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //AAD
-                ArrayList <String> aadNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!aModel.getText().equals(a.getAadModel())){
-                    aadNewParams.add("aad_model = "+"\""+aModel.getText()+"\"");
+                    a.setAadModel(aModel.getText());
+                    changeCheck = false;
                 }
                 if (!aSN.getText().equals(a.getAadSN())){
-                    aadNewParams.add("aad_sn = "+"\""+aSN.getText()+"\"");
+                    a.setAadSN(aSN.getText());
+                    changeCheck = false;
                 }
                 if (!aDOM.getValue().equals(a.getAadDOM())){
-                    aadNewParams.add("aad_dom = "+"\'"+mySQLFormat.format(aDOM.getValue())+"\'");
+                    a.setAadDOM(aDOM.getValue());
+                    changeCheck = false;
                 }
                 if (aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID()!=a.getAadManufacturerID()){
-                    aadNewParams.add("manufacturerid = "+aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    a.setAadManufacturerID(aManufacturerName.getSelectionModel().getSelectedItem().getManufacturerID());
+                    changeCheck = false;
                 }
                 if (!aJumps.getText().equals(Integer.toString(a.getAadJumps()))){
-                    aadNewParams.add("aad_jumps = "+aJumps.getText());
+                    a.setAadJumps(Integer.valueOf(aJumps.getText()));
+                    changeCheck = false;
                 }
                 if (!aNextRegl.getValue().equals(a.getAadNextRegl())){
-                    aadNewParams.add("aad_nextregl = "+"\'"+mySQLFormat.format(aNextRegl.getValue())+"\'");
+                    a.setAadNextRegl(aNextRegl.getValue());
+                    changeCheck = false;
                 }
                 if (!aSaved.getText().equals(Integer.toString(a.getAadSaved()))){
-                    aadNewParams.add("aad_saved = "+aSaved.getText());
+                    a.setAadSaved(Integer.valueOf(aSaved.getText()));
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (aadNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -1111,11 +1118,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = aadNewParams.get(0);
-                    int i = aadNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(aadNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -1132,8 +1134,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editAAD(a, updParams);
-                        aadNewParams.clear();
+                        dr.editAAD(a);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
@@ -1242,12 +1243,13 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //Stock
-                ArrayList <String> stockNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!stockName.getText().equals(stock.getStockName())){
-                    stockNewParams.add("stock_name = "+"\""+stockName.getText()+"\"");
+                    stock.setStockName(stockName.getText());
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (stockNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -1255,11 +1257,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = stockNewParams.get(0);
-                    int i = stockNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(stockNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -1276,8 +1273,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editStock(stock, updParams);
-                        stockNewParams.clear();
+                        dr.editStock(stock);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");
@@ -1413,21 +1409,25 @@ public class ElementDetails extends Application {
             }
             if (emptyErr){
             //Manufacturer
-                ArrayList <String> manufacturerNewParams = new ArrayList<>();
+                boolean changeCheck = true;
                 if (!manufacturerName.getText().equals(man.getManufacturerName())){
-                    manufacturerNewParams.add("manufacturer_name = "+"\""+manufacturerName.getText()+"\"");
+                    man.setManufacturerName(manufacturerName.getText());
+                    changeCheck = false;
                 }
                 if (!manufacturerCountry.getText().equals(man.getManufacturerCountry())){
-                    manufacturerNewParams.add("manufacturer_country = "+"\""+manufacturerCountry.getText()+"\"");
+                    man.setManufacturerCountry(manufacturerCountry.getText());
+                    changeCheck = false;
                 }
                 if (!manufacturerTelephone.getText().equals(man.getManufacturerTelephone())){
-                    manufacturerNewParams.add("manufacturer_telephone = "+manufacturerTelephone.getText());
+                    man.setManufacturerTelephone(manufacturerTelephone.getText());
+                    changeCheck = false;
                 }
                 if (!manufacturerEmail.getText().equals(man.getManufacturerEmail())){
-                    manufacturerNewParams.add("manufacturer_email = "+manufacturerEmail.getText());
+                    man.setManufacturerEmail(manufacturerEmail.getText());
+                    changeCheck = false;
                 }
             //Apply changes    
-                if (manufacturerNewParams.isEmpty()) {
+                if (changeCheck) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
@@ -1435,11 +1435,6 @@ public class ElementDetails extends Application {
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
                 }else{
-                    updParams = manufacturerNewParams.get(0);
-                    int i = manufacturerNewParams.size()-1;
-                    while (i>0){
-                        updParams = updParams.concat(", ").concat(manufacturerNewParams.get(i--));
-                    }
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
@@ -1456,8 +1451,7 @@ public class ElementDetails extends Application {
                         noChange.setContentText("Параметры не изменены!");
                         noChange.showAndWait();
                     } else if (option.get() == yes) {
-                        dr.editManufacturer(man, updParams);
-                        manufacturerNewParams.clear();
+                        dr.editManufacturer(man);
                     } else if (option.get() == no) {
                         Alert noChange = new Alert(AlertType.INFORMATION);
                         noChange.setTitle("Внимание!");

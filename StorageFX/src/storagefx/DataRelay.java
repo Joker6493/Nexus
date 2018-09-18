@@ -12,16 +12,13 @@ package storagefx;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -29,7 +26,6 @@ public class DataRelay {
     private int status = 0;
     private int stock = 2;
     private Connection conn;
-    private Statement stmt;
     private boolean result;
     private int newID;
 
@@ -44,12 +40,6 @@ public class DataRelay {
     }
     public void setResult(boolean result) {
         this.result = result;
-    }
-    public Statement getStmt() {
-        return stmt;
-    }
-    public void setStmt(Statement stmt) {
-        this.stmt = stmt;
     }
     public Connection getConn() {
         return conn;
@@ -70,21 +60,21 @@ public class DataRelay {
         this.stock = stock;
     }
     
-    private Connection openConn(){
-        Connection conn = null;
+    private void openConn(){
         try {
-            //Call a method dynamically (Reflection)
-            Class params[] = {};
-            Object paramsObj[] = {};
-            Class mysql = Class.forName("utils.SAMConn");
-            Object mysqlClass = mysql.newInstance();
-            Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
-            conn = (Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj);
-        }catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            if (getConn().isClosed()){
+        //Call a method dynamically (Reflection)
+                Class params[] = {};
+                Object paramsObj[] = {};
+                Class mysql = Class.forName("utils.SAMConn");
+                Object mysqlClass = mysql.newInstance();
+                Method mysqlConnMethod = mysql.getDeclaredMethod("connectDatabase", params);
+                setConn((Connection) mysqlConnMethod.invoke(mysqlClass, paramsObj));
+            }
+        }catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | SQLException e) {
             System.out.println("Ошибка соединения с сервером:" + e.getMessage());
 //            e.printStackTrace();
         }
-        return conn;
     }
     
     private void closeConn (){
@@ -94,66 +84,27 @@ public class DataRelay {
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
 //            e.printStackTrace();
         }
-        
-    }
-
-    private ResultSet getData (String Query){
-        ResultSet rs = null;
-        try {
-            setConn(openConn());
-            Statement st = conn.createStatement();
-            rs = st.executeQuery(Query);
-        } catch (Exception e) {
-            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
-//            e.printStackTrace();
-        }
-        return rs;
     }
     
-    private void addQuery (String Query){
-        try {
-            if (getStmt()==null){
-                setConn(openConn());
-                setStmt(getConn().createStatement());
-            }
-            getStmt().addBatch(Query);
-        } catch (Exception e) {
-            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
-//            e.printStackTrace();
-        }
-    }
-    
-    private void executeQuery (Statement stmt) throws SQLException{
+    private void rollbackConn (){
         try{
-            int[] count = stmt.executeBatch();
-            stmt.close();
-            getConn().commit();
-            setStmt(null);
-            setResult(true);
-        }catch (BatchUpdateException e) {
-            System.out.println("Ошибка при выполнении запроса:" + e.getMessage());
-            System.out.println("Выполнено:" + Arrays.toString(e.getUpdateCounts()));
             getConn().rollback();
-            setStmt(null);
-            setResult(false);
-        }finally{
-            closeConn();
+            getConn().close();
+        } catch (SQLException e) {
+            System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+//            e.printStackTrace();
         }
     }
-        
+    
     protected ObservableList<SkydiveSystem> getSystemsList() {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid as system_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid) as system_manufacturer_name, " +
-                                 "ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name, " +
-                                 "ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name, " + 
-                                 "ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_saved, ai.manufacturerid as aad_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) as aad_manufacturer_name " +
-                                 "from system_info si " +
-                                 "inner JOIN canopy_info ci ON si.canopyid = ci.canopyid and ci.status = si.status and ci.stockid = si.stockid and ci.systemid = si.systemid " +
-                                 "inner JOIN reserve_info ri ON si.reserveid = ri.reserveid and ri.status = si.status and ri.stockid = si.stockid and ri.systemid = si.systemid " +
-                                 "inner JOIN aad_info ai ON si.aadid = ai.aadid and ai.status = si.status and ai.stockid = si.stockid and ai.systemid = si.systemid " +
-                                 "where si.status = "+ getStatus() +" and si.stockid = "+ getStock() +";";
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getSkydiveSystemsList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            stmt.setInt(2,getStock());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //Container
                 int systemID = rs.getInt("systemid");
@@ -195,13 +146,12 @@ public class DataRelay {
                 String aadManufacturerName = rs.getString("aad_manufacturer_name");
                 indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
         return list;
@@ -210,11 +160,12 @@ public class DataRelay {
     protected ObservableList<SkydiveSystem> getContainersList() {
         ArrayList<SkydiveSystem> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select si.systemid, si.system_code, si.system_model, si.system_sn, si.system_dom, si.manufacturerid as system_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = si.manufacturerid) as system_manufacturer_name " +
-                                 "from system_info si " +
-                                 "where si.canopyid = 0 and si.reserveid = 0 and si.aadid = 0 and si.status = "+ getStatus() +" and si.stockid = "+ getStock() +";";
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getContainersList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            stmt.setInt(2,getStock());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //Container
                 int systemID = rs.getInt("systemid");
@@ -227,13 +178,12 @@ public class DataRelay {
                 int stockID = getStock();
                 indexList.add(new SkydiveSystem(systemID, systemCode, systemModel, systemSN, systemDOM, systemManufacturerID, systemManufacturerName, stockID));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<SkydiveSystem> list = FXCollections.observableList(indexList);
         return list;
@@ -242,11 +192,12 @@ public class DataRelay {
     protected ObservableList<Canopy> getCanopyList() {
         ArrayList<Canopy> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select ci.canopyid, ci.canopy_model, ci.canopy_size, ci.canopy_sn, ci.canopy_dom, ci.canopy_jumps, ci.manufacturerid as canopy_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ci.manufacturerid) as canopy_manufacturer_name " +
-                                 "from canopy_info ci " + 
-                                 "where ci.systemid = 0 and ci.status = "+ getStatus() +" and ci.stockid = "+ getStock();
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getCanopyList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            stmt.setInt(2,getStock());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int systemID = 0;
                 int stockID = getStock();
@@ -260,13 +211,12 @@ public class DataRelay {
                 String canopyManufacturerName = rs.getString("canopy_manufacturer_name");
                 indexList.add(new Canopy(systemID, canopyID, canopyModel, canopySize, canopySN, canopyDOM, canopyJumps, canopyManufacturerID, canopyManufacturerName, stockID));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<Canopy> list = FXCollections.observableList(indexList);
         return list;
@@ -275,11 +225,12 @@ public class DataRelay {
     protected ObservableList<Reserve> getReserveList() {
         ArrayList<Reserve> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select ri.reserveid, ri.reserve_model, ri.reserve_size, ri.reserve_sn, ri.reserve_dom, ri.reserve_jumps, ri.reserve_packdate, ri.manufacturerid as reserve_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ri.manufacturerid) as reserve_manufacturer_name " +
-                                 "from reserve_info ri " +
-                                 "where ri.systemid = 0 and ri.status = "+ getStatus() +" and ri.stockid = "+ getStock();
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getReserveList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            stmt.setInt(2,getStock());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int systemID = 0;
                 int stockID = getStock();
@@ -294,13 +245,12 @@ public class DataRelay {
                 String reserveManufacturerName = rs.getString("reserve_manufacturer_name");
                 indexList.add(new Reserve(systemID, reserveID, reserveModel, reserveSize, reserveSN, reserveDOM, reserveJumps, reservePackDate, reserveManufacturerID, reserveManufacturerName, stockID));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<Reserve> list = FXCollections.observableList(indexList);
         return list;
@@ -309,12 +259,12 @@ public class DataRelay {
     protected ObservableList<AAD> getAadList() {
         ArrayList<AAD> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select ai.aadid, ai.aad_model, ai.aad_sn, ai.aad_dom, ai.aad_jumps, ai.aad_nextregl, ai.aad_saved, ai.manufacturerid as aad_manufacturerid, (select manufacturer_name from manufacturer_info mi where mi.manufacturerid = ai.manufacturerid) as aad_manufacturer_name " +
-                                 "from aad_info ai " +
-                                 "where ai.systemid = 0 and ai.status = "+ getStatus() +" and ai.stockid = "+ getStock() +";";
-            
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getAadList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            stmt.setInt(2,getStock());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int systemID = 0;
                 int stockID = getStock();
@@ -329,26 +279,25 @@ public class DataRelay {
                 String aadManufacturerName = rs.getString("aad_manufacturer_name");
                 indexList.add(new AAD(systemID, aadID, aadModel, aadSN, aadDOM, aadJumps, aadNextRegl, aadSaved, aadManufacturerID, aadManufacturerName, stockID));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<AAD> list = FXCollections.observableList(indexList);
         return list;
     }
 
-    protected ObservableList<Manufacturer> getManufactirerList() {
+    protected ObservableList<Manufacturer> getManufacturerList() {
         ArrayList<Manufacturer> indexList = new ArrayList<>();
         try{
-            String selectQuery = "select mi.manufacturerid, mi.manufacturer_name, mi.manufacturer_country, mi.manufacturer_telephone, mi.manufacturer_email " +
-                                 "from manufacturer_info mi " +
-                                 "where mi.status = " + getStatus();
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getManufacturerList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int manufacturerID = rs.getInt("manufacturerid");
                 String manufacturerName = rs.getString("manufacturer_name");
@@ -357,13 +306,12 @@ public class DataRelay {
                 String manufacturerEmail = rs.getString("manufacturer_email");
                 indexList.add(new Manufacturer(manufacturerID, manufacturerName, manufacturerCountry, manufacturerTelephone, manufacturerEmail));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<Manufacturer> list = FXCollections.observableList(indexList);
         return list;
@@ -372,23 +320,22 @@ public class DataRelay {
     protected ObservableList<Stock> getStockList() {
         ArrayList<Stock> stockList = new ArrayList<>();
         try{
-            String selectQuery = "select stockid, stock_name " +
-                                 "from stock_info " +
-                                 "where status = " + getStatus();
-            System.out.println(selectQuery);
-            ResultSet rs = getData(selectQuery);
+            openConn();
+            String procedureCall = "{call getStockList(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1,getStatus());
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int stockID = rs.getInt("stockid");
                 String stockName = rs.getString("stock_name");
                 stockList.add(new Stock(stockID, stockName));
             }
-            Statement stmt = rs.getStatement();
-            Connection bdcon = stmt.getConnection();
             rs.close();
             stmt.close();
-            bdcon.close();
         }catch(SQLException e){
             System.out.println("Ошибка MySQL сервера:" + e.getMessage());
+        }finally{
+            closeConn();
         }
         ObservableList<Stock> list = FXCollections.observableList(stockList);
         return list;
@@ -408,9 +355,7 @@ public class DataRelay {
     
     protected void addSkydiveSystem(SkydiveSystem ss) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
+            openConn();
             //first insert new canopy, reserve and aad (if nesessary)
             Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
             Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
@@ -431,564 +376,636 @@ public class DataRelay {
                 newAAD.setAadID(getNewID());
             }
             //insert system
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = getConn().prepareStatement("Insert into SYSTEM_INFO (SYSTEM_CODE,MANUFACTURERID,SYSTEM_MODEL,SYSTEM_SN,SYSTEM_DOM,CANOPYID,RESERVEID,AADID,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, ss.getSystemCode());
-            stmt.setInt(2, ss.getSystemManufacturerID());
+            setNewID(0);
+            String procedureCall = "{? = call addSkydiveSystem(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, ss.getSystemCode());
             stmt.setString(3, ss.getSystemModel());
             stmt.setString(4, ss.getSystemSN());
             stmt.setDate(5, Date.valueOf(ss.getSystemDOM()));
-            stmt.setInt(6, ss.getCanopyID());
-            stmt.setInt(7, ss.getReserveID());
-            stmt.setInt(8, ss.getAadID());
-            stmt.setInt(9, 0);
+            stmt.setInt(6, ss.getSystemManufacturerID());
+            stmt.setInt(7, ss.getCanopyID());
+            stmt.setInt(8, ss.getReserveID());
+            stmt.setInt(9, ss.getAadID());
             stmt.setInt(10, ss.getStockID());
+            stmt.setInt(11, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));            
+            setNewID(stmt.getInt(1));  
             stmt.close();
-            getConn().commit();
-            getConn().close();
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            }
             ss.setSystemID(getNewID());
             //finally assemble system (getting element's ID mechanizm required)
             assembleSkydiveSystem(ss, newCanopy, newReserve, newAAD);
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            try {
+                if (!getConn().isClosed()){  
+                    closeConn();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Ошибка связи с сервером:" + ex.getMessage());
+                closeConn();
+            }
         }
     }
     
     protected void addCanopy(Canopy c) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = conn.prepareStatement("Insert into CANOPY_INFO (SYSTEMID,MANUFACTURERID,CANOPY_MODEL,CANOPY_SIZE,CANOPY_SN,CANOPY_DOM,CANOPY_JUMPS,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, c.getSystemID());
-            stmt.setInt(2, c.getCanopyManufacturerID());
-            stmt.setString(3, c.getCanopyModel());
-            stmt.setInt(4, c.getCanopySize());
-            stmt.setString(5, c.getCanopySN());
-            stmt.setDate(6, Date.valueOf(c.getCanopyDOM()));
-            stmt.setInt(7, c.getCanopyJumps());
-            stmt.setInt(8, 0);
+            openConn();
+            setNewID(0);
+            String procedureCall = "{? = call addCanopy(?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, c.getCanopyModel());
+            stmt.setInt(3, c.getCanopySize());
+            stmt.setString(4, c.getCanopySN());
+            stmt.setDate(5, Date.valueOf(c.getCanopyDOM()));
+            stmt.setInt(6, c.getCanopyJumps());
+            stmt.setInt(7, c.getCanopyManufacturerID());
+            stmt.setInt(8, c.getSystemID());
             stmt.setInt(9, c.getStockID());
+            stmt.setInt(10, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));
+            setNewID(stmt.getInt(1));
             stmt.close();
-            getConn().commit();
-            getConn().close();  
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            }
             c.setCanopyID(getNewID());
         } catch (Exception e) {
-            System.out.println("Ошибка связи с сервером:" + e.getMessage());;
+            System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            if (c.getSystemID()==0){
+                closeConn();
+            }
         }
     }
     
     protected void addReserve(Reserve r) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = conn.prepareStatement("Insert into RESERVE_INFO (SYSTEMID,MANUFACTURERID,RESERVE_MODEL,RESERVE_SIZE,RESERVE_SN,RESERVE_DOM,RESERVE_JUMPS,RESERVE_PACKDATE,STATUS,STOCKID) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, r.getSystemID());
-            stmt.setInt(2, r.getReserveManufacturerID());
-            stmt.setString(3, r.getReserveModel());
-            stmt.setInt(4, r.getReserveSize());
-            stmt.setString(5, r.getReserveSN());
-            stmt.setDate(6, Date.valueOf(r.getReserveDOM()));
-            stmt.setInt(7, r.getReserveJumps());
-            stmt.setDate(8, Date.valueOf(r.getReservePackDate()));
-            stmt.setInt(9, 0);
-            stmt.setInt(10, r.getStockID());
+            openConn();
+            setNewID(0);
+            String procedureCall = "{? = call addReserve(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, r.getReserveModel());
+            stmt.setInt(3, r.getReserveSize());
+            stmt.setString(4, r.getReserveSN());
+            stmt.setDate(5, Date.valueOf(r.getReserveDOM()));
+            stmt.setInt(6, r.getReserveJumps());
+            stmt.setDate(7, Date.valueOf(r.getReservePackDate()));
+            stmt.setInt(8, r.getReserveManufacturerID());
+            stmt.setInt(9, r.getSystemID());
+            stmt.setInt(10, r.getStockID());            
+            stmt.setInt(11, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));
+            setNewID(stmt.getInt(1));
             stmt.close();
-            getConn().commit();
-            getConn().close(); 
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            } 
             r.setReserveID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            if (r.getSystemID()==0){
+                closeConn();
+            }
         }
     }
     
     protected void addAAD(AAD aad) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = conn.prepareStatement("Insert into AAD_INFO (SYSTEMID,MANUFACTURERID,AAD_MODEL,AAD_SN,AAD_DOM,AAD_JUMPS,AAD_NEXTREGL,STATUS,STOCKID,AAD_SAVED) values (?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, aad.getSystemID());
-            stmt.setInt(2, aad.getAadManufacturerID());
-            stmt.setString(3, aad.getAadModel());
-            stmt.setString(4, aad.getAadSN());
-            stmt.setDate(5, Date.valueOf(aad.getAadDOM()));
-            stmt.setInt(6, aad.getAadJumps());
-            stmt.setDate(7, Date.valueOf(aad.getAadNextRegl()));
-            stmt.setInt(8, 0);
-            stmt.setInt(9, aad.getStockID());
-            stmt.setInt(10, aad.getAadSaved());
+            openConn();
+            setNewID(0);
+            String procedureCall = "{? = call addAAD(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, aad.getAadModel());
+            stmt.setString(3, aad.getAadSN());
+            stmt.setDate(4, Date.valueOf(aad.getAadDOM()));
+            stmt.setInt(5, aad.getAadJumps());
+            stmt.setDate(6, Date.valueOf(aad.getAadNextRegl()));
+            stmt.setInt(7, aad.getAadSaved());
+            stmt.setInt(8, aad.getAadManufacturerID());
+            stmt.setInt(9, aad.getSystemID());
+            stmt.setInt(10, aad.getStockID());
+            stmt.setInt(11, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));
+            setNewID(stmt.getInt(1));
             stmt.close();
-            getConn().commit();
-            getConn().close();
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            } 
             aad.setAadID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            if (aad.getSystemID()==0){
+                closeConn();
+            }
         }
     }
     
     protected void addStock(Stock stock) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = conn.prepareStatement("Insert into STOCK_INFO (STOCK_NAME,STATUS) values (?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, stock.getStockName());
-            stmt.setInt(2, 0);
+            openConn();
+            String procedureCall = "{? = call addStock(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, stock.getStockName());
+            stmt.setInt(3, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));
+            setNewID(stmt.getInt(1));
             stmt.close();
-            getConn().commit();
-            getConn().close();
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            } 
             stock.setStockID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            closeConn();
         }
     }
     
     protected void addManufacturer(Manufacturer man) {
         try {
-            if (getConn().isClosed()){
-                setConn(openConn());
-            }
-            PreparedStatement stmt = conn.prepareStatement("Insert into MANUFACTURER_INFO (MANUFACTURER_NAME,MANUFACTURER_COUNTRY,MANUFACTURER_TELEPHONE,MANUFACTURER_EMAIL,STATUS) values (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, man.getManufacturerName());
-            stmt.setString(2, man.getManufacturerCountry());
-            stmt.setString(3, man.getManufacturerTelephone());
-            stmt.setString(4, man.getManufacturerEmail());
-            stmt.setInt(5, 0);
+            openConn();
+            String procedureCall = "{? = call addManufacturer(?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setString(2, man.getManufacturerName());
+            stmt.setString(3, man.getManufacturerCountry());
+            stmt.setString(4, man.getManufacturerTelephone());
+            stmt.setString(5, man.getManufacturerEmail());
+            stmt.setInt(6, 0);
             stmt.execute();
             //get ID of new inserted item
-            ResultSet keys = stmt.getGeneratedKeys();    
-            keys.next();  
-            setNewID(keys.getInt(1));
+            setNewID(stmt.getInt(1));
             stmt.close();
-            getConn().commit();
-            getConn().close();
+            if (getNewID()==0){
+                getConn().rollback();
+                System.out.println("При выполнении запроса произошла ошибка. Повторите, пожалуйста, попытку позднее");
+                return;
+            }else{
+                getConn().commit();
+            } 
             man.setManufacturerID(getNewID());
         } catch (Exception e) {
             System.out.println("Ошибка связи с сервером:" + e.getMessage());
+            rollbackConn();
 //            e.printStackTrace();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editSkydiveSystem(SkydiveSystem ss, String updParams) {
-        String updateQuery = "Update system_info set " + updParams + " where systemid = "+ss.getSystemID();
+    protected void editSkydiveSystem(SkydiveSystem ss) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editSkydiveSystem(?,?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, ss.getSystemID());
+            stmt.setString(2, ss.getSystemCode());
+            stmt.setString(3, ss.getSystemModel());
+            stmt.setString(4, ss.getSystemSN());
+            stmt.setDate(5, Date.valueOf(ss.getSystemDOM()));
+            stmt.setInt(6, ss.getSystemManufacturerID());
+            stmt.setInt(7, ss.getCanopyID());
+            stmt.setInt(8, ss.getReserveID());
+            stmt.setInt(9, ss.getAadID());
+            stmt.setInt(10, ss.getStockID());
+            stmt.setInt(11, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editCanopy(Canopy c, String updParams) {
-        String updateQuery = "Update canopy_info set " + updParams + " where canopyid = "+c.getCanopyID();
+    protected void editCanopy(Canopy c) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            setNewID(0);
+            String procedureCall = "{call editCanopy(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, c.getCanopyID());
+            stmt.setString(2, c.getCanopyModel());
+            stmt.setInt(3, c.getCanopySize());
+            stmt.setString(4, c.getCanopySN());
+            stmt.setDate(5, Date.valueOf(c.getCanopyDOM()));
+            stmt.setInt(6, c.getCanopyJumps());
+            stmt.setInt(7, c.getCanopyManufacturerID());
+            stmt.setInt(8, c.getSystemID());
+            stmt.setInt(9, c.getStockID());
+            stmt.setInt(10, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editReserve(Reserve r, String updParams) {
-        String updateQuery = "Update reserve_info set " + updParams + " where reserveid = "+r.getReserveID();
+    protected void editReserve(Reserve r) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editReserve(?,?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, r.getReserveID());
+            stmt.setString(2, r.getReserveModel());
+            stmt.setInt(3, r.getReserveSize());
+            stmt.setString(4, r.getReserveSN());
+            stmt.setDate(5, Date.valueOf(r.getReserveDOM()));
+            stmt.setInt(6, r.getReserveJumps());
+            stmt.setDate(7, Date.valueOf(r.getReservePackDate()));
+            stmt.setInt(8, r.getReserveManufacturerID());
+            stmt.setInt(9, r.getSystemID());
+            stmt.setInt(10, r.getStockID());            
+            stmt.setInt(11, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editAAD(AAD aad, String updParams) {
-        String updateQuery = "Update aad_info set " + updParams + " where aadid = "+aad.getAadID();
+    protected void editAAD(AAD aad) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editAAD(?,?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.registerOutParameter(1, aad.getAadID());
+            stmt.setString(2, aad.getAadModel());
+            stmt.setString(3, aad.getAadSN());
+            stmt.setDate(4, Date.valueOf(aad.getAadDOM()));
+            stmt.setInt(5, aad.getAadJumps());
+            stmt.setDate(6, Date.valueOf(aad.getAadNextRegl()));
+            stmt.setInt(7, aad.getAadSaved());
+            stmt.setInt(8, aad.getAadManufacturerID());
+            stmt.setInt(9, aad.getSystemID());
+            stmt.setInt(10, aad.getStockID());
+            stmt.setInt(11, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editManufacturer(Manufacturer man, String updParams) {
-        String updateQuery = "Update manufacturer_info set " + updParams + " where manufacturerid = "+man.getManufacturerID();
+    protected void editManufacturer(Manufacturer man) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editManufacturer(?,?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, man.getManufacturerID());
+            stmt.setString(2, man.getManufacturerName());
+            stmt.setString(3, man.getManufacturerCountry());
+            stmt.setString(4, man.getManufacturerTelephone());
+            stmt.setString(5, man.getManufacturerEmail());
+            stmt.setInt(6, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void editStock (Stock stock, String updParams) {
-        String updateQuery = "Update stock_info set " + updParams + " where stockid = "+stock.getStockID();
+    protected void editStock (Stock stock) {
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call editStock(?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, stock.getStockID());
+            stmt.setString(2, stock.getStockName());
+            stmt.setInt(3, getStatus());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
         
-    protected void deleteSkydiveSystem(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
-                             "set si.STATUS = 1, ci.STATUS = 1, ri.STATUS = 1, ai.STATUS = 1 " +
-                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
+    protected void setStatusSkydiveSystem(SkydiveSystem ss, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        2 - In repair
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusSkydiveSystem(?,?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, ss.getSystemID());
+            stmt.setInt(2, ss.getCanopyID());
+            stmt.setInt(3, ss.getReserveID());
+            stmt.setInt(4, ss.getAadID());
+            stmt.setInt(5, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteContainer(SkydiveSystem ss) {
-
-        String updateQuery = "Update system_info si " + 
-                             "set si.STATUS = 1 " +
-                             "where si.systemid = " + ss.getSystemID();
+    protected void setStatusContainer(SkydiveSystem ss, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        2 - In repair
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusContainer(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, ss.getSystemID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteCanopy(Canopy c) {
-        String updateQuery = "Update canopy_info ci " + 
-                             "set ci.STATUS = 1 " +
-                             "where ci.canopyid = " + c.getCanopyID();
+    protected void setStatusCanopy(Canopy c, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        2 - In repair
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusCanopy(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, c.getCanopyID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteReserve(Reserve r) {
-        String updateQuery = "Update reserve_info ri " + 
-                             "set ri.STATUS = 1 " +
-                             "where ri.reserveid = " + r.getReserveID();
+    protected void setStatusReserve(Reserve r, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        2 - In repair
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusReserve(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, r.getReserveID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteAAD(AAD aad) {
-        String updateQuery = "Update aad_info ai " + 
-                             "set ai.STATUS = 1 " +
-                             "where ai.aadid = " + aad.getAadID();
+    protected void setStatusAAD(AAD aad, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        2 - In repair
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusAAD(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, aad.getAadID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteStock(Stock stock) {
-        String updateQuery = "Update stock_info si " + 
-                             "set si.STATUS = 1 " +
-                             "where si.stockid = " + stock.getStockID();
+    protected void setStatusStock(Stock stock, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusStock(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, stock.getStockID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
-    protected void deleteManufacturer(Manufacturer man) {
-        String updateQuery = "Update manufacturer_info mi " + 
-                             "set mi.STATUS = 1 " +
-                             "where mi.manufacturerid = " + man.getManufacturerID();
+    protected void setStatusManufacturer(Manufacturer man, int status) {
+        /*
+        0 - Active
+        1 - Deleted
+        */
         try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call setStatusManufacturer(?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, man.getManufacturerID());
+            stmt.setInt(2, status);
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
-
-    protected void restoreSkydiveSystem(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
-                             "set si.STATUS = 0, ci.STATUS = 0, ri.STATUS = 0, ai.STATUS = 0 " +
-                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreContainer(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.STATUS = 0 " +
-                             "where si.systemid = " + ss.getSystemID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreCanopy(Canopy c) {
-        String updateQuery = "Update canopy_info ci " + 
-                             "set ci.STATUS = 0 " +
-                             "where ci.canopyid = " + c.getCanopyID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreReserve(Reserve r) {
-        String updateQuery = "Update reserve_info ri " + 
-                             "set ri.STATUS = 0 " +
-                             "where ri.reserveid = " + r.getReserveID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreAAD(AAD aad) {
-        String updateQuery = "Update aad_info ai " + 
-                             "set ai.STATUS = 0 " +
-                             "where ai.aadid = " + aad.getAadID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreStock(Stock stock) {
-        String updateQuery = "Update stock_info si " + 
-                             "set si.STATUS = 0 " +
-                             "where si.stockid = " + stock.getStockID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void restoreManufacturer(Manufacturer man) {
-        String updateQuery = "Update manufacturer_info mi " + 
-                             "set mi.STATUS = 0 " +
-                             "where mi.manufacturerid = " + man.getManufacturerID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void repairSkydiveSystem(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si, canopy_info ci, reserve_info ri, aad_info ai " + 
-                             "set si.STATUS = 2, ci.STATUS = 2, ri.STATUS = 2, ai.STATUS = 2 " +
-                             "where si.systemid = " + ss.getSystemID() + " and si.systemid = ci.systemid = ri.systemid = ai.systemid";
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void repairContainer(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.STATUS = 2 " +
-                             "where si.systemid = " + ss.getSystemID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void repairCanopy(Canopy c) {
-        String updateQuery = "Update canopy_info ci " + 
-                             "set ci.STATUS = 2 " +
-                             "where ci.canopyid = " + c.getCanopyID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void repairReserve(Reserve r) {
-        String updateQuery = "Update reserve_info ri " + 
-                             "set ri.STATUS = 2 " +
-                             "where ri.reserveid = " + r.getReserveID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-    
-    protected void repairAAD(AAD aad) {
-        String updateQuery = "Update aad_info ai " + 
-                             "set ai.STATUS = 2 " +
-                             "where ai.aadid = " + aad.getAadID();
-        try {
-            addQuery(updateQuery);
-            executeQuery(getStmt());
-        } catch (SQLException ex) {
-            System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
-        }
-    }
-        
+  
     protected void disassembleSkydiveSystem(SkydiveSystem ss) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.canopyid = 0, si.reserveid = 0, si.aadid = 0 " +
-                             "where si.systemid = " + ss.getSystemID();
-        addQuery(updateQuery);
-        updateQuery = "Update canopy_info ci " + 
-                             "set ci.systemid = 0 " +
-                             "where ci.systemid = " + ss.getSystemID() + " and ci.canopyid = " + ss.getCanopyID();
-        addQuery(updateQuery);
-        updateQuery = "Update reserve_info ri " + 
-                             "set ri.systemid = 0 " +
-                             "where ri.systemid = " + ss.getSystemID() + " and ri.reserveid = " + ss.getReserveID();
-        addQuery(updateQuery);
-        updateQuery = "Update aad_info ai " + 
-                             "set ai.systemid = 0 " +
-                             "where ai.systemid = " + ss.getSystemID() + " and ai.aadid = " + ss.getAadID();
-        addQuery(updateQuery);
         try {
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call disassembleSkydiveSystem(?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, ss.getSystemID());
+            stmt.setInt(2, ss.getCanopyID());
+            stmt.setInt(3, ss.getReserveID());
+            stmt.setInt(4, ss.getAadID());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
     protected void assembleSkydiveSystem(SkydiveSystem ss, Canopy c, Reserve r, AAD aad) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.canopyid = " + c.getCanopyID() + ", si.reserveid = " + r.getReserveID() + ", si.aadid = " + aad.getAadID() + " " +
-                             "where si.systemid = " + ss.getSystemID();
-        addQuery(updateQuery);
-        updateQuery = "Update canopy_info ci " + 
-                             "set ci.systemid = " + ss.getSystemID() + " " +
-                             "where ci.systemid = 0 and ci.canopyid = " + c.getCanopyID();
-        addQuery(updateQuery);
-        updateQuery = "Update reserve_info ri " + 
-                             "set ri.systemid = " + ss.getSystemID() + " " +
-                             "where ri.systemid = 0 and ri.reserveid = " + r.getReserveID();
-        addQuery(updateQuery);
-        updateQuery = "Update aad_info ai " + 
-                             "set ai.systemid = " + ss.getSystemID() + " " +
-                             "where ai.systemid = 0 and ai.aadid = " + aad.getAadID();
-        addQuery(updateQuery);
         try {
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call assembleSkydiveSystem(?,?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, ss.getSystemID());
+            stmt.setInt(2, c.getCanopyID());
+            stmt.setInt(3, r.getReserveID());
+            stmt.setInt(4, aad.getAadID());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
     protected void replaceCanopy(Canopy c_Old, Canopy c_New) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.canopyid = " + c_New.getCanopyID() + " " +
-                             "where si.systemid = " + c_Old.getSystemID() + " AND si.canopyid = " + c_Old.getCanopyID();
-        addQuery(updateQuery);
-        updateQuery = "UPDATE canopy_info t1 JOIN canopy_info t2 " +
-                        "ON t1.canopyid = " + c_Old.getCanopyID() + " AND t2.canopyid = " + c_New.getCanopyID() + " " +
-                       "SET t1.systemid = 0, " +
-                           "t2.systemid = " + c_Old.getSystemID();
-        addQuery(updateQuery);
         try {
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call replaceCanopy(?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, c_Old.getSystemID());
+            stmt.setInt(2, c_Old.getCanopyID());
+            stmt.setInt(3, c_New.getCanopyID());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
     protected void replaceReserve(Reserve r_Old,Reserve r_New) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.reserveid = " + r_New.getReserveID() + " " +
-                             "where si.systemid = " + r_Old.getSystemID() + " AND si.reserveid = " + r_Old.getReserveID();
-        addQuery(updateQuery);
-        updateQuery = "UPDATE reserve_info t1 JOIN reserve_info t2 " +
-                        "ON t1.reserveid = " + r_Old.getReserveID() + " AND t2.reserveid = " + r_New.getReserveID() + " " +
-                       "SET t1.systemid = 0, " +
-                           "t2.systemid = " + r_Old.getSystemID();
-        addQuery(updateQuery);
         try {
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call replaceReserve(?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, r_Old.getSystemID());
+            stmt.setInt(2, r_Old.getReserveID());
+            stmt.setInt(3, r_New.getReserveID());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
     
     protected void replaceAAD(AAD aad_Old, AAD aad_New) {
-        String updateQuery = "Update system_info si " + 
-                             "set si.aadid = " + aad_New.getAadID() + " " +
-                             "where si.systemid = " + aad_Old.getSystemID() + " AND si.aadid = " + aad_Old.getAadID();
-        addQuery(updateQuery);
-        updateQuery = "UPDATE aad_info t1 JOIN aad_info t2 " +
-                        "ON t1.aadid = " + aad_Old.getAadID() + " AND t2.aadid = " + aad_New.getAadID() + " " +
-                       "SET t1.systemid = 0, " +
-                           "t2.systemid = " + aad_Old.getSystemID();
-        addQuery(updateQuery);
         try {
-            executeQuery(getStmt());
+            openConn();
+            String procedureCall = "{call replaceAAD(?,?,?)}";
+            CallableStatement stmt = getConn().prepareCall(procedureCall);
+            stmt.setInt(1, aad_Old.getSystemID());
+            stmt.setInt(2, aad_Old.getAadID());
+            stmt.setInt(3, aad_New.getAadID());
+            stmt.execute();
+            stmt.close();
+            getConn().commit();
         } catch (SQLException ex) {
             System.out.println("Ошибка при выполнении запроса. Проверьте правильность данных и повторите попытку." + ex.getMessage());
+            rollbackConn();
+        }finally{
+            closeConn();
         }
     }
 }

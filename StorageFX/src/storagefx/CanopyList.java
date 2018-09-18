@@ -237,8 +237,8 @@ public class CanopyList extends Application {
             chooseWindow.showAndWait();
             if (sl.getSelectedStock() != null){
                 Stock newStock = sl.getSelectedStock();
-                String stockNew = "stockid = "+ newStock.getStockID();
-                dr.editCanopy(selectedCanopy, stockNew);
+                selectedCanopy.setStockID(newStock.getStockID());
+                dr.editCanopy(selectedCanopy);
                 System.out.println("Система перемещена!");
             //Updating skydive system list
                 selectedCanopy.setStockID(newStock.getStockID());
@@ -272,7 +272,7 @@ public class CanopyList extends Application {
             Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
-                    dr.deleteCanopy(getSelectedCanopy());
+                    dr.setStatusCanopy(getSelectedCanopy(),1);
                     canopyTable.getItems().clear();
                     canopyTable.setItems(dr.getCanopyList());
                 } else if (option.get() == no) {

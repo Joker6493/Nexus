@@ -194,7 +194,7 @@ public class ContainerList extends Application {
             Optional<ButtonType> option = confirm.showAndWait();
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
-                    dr.deleteContainer(currentSystem);
+                    dr.setStatusContainer(currentSystem,1);
                     containerTable.getItems().clear();
                     containerTable.setItems(dr.getContainersList());
                 } else if (option.get() == no) {

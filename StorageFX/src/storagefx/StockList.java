@@ -163,7 +163,7 @@ public class StockList extends Application {
             //Refreshing indexList - in process
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             System.out.println("Удалить склад "+ selectedStock.getStockName() + "?");
-            dr.deleteStock(selectedStock);
+            dr.setStatusStock(selectedStock,1);
             System.out.println("Склад удален!");
             stockList.getItems().clear();
             stockList.setItems(dr.getStockList());
