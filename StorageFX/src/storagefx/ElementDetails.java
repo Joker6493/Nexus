@@ -240,23 +240,23 @@ public class ElementDetails extends Application {
         boolean emptyErr = true;
             if (sCode.getText().isEmpty()){
                 emptyErr = false;
-                sCode.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sCode.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sModel.getText().isEmpty()){
                 emptyErr = false;
-                sModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sSN.getText().isEmpty()){
                 emptyErr = false;
-                sSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                sDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (sManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                sManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                sManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //Container
@@ -488,27 +488,27 @@ public class ElementDetails extends Application {
             boolean emptyErr = true;
             if (!cModel.getText().isEmpty()){
                 emptyErr = false;
-                cModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!cSize.getText().isEmpty()){
                 emptyErr = false;
-                cSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!cSN.getText().isEmpty()){
                 emptyErr = false;
-                cSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!cDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                cDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (cManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                cManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!cJumps.getText().isEmpty()){
                 emptyErr = false;
-                cJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                cJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //Canopy
@@ -759,31 +759,31 @@ public class ElementDetails extends Application {
         //Reserve
             if (!rModel.getText().isEmpty()){
                 emptyErr = false;
-                rModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!rSize.getText().isEmpty()){
                 emptyErr = false;
-                rSize.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!rSN.getText().isEmpty()){
                 emptyErr = false;
-                rSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!rDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (rManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                rManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!rJumps.getText().isEmpty()){
                 emptyErr = false;
-                rJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!rPackDate.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rPackDate.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                rPackDate.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //Reserve
@@ -1043,31 +1043,31 @@ public class ElementDetails extends Application {
         //AAD
             if (!aModel.getText().isEmpty()){
                 emptyErr = false;
-                aModel.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!aSN.getText().isEmpty()){
                 emptyErr = false;
-                aSN.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!aDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aDOM.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (aManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                aManufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!aJumps.getText().isEmpty()){
                 emptyErr = false;
-                aJumps.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!aNextRegl.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aNextRegl.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aNextRegl.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (!aSaved.getText().isEmpty()){
                 emptyErr = false;
-                aSaved.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                aSaved.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //AAD
@@ -1232,7 +1232,7 @@ public class ElementDetails extends Application {
             boolean emptyErr = true;
             if (stockName.getText().isEmpty()){
                 emptyErr = false;
-                stockName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                stockName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //Stock
@@ -1388,19 +1388,19 @@ public class ElementDetails extends Application {
             boolean emptyErr = true;
             if (manufacturerName.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerName.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                manufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (manufacturerCountry.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerCountry.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                manufacturerCountry.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (manufacturerTelephone.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerTelephone.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                manufacturerTelephone.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (manufacturerEmail.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerEmail.setStyle(" -fx-background-color: #ff0000, -fx-border-color: #ff0000");
+                manufacturerEmail.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
             }
             if (emptyErr){
             //Manufacturer

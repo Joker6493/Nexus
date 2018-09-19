@@ -63,7 +63,7 @@ public class StorageIndex extends Application {
         BorderPane index = StorageIndex();
         Scene scene = new Scene(index);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Склад");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
