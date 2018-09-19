@@ -91,7 +91,7 @@ public class AADList extends Application {
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = AADTable(false);
         Scene scene = new Scene(index);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список страхующих приборов");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -269,7 +269,6 @@ public class AADList extends Application {
                 dr.editAAD(selectedAAD);
                 System.out.println("Прибор перемещен!");
             //Updating skydive system list
-                selectedAAD.setStockID(newStock.getStockID());
                 aadTable.getItems().clear();
                 aadTable.setItems(dr.getAadList());
             }
@@ -297,7 +296,64 @@ public class AADList extends Application {
 
                 }
         });
-        aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("Восстановить прибор "+getSelectedAAD().getAadModel()+" № "+getSelectedAAD().getAadSN()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Восстановить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusAAD(getSelectedAAD(),0);
+                    aadTable.getItems().clear();
+                    aadTable.setItems(dr.getAadList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        MenuItem repairItem = new MenuItem("В ремонт");
+        repairItem.setOnAction((ActionEvent e) -> {
+            setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
+            System.out.println("Передать прибор "+getSelectedAAD().getAadModel()+" № "+getSelectedAAD().getAadSN()+" в ремонт?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Передать прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+" в ремонт?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusAAD(getSelectedAAD(),2);
+                    aadTable.getItems().clear();
+                    aadTable.setItems(dr.getAadList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem);
+        switch (getStatus()){
+            case 0:
+                aadContextMenu.getItems().addAll(deleteItem,repairItem);
+                break;
+            case 1:
+                aadContextMenu.getItems().addAll(restoreItem,repairItem);
+                break;
+            case 2:
+                aadContextMenu.getItems().addAll(deleteItem,restoreItem);
+                break;
+        }
         aadTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             aadContextMenu.show(aadTable, event.getScreenX(), event.getScreenY());
         });

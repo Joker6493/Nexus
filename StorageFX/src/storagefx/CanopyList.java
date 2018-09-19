@@ -90,7 +90,7 @@ public class CanopyList extends Application {
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = CanopyTable(false);
         Scene scene = new Scene(index);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список основных парашютов");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -224,7 +224,7 @@ public class CanopyList extends Application {
         MenuItem moveItem = new MenuItem("Переместить");
         moveItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Переместить систему "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+            System.out.println("Переместить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
             Stage chooseWindow = new Stage();
             chooseWindow.setTitle("Выберите склад");
             //TODO - transmit to modal window stock and current canopy
@@ -239,9 +239,8 @@ public class CanopyList extends Application {
                 Stock newStock = sl.getSelectedStock();
                 selectedCanopy.setStockID(newStock.getStockID());
                 dr.editCanopy(selectedCanopy);
-                System.out.println("Система перемещена!");
+                System.out.println("Купол перемещен!");
             //Updating skydive system list
-                selectedCanopy.setStockID(newStock.getStockID());
                 canopyTable.getItems().clear();
                 canopyTable.setItems(dr.getCanopyList());
             }
@@ -281,7 +280,64 @@ public class CanopyList extends Application {
 
                 }
         });
-        canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
+            System.out.println("Восстановить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Восстановить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusCanopy(getSelectedCanopy(),0);
+                    canopyTable.getItems().clear();
+                    canopyTable.setItems(dr.getCanopyList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        MenuItem repairItem = new MenuItem("В ремонт");
+        repairItem.setOnAction((ActionEvent e) -> {
+            setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
+            System.out.println("Передать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+" в ремонт?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Передать купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+" в ремонт?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusCanopy(getSelectedCanopy(),2);
+                    canopyTable.getItems().clear();
+                    canopyTable.setItems(dr.getCanopyList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem);
+        switch (getStatus()){
+            case 0:
+                canopyContextMenu.getItems().addAll(deleteItem,repairItem);
+                break;
+            case 1:
+                canopyContextMenu.getItems().addAll(restoreItem,repairItem);
+                break;
+            case 2:
+                canopyContextMenu.getItems().addAll(deleteItem,restoreItem);
+                break;
+        }
         canopyTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             canopyContextMenu.show(canopyTable, event.getScreenX(), event.getScreenY());
         });

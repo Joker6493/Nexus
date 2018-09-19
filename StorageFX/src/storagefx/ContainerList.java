@@ -61,7 +61,7 @@ public class ContainerList extends Application {
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ContainerTable(false);
         Scene scene = new Scene(index);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список ранцев");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -180,6 +180,30 @@ public class ContainerList extends Application {
             detailStage.initOwner(index.getScene().getWindow());
             detail.start(detailStage);
         });
+        MenuItem moveItem = new MenuItem("Переместить");
+        moveItem.setOnAction((ActionEvent e) -> {
+            SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
+            System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
+            Stage chooseWindow = new Stage();
+            chooseWindow.setTitle("Выберите склад");
+            //TODO - transmit to modal window stock and current canopy
+            StockList sl = new StockList();
+            Scene sList = new Scene(sl.StockList(true));
+            chooseWindow.setScene(sList);
+            
+            chooseWindow.initModality(Modality.WINDOW_MODAL);
+            chooseWindow.initOwner(index.getScene().getWindow());
+            chooseWindow.showAndWait();
+            if (sl.getSelectedStock() != null){
+                Stock newStock = sl.getSelectedStock();
+                currentSystem.setStockID(newStock.getStockID());
+                dr.editSkydiveSystem(currentSystem);
+                System.out.println("Система перемещена!");
+            //Updating skydive system list
+                containerTable.getItems().clear();
+                containerTable.setItems(dr.getContainersList());
+            }
+        });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
@@ -203,7 +227,64 @@ public class ContainerList extends Application {
 
                 }
         });
-        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, assembleItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
+            System.out.println("Восстановить ранец "+currentSystem.getSystemCode()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Восстановить ранец " + currentSystem.getSystemCode() +" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusContainer(currentSystem,0);
+                    containerTable.getItems().clear();
+                    containerTable.setItems(dr.getContainersList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        MenuItem repairItem = new MenuItem("В ремонт");
+        repairItem.setOnAction((ActionEvent e) -> {
+            SkydiveSystem currentSystem = containerTable.getSelectionModel().getSelectedItem();
+            System.out.println("Передать ранец "+currentSystem.getSystemCode()+" в ремонт?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Передать ранец " + currentSystem.getSystemCode() +" в ремонт?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusContainer(currentSystem,2);
+                    containerTable.getItems().clear();
+                    containerTable.setItems(dr.getContainersList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, assembleItem);
+        switch (getStatus()){
+            case 0:
+                containerContextMenu.getItems().addAll(deleteItem,repairItem);
+                break;
+            case 1:
+                containerContextMenu.getItems().addAll(restoreItem,repairItem);
+                break;
+            case 2:
+                containerContextMenu.getItems().addAll(deleteItem,restoreItem);
+                break;
+        }
         containerTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             containerContextMenu.show(containerTable, event.getScreenX(), event.getScreenY());
         });

@@ -1169,6 +1169,8 @@ public class SystemDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                

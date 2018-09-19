@@ -97,7 +97,6 @@ public class ElementDetails extends Application {
         this.selectedStock = selectedStock;
         this.stageTitle = "Склад "+selectedStock.getStockName();
         this.setStatus(getStatus());
-        this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(stockDetail(selectedStock));
     }
@@ -106,7 +105,6 @@ public class ElementDetails extends Application {
         this.stageTitle = "Производитель "+selectedManufacturer.getManufacturerName();
         this.editStatus = editStatus;
         this.setStatus(getStatus());
-        this.setStockID(getStockID());
         this.scene = new Scene(manufacturerDetail(selectedManufacturer));
     }
     ElementDetails (String elementType, int stockID){
@@ -367,6 +365,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                
@@ -623,6 +623,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                
@@ -904,6 +906,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                
@@ -1185,6 +1189,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                
@@ -1306,6 +1312,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                
@@ -1493,6 +1501,8 @@ public class ElementDetails extends Application {
                         } else if (option.get() == no) {
                         } else {
                     }
+                }else{
+                details.getScene().getWindow().hide();                
                 }
             }else{
                 details.getScene().getWindow().hide();                

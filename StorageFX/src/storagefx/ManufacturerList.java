@@ -48,7 +48,7 @@ public class ManufacturerList extends Application {
         BorderPane index = ManufacturerList(false);
         Scene scene = new Scene(index);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список производителей");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -137,7 +137,7 @@ public class ManufacturerList extends Application {
         storageBar.setPadding(new Insets(10));
         index.setTop(storageBar);
         
-        ContextMenu storageContextMenu = new ContextMenu();
+        ContextMenu manufacturerContextMenu = new ContextMenu();
         MenuItem refreshList = new MenuItem("Обновить список");
         refreshList.setOnAction((ActionEvent e) -> {
             System.out.println("Идет обновление списка");
@@ -175,9 +175,27 @@ public class ManufacturerList extends Application {
             manufacturerList.getItems().clear();
             manufacturerList.setItems(dr.getManufacturerList());
         });
-        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
+            System.out.println("Восстановить производителя " + selectedManufacturer.getManufacturerName() + "?");
+            dr.setStatusManufacturer(selectedManufacturer,1);
+            System.out.println("Производитель восстановлен!");
+            manufacturerList.getItems().clear();
+            manufacturerList.setItems(dr.getManufacturerList());
+        });
+        manufacturerContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem);
+        switch (getStatus()){
+            case 0:
+                manufacturerContextMenu.getItems().add(deleteItem);
+                break;
+            case 1:
+                manufacturerContextMenu.getItems().add(restoreItem);
+                break;
+        }
         manufacturerList.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            storageContextMenu.show(manufacturerList, event.getScreenX(), event.getScreenY());
+            manufacturerContextMenu.show(manufacturerList, event.getScreenX(), event.getScreenY());
         });
         
         index.setCenter(manufacturerList);
@@ -186,6 +204,7 @@ public class ManufacturerList extends Application {
         closeBtn.setText("Закрыть");
         closeBtn.setOnAction((ActionEvent event) -> {
             //Some code here
+            index.getScene().getWindow().hide();
             System.out.println("Закрыть?");
         });
         

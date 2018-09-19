@@ -49,7 +49,7 @@ public class ElementsIndex extends Application {
     public void start(Stage primaryStage) throws SQLException {
         BorderPane index = ElementsIndex();
         Scene scene = new Scene(index);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Элементы систем");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

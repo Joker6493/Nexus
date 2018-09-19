@@ -91,7 +91,7 @@ public class ReserveList extends Application {
     public void start(Stage primaryStage) throws SQLException {
         StackPane index = ReserveTable(false);
         Scene scene = new Scene(index);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список запасных парашютов");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -240,9 +240,8 @@ public class ReserveList extends Application {
                 Stock newStock = sl.getSelectedStock();
                 selectedReserve.setStockID(newStock.getStockID());
                 dr.editReserve(selectedReserve);
-                System.out.println("Система перемещена!");
+                System.out.println("Купол перемещен!");
             //Updating skydive system list
-                selectedReserve.setStockID(newStock.getStockID());
                 reserveTable.getItems().clear();
                 reserveTable.setItems(dr.getReserveList());
             }
@@ -282,7 +281,64 @@ public class ReserveList extends Application {
 
                 }
         });
-        reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("Восстановить купол "+getSelectedReserve().getReserveModel()+"-"+getSelectedReserve().getReserveSize()+"?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Восстановить купол ПЗ " + getSelectedReserve().getReserveModel() +"-"+ getSelectedReserve().getReserveSize()+" ?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusReserve(getSelectedReserve(),0);
+                    reserveTable.getItems().clear();
+                    reserveTable.setItems(dr.getReserveList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        MenuItem repairItem = new MenuItem("В ремонт");
+        repairItem.setOnAction((ActionEvent e) -> {
+            setSelectedReserve(reserveTable.getSelectionModel().getSelectedItem());
+            System.out.println("Передать купол "+getSelectedReserve().getReserveModel()+"-"+getSelectedReserve().getReserveSize()+" в ремонт?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Передать купол ПЗ " + getSelectedReserve().getReserveModel() +"-"+ getSelectedReserve().getReserveSize()+" в ремонт?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusReserve(getSelectedReserve(),2);
+                    reserveTable.getItems().clear();
+                    reserveTable.setItems(dr.getReserveList());
+                } else if (option.get() == no) {
+
+                } else {
+
+                }
+        });
+        reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem);
+        switch (getStatus()){
+            case 0:
+                reserveContextMenu.getItems().addAll(deleteItem,repairItem);
+                break;
+            case 1:
+                reserveContextMenu.getItems().addAll(restoreItem,repairItem);
+                break;
+            case 2:
+                reserveContextMenu.getItems().addAll(deleteItem,restoreItem);
+                break;
+        }
         reserveTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
             reserveContextMenu.show(reserveTable, event.getScreenX(), event.getScreenY());
         });

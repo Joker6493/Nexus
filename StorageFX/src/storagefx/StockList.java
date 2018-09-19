@@ -53,7 +53,7 @@ public class StockList extends Application {
         BorderPane index = StockList(false);
         Scene scene = new Scene(index);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Список складов");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -63,6 +63,17 @@ public class StockList extends Application {
         DataRelay dr = new DataRelay();
         dr.setStatus(getStatus());
         ListView<Stock> stockList = new ListView<>();
+        stockList.setCellFactory(view -> new ListCell<Stock>(){
+            @Override
+            protected void updateItem(Stock stock, boolean empty) {
+                super.updateItem(stock, empty);
+                if (empty || stock == null || stock.getStockName() == null) {
+                    setText(null);
+                }else{
+                    setText(stock.getStockName());
+                }
+            }
+        });
         //Adding data and create scene
         ObservableList<Stock> indexList = dr.getStockList();
         stockList.setItems(indexList);
@@ -168,7 +179,25 @@ public class StockList extends Application {
             stockList.getItems().clear();
             stockList.setItems(dr.getStockList());
         });
-        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, deleteItem);
+        MenuItem restoreItem = new MenuItem("Восстановить");
+        restoreItem.setOnAction((ActionEvent e) -> {
+            //Refreshing indexList - in process
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            System.out.println("Восстановить склад "+ selectedStock.getStockName() + "?");
+            dr.setStatusStock(selectedStock,0);
+            System.out.println("Склад восстановлен!");
+            stockList.getItems().clear();
+            stockList.setItems(dr.getStockList());
+        });
+        storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem);
+        switch (getStatus()){
+            case 0:
+                storageContextMenu.getItems().add(deleteItem);
+                break;
+            case 1:
+                storageContextMenu.getItems().add(restoreItem);
+                break;
+        }
         stockList.setOnContextMenuRequested((ContextMenuEvent event) -> {
             storageContextMenu.show(stockList, event.getScreenX(), event.getScreenY());
         });
@@ -179,6 +208,7 @@ public class StockList extends Application {
         closeBtn.setText("Закрыть");
         closeBtn.setOnAction((ActionEvent event) -> {
             //Some code here
+            index.getScene().getWindow().hide();
             System.out.println("Закрыть?");
         });
         
