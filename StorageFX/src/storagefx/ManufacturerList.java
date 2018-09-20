@@ -80,9 +80,11 @@ public class ManufacturerList extends Application {
                 Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбран производитель " + selectedManufacturer.getManufacturerName() + "!");
-                if (closeOnSelect) {
-                    index.getScene().getWindow().hide();
-                }
+                ElementDetails detail = new ElementDetails(selectedManufacturer, false);
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
             }
         });
         
@@ -99,7 +101,7 @@ public class ManufacturerList extends Application {
         });
                 
         ComboBox <Status> statusBox = new ComboBox<>();
-        ObservableList<Status> statusList = dr.getStatusList();
+        ObservableList<Status> statusList = dr.getStatusListShort();
         statusBox.setItems(statusList);
         statusBox.getSelectionModel().select(0);
         status = statusBox.getSelectionModel().getSelectedItem().getStatusID();

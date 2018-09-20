@@ -237,7 +237,7 @@ public class StorageIndex extends Application {
             StockList sl = new StockList();
         //Need to modify - choosing statuses in modal window
             sl.setStatus(getStatus());
-            Scene sList = new Scene(sl.StockList(true));
+            Scene sList = new Scene(sl.StockList(false));
             chooseWindow.setScene(sList);
             
             chooseWindow.initModality(Modality.WINDOW_MODAL);
@@ -250,9 +250,8 @@ public class StorageIndex extends Application {
             Stage chooseWindow = new Stage();
             chooseWindow.setTitle("Справочник - Производители");
             ManufacturerList ml = new ManufacturerList();
-        //Need to modify - choosing statuses in modal window
             ml.setStatus(getStatus());
-            Scene mList = new Scene(ml.ManufacturerList(true));
+            Scene mList = new Scene(ml.ManufacturerList(false));
             chooseWindow.setScene(mList);
             
             chooseWindow.initModality(Modality.WINDOW_MODAL);
