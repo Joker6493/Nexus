@@ -353,6 +353,16 @@ public class DataRelay {
         return list;
     }
     
+    protected ObservableList<Status> getStatusListShort() {
+        ArrayList<Status> statusList = new ArrayList<>();
+        Status active = new Status(0,"Активные");
+        statusList.add(active);
+        Status disable = new Status(1,"Удаленные");
+        statusList.add(disable);
+        ObservableList<Status> list = FXCollections.observableList(statusList);
+        return list;
+    }
+    
     protected void addSkydiveSystem(SkydiveSystem ss) {
         try {
             openConn();

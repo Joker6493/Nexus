@@ -80,7 +80,7 @@ public class ManufacturerList extends Application {
                 Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
                 //TODO list
                 System.out.println("Выбран производитель " + selectedManufacturer.getManufacturerName() + "!");
-                if (closeOnSelect == true) {
+                if (closeOnSelect) {
                     index.getScene().getWindow().hide();
                 }
             }

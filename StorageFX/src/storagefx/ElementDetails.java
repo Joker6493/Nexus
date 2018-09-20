@@ -45,6 +45,7 @@ public class ElementDetails extends Application {
     private DataRelay dr = new DataRelay();
     private int stockID;
     private int status;
+    private boolean newElement;
     
     public int getStockID() {
         return stockID;
@@ -68,6 +69,7 @@ public class ElementDetails extends Application {
         this.editStatus = editStatus;
         this.scene = new Scene(containerDetail(selectedSystem));
         this.assemble = true;
+        this.newElement = false;
     }
     ElementDetails (Canopy selectedCanopy, boolean editStatus){
         this.selectedCanopy = selectedCanopy;
@@ -76,6 +78,7 @@ public class ElementDetails extends Application {
         this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(canopyDetail(selectedCanopy));
+        this.newElement = false;
     }
     ElementDetails (Reserve selectedReserve, boolean editStatus){
         this.selectedReserve = selectedReserve;
@@ -84,6 +87,7 @@ public class ElementDetails extends Application {
         this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(reserveDetail(selectedReserve));
+        this.newElement = false;
     }
     ElementDetails (AAD selectedAAD, boolean editStatus){
         this.selectedAAD = selectedAAD;
@@ -92,6 +96,7 @@ public class ElementDetails extends Application {
         this.setStockID(getStockID());
         this.editStatus = editStatus;
         this.scene = new Scene(aadDetail(selectedAAD));
+        this.newElement = false;
     }
     ElementDetails (Stock selectedStock, boolean editStatus){
         this.selectedStock = selectedStock;
@@ -99,6 +104,7 @@ public class ElementDetails extends Application {
         this.setStatus(getStatus());
         this.editStatus = editStatus;
         this.scene = new Scene(stockDetail(selectedStock));
+        this.newElement = false;
     }
     ElementDetails (Manufacturer selectedManufacturer, boolean editStatus){
         this.selectedManufacturer = selectedManufacturer;
@@ -106,9 +112,11 @@ public class ElementDetails extends Application {
         this.editStatus = editStatus;
         this.setStatus(getStatus());
         this.scene = new Scene(manufacturerDetail(selectedManufacturer));
+        this.newElement = false;
     }
     ElementDetails (String elementType, int stockID){
         this.editStatus = true;
+        this.newElement = true;
         switch (elementType) {
             case "container":
                 this.selectedSystem = new SkydiveSystem(0, "", "", "", LocalDate.now(), 0, "", stockID);
@@ -132,12 +140,12 @@ public class ElementDetails extends Application {
                 this.scene = new Scene(aadDetail(selectedAAD));
                 break;
             case "stock":
-                this.selectedStock = new Stock("");
+                this.selectedStock = new Stock(0,"");
                 this.stageTitle = "Добавление нового склада";
                 this.scene = new Scene(stockDetail(selectedStock));
                 break;
             case "manufacturer": 
-                this.selectedManufacturer = new Manufacturer("", "", "", "");
+                this.selectedManufacturer = new Manufacturer(0,"", "", "", "");
                 this.stageTitle = "Добавление нового производителя";
                 this.scene = new Scene(manufacturerDetail(selectedManufacturer));
                 break;    
@@ -240,23 +248,23 @@ public class ElementDetails extends Application {
         boolean emptyErr = true;
             if (sCode.getText().isEmpty()){
                 emptyErr = false;
-                sCode.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sCode.setStyle("-fx-border-color: red ;");
             }
             if (sModel.getText().isEmpty()){
                 emptyErr = false;
-                sModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sModel.setStyle("-fx-border-color: red ;");
             }
             if (sSN.getText().isEmpty()){
                 emptyErr = false;
-                sSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sSN.setStyle("-fx-border-color: red ;");
             }
             if (sDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                sDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sDOM.setStyle("-fx-border-color: red ;");
             }
             if (sManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                sManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //Container
@@ -282,13 +290,44 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck && !newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if (newElement){
+            //add new element
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить новый ранец " + selectedSystem.getSystemCode() + "?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addSkydiveSystem(ss);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
@@ -488,27 +527,27 @@ public class ElementDetails extends Application {
             boolean emptyErr = true;
             if (!cModel.getText().isEmpty()){
                 emptyErr = false;
-                cModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cModel.setStyle("-fx-border-color: red ;");
             }
             if (!cSize.getText().isEmpty()){
                 emptyErr = false;
-                cSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cSize.setStyle("-fx-border-color: red ;");
             }
             if (!cSN.getText().isEmpty()){
                 emptyErr = false;
-                cSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cSN.setStyle("-fx-border-color: red ;");
             }
             if (!cDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                cDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cDOM.setStyle("-fx-border-color: red ;");
             }
             if (cManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                cManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (!cJumps.getText().isEmpty()){
                 emptyErr = false;
-                cJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cJumps.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //Canopy
@@ -538,13 +577,43 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck && !newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if(newElement){
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить купол ОП " + c.getCanopyModel()+"-"+c.getCanopySize()+" ?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addCanopy(c);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
@@ -759,31 +828,31 @@ public class ElementDetails extends Application {
         //Reserve
             if (!rModel.getText().isEmpty()){
                 emptyErr = false;
-                rModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rModel.setStyle("-fx-border-color: red ;");
             }
             if (!rSize.getText().isEmpty()){
                 emptyErr = false;
-                rSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rSize.setStyle("-fx-border-color: red ;");
             }
             if (!rSN.getText().isEmpty()){
                 emptyErr = false;
-                rSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rSN.setStyle("-fx-border-color: red ;");
             }
             if (!rDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rDOM.setStyle("-fx-border-color: red ;");
             }
             if (rManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                rManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (!rJumps.getText().isEmpty()){
                 emptyErr = false;
-                rJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rJumps.setStyle("-fx-border-color: red ;");
             }
             if (!rPackDate.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rPackDate.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rPackDate.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //Reserve
@@ -817,13 +886,43 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck && !newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if (newElement){
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить купол ПЗ " + r.getReserveModel()+"-"+r.getReserveSize()+" ?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addReserve(r);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
@@ -1043,31 +1142,31 @@ public class ElementDetails extends Application {
         //AAD
             if (!aModel.getText().isEmpty()){
                 emptyErr = false;
-                aModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aModel.setStyle("-fx-border-color: red ;");
             }
             if (!aSN.getText().isEmpty()){
                 emptyErr = false;
-                aSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aSN.setStyle("-fx-border-color: red ;");
             }
             if (!aDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aDOM.setStyle("-fx-border-color: red ;");
             }
             if (aManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                aManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (!aJumps.getText().isEmpty()){
                 emptyErr = false;
-                aJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aJumps.setStyle("-fx-border-color: red ;");
             }
             if (!aNextRegl.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aNextRegl.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aNextRegl.setStyle("-fx-border-color: red ;");
             }
             if (!aSaved.getText().isEmpty()){
                 emptyErr = false;
-                aSaved.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aSaved.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //AAD
@@ -1101,18 +1200,48 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck && !newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if (newElement){
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить страхующий прибор " + a.getAadModel()+" № "+a.getAadSN()+" ?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addAAD(a);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                    confirm.setContentText("ПЗ " + a.getAadModel()+" № "+a.getAadSN());
+                    confirm.setContentText("Страхующий прибор " + a.getAadModel()+" № "+a.getAadSN());
                     ButtonType yes = new ButtonType("Да");
                     ButtonType no = new ButtonType("Нет");
                     confirm.getButtonTypes().clear();
@@ -1228,11 +1357,10 @@ public class ElementDetails extends Application {
             stockName.setText(stock.getStockName());
         });
         saveBtn.setOnAction((ActionEvent event) -> {
-            
             boolean emptyErr = true;
             if (stockName.getText().isEmpty()){
                 emptyErr = false;
-                stockName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                stockName.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //Stock
@@ -1242,13 +1370,43 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck && !newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if (newElement){
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить склад " + stock.getStockName()+" ?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addStock(stock);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
@@ -1388,19 +1546,19 @@ public class ElementDetails extends Application {
             boolean emptyErr = true;
             if (manufacturerName.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                manufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (manufacturerCountry.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerCountry.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                manufacturerCountry.setStyle("-fx-border-color: red ;");
             }
             if (manufacturerTelephone.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerTelephone.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                manufacturerTelephone.setStyle("-fx-border-color: red ;");
             }
             if (manufacturerEmail.getText().isEmpty()){
                 emptyErr = false;
-                manufacturerEmail.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                manufacturerEmail.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
             //Manufacturer
@@ -1422,18 +1580,48 @@ public class ElementDetails extends Application {
                     changeCheck = false;
                 }
             //Apply changes    
-                if (changeCheck) {
+                if (changeCheck &&!newElement) {
                     //Ничего не меялось
                     Alert noChange = new Alert(AlertType.INFORMATION);
                     noChange.setTitle("Внимание!");
                     noChange.setHeaderText(null);
                     noChange.setContentText("Изменений в параметрах нет!");
                     noChange.showAndWait();
+                }else if (newElement){
+                    Alert confirm = new Alert(AlertType.CONFIRMATION);
+                    confirm.setTitle("Подтверждение изменений");
+                    confirm.setHeaderText("Добавить производителя " + man.getManufacturerName()+" ?");
+                    ButtonType yes = new ButtonType("Да");
+                    ButtonType no = new ButtonType("Нет");
+                    confirm.getButtonTypes().clear();
+                    confirm.getButtonTypes().addAll(yes, no);
+                    Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Параметры не изменены!");
+                        noChange.showAndWait();
+                    } else if (option.get() == yes) {
+                        dr.addManufacturer(man);
+                    } else if (option.get() == no) {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    } else {
+                        Alert noChange = new Alert(AlertType.INFORMATION);
+                        noChange.setTitle("Внимание!");
+                        noChange.setHeaderText(null);
+                        noChange.setContentText("Изменения не сохранены!");
+                        noChange.showAndWait();
+                    }
                 }else{
                     Alert confirm = new Alert(AlertType.CONFIRMATION);
                     confirm.setTitle("Подтверждение изменений");
                     confirm.setHeaderText("Сохранить изменения в выбраном элементе?");
-                    confirm.setContentText("Склад " + man.getManufacturerName());
+                    confirm.setContentText("Производитель " + man.getManufacturerName());
                     ButtonType yes = new ButtonType("Да");
                     ButtonType no = new ButtonType("Нет");
                     confirm.getButtonTypes().clear();

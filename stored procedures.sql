@@ -186,9 +186,9 @@ begin
 
 set @status = status;
 
-select stockid, stock_name
-from stock_info
-where status = @status;
+select sti.stockid, sti.stock_name
+from stock_info sti
+where sti.status = @status;
 
 end $$
 
@@ -736,7 +736,7 @@ update stock_info sti
 set
 sti.stock_name = @stock_name,
 sti.status = @status
-where stockid = @stockid;
+where sti.stockid = @stockid;
 
 end $$
 

@@ -716,106 +716,106 @@ public class SystemDetails extends Application {
             boolean emptyErr = true;
             if (sCode.getText().isEmpty()){
                 emptyErr = false;
-                sCode.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sCode.setStyle("-fx-border-color: red ;");
             }
             if (sModel.getText().isEmpty()){
                 emptyErr = false;
-                sModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sModel.setStyle("-fx-border-color: red ;");
             }
             if (sSN.getText().isEmpty()){
                 emptyErr = false;
-                sSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sSN.setStyle("-fx-border-color: red ;");
             }
             if (sDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                sDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sDOM.setStyle("-fx-border-color: red ;");
             }
             if (sManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                sManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                sManufacturerName.setStyle("-fx-border-color: red ;");
             }
         //Canopy
             if (cModel.getText().isEmpty()){
                 emptyErr = false;
-                cModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cModel.setStyle("-fx-border-color: red ;");
             }
             if (cSize.getText().isEmpty()){
                 emptyErr = false;
-                cSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cSize.setStyle("-fx-border-color: red ;");
             }
             if (cSN.getText().isEmpty()){
                 emptyErr = false;
-                cSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cSN.setStyle("-fx-border-color: red ;");
             }
             if (cDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                cDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cDOM.setStyle("-fx-border-color: red ;");
             }
             if (cManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                cManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (cJumps.getText().isEmpty()){
                 emptyErr = false;
-                cJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                cJumps.setStyle("-fx-border-color: red ;");
             }
         //Reserve
             if (rModel.getText().isEmpty()){
                 emptyErr = false;
-                rModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rModel.setStyle("-fx-border-color: red ;");
             }
             if (rSize.getText().isEmpty()){
                 emptyErr = false;
-                rSize.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rSize.setStyle("-fx-border-color: red ;");
             }
             if (rSN.getText().isEmpty()){
                 emptyErr = false;
-                rSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rSN.setStyle("-fx-border-color: red ;");
             }
             if (rDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rDOM.setStyle("-fx-border-color: red ;");
             }
             if (rManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                rManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (rJumps.getText().isEmpty()){
                 emptyErr = false;
-                rJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rJumps.setStyle("-fx-border-color: red ;");
             }
             if (rPackDate.getValue().toString().isEmpty()){
                 emptyErr = false;
-                rPackDate.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                rPackDate.setStyle("-fx-border-color: red ;");
             }
         //AAD
             if (aModel.getText().isEmpty()){
                 emptyErr = false;
-                aModel.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aModel.setStyle("-fx-border-color: red ;");
             }
             if (aSN.getText().isEmpty()){
                 emptyErr = false;
-                aSN.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aSN.setStyle("-fx-border-color: red ;");
             }
             if (aDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aDOM.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aDOM.setStyle("-fx-border-color: red ;");
             }
             if (aManufacturerName.getSelectionModel().isEmpty()){
                 emptyErr = false;
-                aManufacturerName.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aManufacturerName.setStyle("-fx-border-color: red ;");
             }
             if (aJumps.getText().isEmpty()){
                 emptyErr = false;
-                aJumps.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aJumps.setStyle("-fx-border-color: red ;");
             }
             if (aNextRegl.getValue().toString().isEmpty()){
                 emptyErr = false;
-                aNextRegl.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aNextRegl.setStyle("-fx-border-color: red ;");
             }
             if (aSaved.getText().isEmpty()){
                 emptyErr = false;
-                aSaved.setStyle("-fx-background-color: red ; -fx-border-color: red ;");
+                aSaved.setStyle("-fx-border-color: red ;");
             }
             if (emptyErr){
                 if (!isAssembleInProcess() && !isNewSystem()){

@@ -82,10 +82,10 @@ public class StockList extends Application {
                 //Get selected TableView SkydiveSystem object
                 setSelectedStock(stockList.getSelectionModel().getSelectedItem());
                 //TODO list
-                System.out.println("Выбран склад "+selectedStock.getStockName() + "!");
-                if (closeOnSelect == true) {
+                if (closeOnSelect) {
+                    System.out.println("Выбран склад "+selectedStock.getStockName() + "!");
                     index.getScene().getWindow().hide();
-                }    
+                }   
             }
         });
         
@@ -102,7 +102,7 @@ public class StockList extends Application {
         });
         
         ComboBox <Status> statusBox = new ComboBox<>();
-        ObservableList<Status> statusList = dr.getStatusList();
+        ObservableList<Status> statusList = dr.getStatusListShort();
         statusBox.setItems(statusList);
         statusBox.getSelectionModel().select(0);
         status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
