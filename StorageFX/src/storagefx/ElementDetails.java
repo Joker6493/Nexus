@@ -525,19 +525,19 @@ public class ElementDetails extends Application {
         saveBtn.setOnAction((ActionEvent event) -> {
             
             boolean emptyErr = true;
-            if (!cModel.getText().isEmpty()){
+            if (cModel.getText().isEmpty()){
                 emptyErr = false;
                 cModel.setStyle("-fx-border-color: red ;");
             }
-            if (!cSize.getText().isEmpty()){
+            if (cSize.getText().isEmpty()){
                 emptyErr = false;
                 cSize.setStyle("-fx-border-color: red ;");
             }
-            if (!cSN.getText().isEmpty()){
+            if (cSN.getText().isEmpty()){
                 emptyErr = false;
                 cSN.setStyle("-fx-border-color: red ;");
             }
-            if (!cDOM.getValue().toString().isEmpty()){
+            if (cDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
                 cDOM.setStyle("-fx-border-color: red ;");
             }
@@ -545,7 +545,7 @@ public class ElementDetails extends Application {
                 emptyErr = false;
                 cManufacturerName.setStyle("-fx-border-color: red ;");
             }
-            if (!cJumps.getText().isEmpty()){
+            if (cJumps.getText().isEmpty()){
                 emptyErr = false;
                 cJumps.setStyle("-fx-border-color: red ;");
             }
@@ -826,19 +826,19 @@ public class ElementDetails extends Application {
             
             boolean emptyErr = true;
         //Reserve
-            if (!rModel.getText().isEmpty()){
+            if (rModel.getText().isEmpty()){
                 emptyErr = false;
                 rModel.setStyle("-fx-border-color: red ;");
             }
-            if (!rSize.getText().isEmpty()){
+            if (rSize.getText().isEmpty()){
                 emptyErr = false;
                 rSize.setStyle("-fx-border-color: red ;");
             }
-            if (!rSN.getText().isEmpty()){
+            if (rSN.getText().isEmpty()){
                 emptyErr = false;
                 rSN.setStyle("-fx-border-color: red ;");
             }
-            if (!rDOM.getValue().toString().isEmpty()){
+            if (rDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
                 rDOM.setStyle("-fx-border-color: red ;");
             }
@@ -846,11 +846,11 @@ public class ElementDetails extends Application {
                 emptyErr = false;
                 rManufacturerName.setStyle("-fx-border-color: red ;");
             }
-            if (!rJumps.getText().isEmpty()){
+            if (rJumps.getText().isEmpty()){
                 emptyErr = false;
                 rJumps.setStyle("-fx-border-color: red ;");
             }
-            if (!rPackDate.getValue().toString().isEmpty()){
+            if (rPackDate.getValue().toString().isEmpty()){
                 emptyErr = false;
                 rPackDate.setStyle("-fx-border-color: red ;");
             }
@@ -1140,15 +1140,15 @@ public class ElementDetails extends Application {
             
             boolean emptyErr = true;
         //AAD
-            if (!aModel.getText().isEmpty()){
+            if (aModel.getText().isEmpty()){
                 emptyErr = false;
                 aModel.setStyle("-fx-border-color: red ;");
             }
-            if (!aSN.getText().isEmpty()){
+            if (aSN.getText().isEmpty()){
                 emptyErr = false;
                 aSN.setStyle("-fx-border-color: red ;");
             }
-            if (!aDOM.getValue().toString().isEmpty()){
+            if (aDOM.getValue().toString().isEmpty()){
                 emptyErr = false;
                 aDOM.setStyle("-fx-border-color: red ;");
             }
@@ -1156,15 +1156,15 @@ public class ElementDetails extends Application {
                 emptyErr = false;
                 aManufacturerName.setStyle("-fx-border-color: red ;");
             }
-            if (!aJumps.getText().isEmpty()){
+            if (aJumps.getText().isEmpty()){
                 emptyErr = false;
                 aJumps.setStyle("-fx-border-color: red ;");
             }
-            if (!aNextRegl.getValue().toString().isEmpty()){
+            if (aNextRegl.getValue().toString().isEmpty()){
                 emptyErr = false;
                 aNextRegl.setStyle("-fx-border-color: red ;");
             }
-            if (!aSaved.getText().isEmpty()){
+            if (aSaved.getText().isEmpty()){
                 emptyErr = false;
                 aSaved.setStyle("-fx-border-color: red ;");
             }
