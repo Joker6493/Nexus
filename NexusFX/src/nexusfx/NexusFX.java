@@ -127,12 +127,11 @@ public class NexusFX extends Application {
         statusBar.add(statusLabel, 2, 0);
         statusBar.add(connStatus, 3, 0);
         
-        ColumnConstraints columnButton = new ColumnConstraints();
-        ColumnConstraints columnTask = new ColumnConstraints();
-        columnTask.setPercentWidth(70);
-        ColumnConstraints columnConnection = new ColumnConstraints();
-        statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
-        
+//        ColumnConstraints columnButton = new ColumnConstraints();
+//        ColumnConstraints columnTask = new ColumnConstraints();
+//        columnTask.setPercentWidth(50);
+//        ColumnConstraints columnConnection = new ColumnConstraints();
+//        statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
         root.setTop(MenuBarMain);
         root.setLeft(/*new Button("Left")*/btn);
