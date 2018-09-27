@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
+import logger.Level;
+import logger.Logger;
 
 /**
  * Plugin Loader module
@@ -25,13 +27,14 @@ public class PluginLoader {
     //Array of files and classes
     ArrayList<File> jarFileList = new ArrayList();
     ArrayList<String> ClassList = new ArrayList();
+    Logger logger = new Logger();
         
     public Class<?> loadClass (String path, String fileName, String className) throws MalformedURLException, ClassNotFoundException, IOException{
         Class<?> clazz = null;
         File file = new File (path.concat("/").concat(fileName).concat(".jar"));
         if (!file.exists()) {
             //if file not exist
-            System.out.println("Файл не найден");
+            logger.writeLog(Level.SEVERE, "Файл "+ fileName +" не найден");
         } else {
             JarFile jFile = new JarFile(file);
             jFile.stream().forEach(jc -> {
