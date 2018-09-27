@@ -396,17 +396,17 @@ public class DataRelay {
                 Canopy newCanopy = new Canopy(ss.getSystemID(), ss.getCanopyID(), ss.getCanopyModel(), ss.getCanopySize(), ss.getCanopySN(), ss.getCanopyDOM(), ss.getCanopyJumps(), ss.getCanopyManufacturerID(), ss.getCanopyManufacturerName(), ss.getStockID());
                 Reserve newReserve = new Reserve(ss.getSystemID(), ss.getReserveID(), ss.getReserveModel(), ss.getReserveSize(), ss.getReserveSN(), ss.getReserveDOM(), ss.getReserveJumps(), ss.getReservePackDate(), ss.getReserveManufacturerID(), ss.getReserveManufacturerName(), ss.getStockID());
                 AAD newAAD = new AAD(ss.getSystemID(), ss.getAadID(), ss.getAadModel(), ss.getAadSN(), ss.getAadDOM(), ss.getAadJumps(), ss.getAadNextRegl(), ss.getAadSaved(), ss.getAadManufacturerID(), ss.getAadManufacturerName(), ss.getStockID());
-                if (newCanopy.getCanopyID()==0){
+                if (newCanopy.getCanopyID()==0 && !newCanopy.getCanopyModel().isEmpty()){
                     addCanopy(newCanopy);
                     ss.setCanopyID(getNewID());
                     newCanopy.setCanopyID(getNewID());
                 }
-                if (newReserve.getReserveID()==0){
+                if (newReserve.getReserveID()==0 && !newReserve.getReserveModel().isEmpty()){
                     addReserve(newReserve);
                     ss.setReserveID(getNewID());
                     newReserve.setReserveID(getNewID());
                 }
-                if (newAAD.getAadID()==0){
+                if (newAAD.getAadID()==0 && !newAAD.getAadModel().isEmpty()){
                     addAAD(newAAD);
                     ss.setAadID(getNewID());
                     newAAD.setAadID(getNewID());
@@ -696,7 +696,7 @@ public class DataRelay {
             openConn();
             String procedureCall = "{call editAAD(?,?,?,?,?,?,?,?,?,?,?)}";
             CallableStatement stmt = getConn().prepareCall(procedureCall);
-            stmt.registerOutParameter(1, aad.getAadID());
+            stmt.setInt(1, aad.getAadID());
             stmt.setString(2, aad.getAadModel());
             stmt.setString(3, aad.getAadSN());
             stmt.setDate(4, Date.valueOf(aad.getAadDOM()));

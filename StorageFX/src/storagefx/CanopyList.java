@@ -326,7 +326,7 @@ public class CanopyList extends Application {
 
                 }
         });
-        canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem);
+        canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem);
         switch (getStatus()){
             case 0:
                 canopyContextMenu.getItems().addAll(deleteItem,repairItem);

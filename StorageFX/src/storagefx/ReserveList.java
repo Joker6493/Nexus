@@ -327,7 +327,7 @@ public class ReserveList extends Application {
 
                 }
         });
-        reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem);
+        reserveContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem);
         switch (getStatus()){
             case 0:
                 reserveContextMenu.getItems().addAll(deleteItem,repairItem);

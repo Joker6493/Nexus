@@ -63,7 +63,7 @@ public class ElementDetails extends Application {
     DateTimeFormatter mySQLFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     ElementDetails (SkydiveSystem selectedSystem, boolean editStatus){
         this.selectedSystem = selectedSystem;
-        this.stageTitle = "Система "+selectedSystem.getSystemCode();
+        this.stageTitle = "Ранец "+selectedSystem.getSystemCode();
         this.setStatus(getStatus());
         this.setStockID(getStockID());
         this.editStatus = editStatus;
@@ -781,16 +781,7 @@ public class ElementDetails extends Application {
             }
         });
         rJumps.setEditable(editStatus);
-        Label rPackDateLabel = new Label ("Дата укладки: ");
-        DatePicker rPackDate = new DatePicker(r.getReservePackDate());
-        rPackDate.setShowWeekNumbers(true);
-        rPackDate.setEditable(editStatus);
-        rPackDate.setOnMouseClicked(e -> {
-            if(!rPackDate.isEditable()){
-                rPackDate.hide();
-            }
-        });
-                
+        
         details.add(reserveGridName, 0, 0);
         details.add(rModelLabel, 0, 1);
         details.add(rModel, 1, 1);
@@ -804,8 +795,6 @@ public class ElementDetails extends Application {
         details.add(rManufacturerName, 1, 5);
         details.add(rJumpsLabel, 0, 6);
         details.add(rJumps, 1, 6);
-        details.add(rPackDateLabel, 0, 7);
-        details.add(rPackDate, 1, 7);
         details.setPadding(new Insets(5));
         
         Button saveBtn = new Button("Сохранить");
@@ -820,7 +809,6 @@ public class ElementDetails extends Application {
             rDOM.setValue(r.getReserveDOM());
             rManufacturerName.getSelectionModel().select(r.getReserveManufacturerID()-1); 
             rJumps.setText(Integer.toString(r.getReserveJumps()));
-            rPackDate.setValue(r.getReservePackDate()); 
         });
         saveBtn.setOnAction((ActionEvent event) -> {
             
@@ -850,10 +838,6 @@ public class ElementDetails extends Application {
                 emptyErr = false;
                 rJumps.setStyle("-fx-border-color: red ;");
             }
-            if (rPackDate.getValue().toString().isEmpty()){
-                emptyErr = false;
-                rPackDate.setStyle("-fx-border-color: red ;");
-            }
             if (emptyErr){
             //Reserve
                 boolean changeCheck = true;
@@ -879,10 +863,6 @@ public class ElementDetails extends Application {
                 }
                 if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
                     r.setReserveJumps(Integer.valueOf(rJumps.getText()));
-                    changeCheck = false;
-                }
-                if (!rPackDate.getValue().equals(r.getReservePackDate())){
-                    r.setReservePackDate(rPackDate.getValue());
                     changeCheck = false;
                 }
             //Apply changes    
@@ -985,9 +965,6 @@ public class ElementDetails extends Application {
                     changed = true;
                 }
                 if (!rJumps.getText().equals(Integer.toString(r.getReserveJumps()))){
-                    changed = true;
-                }
-                if (!rPackDate.getValue().equals(r.getReservePackDate())){
                     changed = true;
                 }
                 if (changed){

@@ -273,7 +273,7 @@ public class ContainerList extends Application {
 
                 }
         });
-        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, assembleItem);
+        containerContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem, assembleItem);
         switch (getStatus()){
             case 0:
                 containerContextMenu.getItems().addAll(deleteItem,repairItem);
