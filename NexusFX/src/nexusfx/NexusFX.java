@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -34,6 +33,7 @@ public class NexusFX extends Application {
     PluginLoader classLoader = new PluginLoader();
     Logger logger = new Logger();
     SAMConn mysqlconn = new SAMConn();
+    StatusBar bar = new StatusBar();
     Connection dbconn = mysqlconn.connectDatabase();
     String status = logger.readLastLog();
     
@@ -54,6 +54,7 @@ public class NexusFX extends Application {
                 Object storageObj = storageClass.newInstance();
                 Method storageMethod = storageClass.getDeclaredMethod("StorageIndex", params);
                 root.setCenter((BorderPane) storageMethod.invoke(storageObj, paramsObj));
+                bar.AddTask("Склад", root, (BorderPane) storageMethod.invoke(storageObj, paramsObj));
             } catch (Exception e) {
             System.out.println("Ошибка " + e.getMessage());
             //e.printStackTrace();
@@ -106,42 +107,15 @@ public class NexusFX extends Application {
             System.out.println("Hello World!");
             logger.writeLog(Level.SUCCESS, "Hello World!");
         });
-        //Task Bar
-        HBox taskBar = new HBox();
-        taskBar.getChildren().addAll(new Button("Scene1"),new Button("Scene2"),new Button("Scene3"));
-        //Status Bar
-        GridPane statusBar = new GridPane();
-        ConnectionCheck connStatus = new ConnectionCheck();
-        connStatus.bindToTime();
-        Label statusLabel = new Label(logger.readLastLog());
-        statusLabel.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (oldValue.equalsIgnoreCase(logger.readLastLog())){
-                statusLabel.setText(oldValue);
-            }else{
-                statusLabel.setText(newValue); 
-            }
-        });
-        Button menuButton = new Button("Menu");
-        statusBar.add(menuButton, 0, 0);
-        statusBar.add(taskBar, 1, 0);
-        statusBar.add(statusLabel, 2, 0);
-        statusBar.add(connStatus, 3, 0);
-        
-//        ColumnConstraints columnButton = new ColumnConstraints();
-//        ColumnConstraints columnTask = new ColumnConstraints();
-//        columnTask.setPercentWidth(50);
-//        ColumnConstraints columnConnection = new ColumnConstraints();
-//        statusBar.getColumnConstraints().addAll(columnButton, columnTask, columnConnection);
         
         root.setTop(MenuBarMain);
         root.setLeft(/*new Button("Left")*/btn);
         root.setRight(new Button("Right"));
-        root.setBottom(statusBar);
+        root.setBottom(bar.init());
         //root.setCenter(new Button("Center"));
         //root.setCenter(btn);
         
         Scene scene = new Scene(root);
-        
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);

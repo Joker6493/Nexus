@@ -198,11 +198,12 @@ public class AADList extends Application {
                         index.getScene().getWindow().hide();
                     }
                 }else{
-                ElementDetails detail = new ElementDetails(selectedAAD, false);
-                Stage detailStage = new Stage();
-                detailStage.initModality(Modality.WINDOW_MODAL);
-                detailStage.initOwner(index.getScene().getWindow());
-                detail.start(detailStage);
+                    System.out.println("Просмотр информации о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
+                    ElementDetails detail = new ElementDetails(selectedAAD, false);
+                    Stage detailStage = new Stage();
+                    detailStage.initModality(Modality.WINDOW_MODAL);
+                    detailStage.initOwner(index.getScene().getWindow());
+                    detail.start(detailStage);
                 }
             }
         });
@@ -217,7 +218,7 @@ public class AADList extends Application {
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
-            System.out.println("Информация о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
+            System.out.println("Просмотр информации о приборе "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN());
             ElementDetails detail = new ElementDetails(selectedAAD, false);
             detail.setStatus(getStatus());
             detail.setStockID(getStockID());
@@ -230,48 +231,91 @@ public class AADList extends Application {
         editItem.setOnAction((ActionEvent e) -> {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("Редактируем прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
-            ElementDetails detail = new ElementDetails(selectedAAD, true);
-            detail.setStatus(getStatus());
-            detail.setStockID(getStockID());
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Редактировать прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    ElementDetails detail = new ElementDetails(selectedAAD, true);
+                    detail.setStatus(getStatus());
+                    detail.setStockID(getStockID());
+                    Stage detailStage = new Stage();
+                    detailStage.initModality(Modality.WINDOW_MODAL);
+                    detailStage.initOwner(index.getScene().getWindow());
+                    detail.start(detailStage);
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-    //Need to remade
             System.out.println("Добавить прибор?");
-            ElementDetails detail = new ElementDetails("aad",stockID);
-            detail.setStatus(getStatus());
-            detail.setStockID(getStockID());
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Добавить прибор?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    ElementDetails detail = new ElementDetails("aad",stockID);
+                    detail.setStatus(getStatus());
+                    detail.setStockID(getStockID());
+                    Stage detailStage = new Stage();
+                    detailStage.initModality(Modality.WINDOW_MODAL);
+                    detailStage.initOwner(index.getScene().getWindow());
+                    detail.start(detailStage);
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem moveItem = new MenuItem("Переместить");
         moveItem.setOnAction((ActionEvent e) -> {
             setSelectedAAD(aadTable.getSelectionModel().getSelectedItem());
             System.out.println("Переместить прибор "+selectedAAD.getAadModel()+" № "+selectedAAD.getAadSN()+"?");
-            Stage chooseWindow = new Stage();
-            chooseWindow.setTitle("Выберите склад");
-            //TODO - transmit to modal window stock and current canopy
-            StockList sl = new StockList();
-            Scene sList = new Scene(sl.StockList(true));
-            chooseWindow.setScene(sList);
-            chooseWindow.initModality(Modality.WINDOW_MODAL);
-            chooseWindow.initOwner(index.getScene().getWindow());
-            chooseWindow.showAndWait();
-            if (sl.getSelectedStock() != null){
-                Stock newStock = sl.getSelectedStock();
-                selectedAAD.setStockID(newStock.getStockID());
-                dr.editAAD(selectedAAD);
-                System.out.println("Прибор перемещен!");
-            //Updating skydive system list
-                aadTable.getItems().clear();
-                aadTable.setItems(dr.getAadList());
-            }
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Переместить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+"?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    Stage chooseWindow = new Stage();
+                    chooseWindow.setTitle("Выберите склад");
+                    //TODO - transmit to modal window stock and current canopy
+                    StockList sl = new StockList();
+                    Scene sList = new Scene(sl.StockList(true));
+                    chooseWindow.setScene(sList);
+                    chooseWindow.initModality(Modality.WINDOW_MODAL);
+                    chooseWindow.initOwner(index.getScene().getWindow());
+                    chooseWindow.showAndWait();
+                    if (sl.getSelectedStock() != null){
+                        Stock newStock = sl.getSelectedStock();
+                        selectedAAD.setStockID(newStock.getStockID());
+                        dr.editAAD(selectedAAD);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Прибор перемещен!");
+                        info.showAndWait();
+                        System.out.println("Прибор перемещен!");
+                    //Updating skydive system list
+                        aadTable.getItems().clear();
+                        aadTable.setItems(dr.getAadList());
+                    }
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
@@ -279,7 +323,7 @@ public class AADList extends Application {
             System.out.println("Удалить прибор "+getSelectedAAD().getAadModel()+" № "+getSelectedAAD().getAadSN()+"?");
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Удалить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+" ?");
+            confirm.setHeaderText("Удалить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+"?");
             ButtonType yes = new ButtonType("Да");
             ButtonType no = new ButtonType("Нет");
             confirm.getButtonTypes().clear();
@@ -288,12 +332,16 @@ public class AADList extends Application {
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
                     dr.setStatusAAD(getSelectedAAD(),1);
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Внимание!");
+                    info.setHeaderText(null);
+                    info.setContentText("Прибор удален!");
+                    info.showAndWait();
+                    System.out.println("Прибор удален!");
                     aadTable.getItems().clear();
                     aadTable.setItems(dr.getAadList());
                 } else if (option.get() == no) {
-
                 } else {
-
                 }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
@@ -302,7 +350,7 @@ public class AADList extends Application {
             System.out.println("Восстановить прибор "+getSelectedAAD().getAadModel()+" № "+getSelectedAAD().getAadSN()+"?");
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Восстановить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+" ?");
+            confirm.setHeaderText("Восстановить прибор " + getSelectedAAD().getAadModel() +" № "+ getSelectedAAD().getAadSN()+"?");
             ButtonType yes = new ButtonType("Да");
             ButtonType no = new ButtonType("Нет");
             confirm.getButtonTypes().clear();
@@ -311,12 +359,16 @@ public class AADList extends Application {
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
                     dr.setStatusAAD(getSelectedAAD(),0);
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Внимание!");
+                    info.setHeaderText(null);
+                    info.setContentText("Прибор восстановлен!");
+                    info.showAndWait();
+                    System.out.println("Прибор восстановлен!");
                     aadTable.getItems().clear();
                     aadTable.setItems(dr.getAadList());
                 } else if (option.get() == no) {
-
                 } else {
-
                 }
         });
         MenuItem repairItem = new MenuItem("В ремонт");
@@ -334,12 +386,16 @@ public class AADList extends Application {
                 if (option.get() == null) {
                 } else if (option.get() == yes) {
                     dr.setStatusAAD(getSelectedAAD(),2);
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Внимание!");
+                    info.setHeaderText(null);
+                    info.setContentText("Прибор передан в ремонт!");
+                    info.showAndWait();
+                    System.out.println("Прибор передан в ремонт!");
                     aadTable.getItems().clear();
                     aadTable.setItems(dr.getAadList());
                 } else if (option.get() == no) {
-
                 } else {
-
                 }
         });
         aadContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem);

@@ -139,6 +139,33 @@ public class ElementsIndex extends Application {
             setStockID(stockBox.getSelectionModel().getSelectedItem().getStockID());
             dr.setStock(getStockID());
             System.out.println("Выбран склад "+ stockBox.getSelectionModel().getSelectedItem().getStockName() +"!");
+            table.getChildren().clear();
+            switch (elementsBox.getSelectionModel().getSelectedItem()){
+                case "Ранцы":
+                    ContainerList col = new ContainerList();
+                    col.setStatus(getStatus());
+                    col.setStockID(getStockID());
+                    table = col.ContainerTable(false);
+                    break;
+                case "Основные парашюты":
+                    CanopyList cl = new CanopyList();
+                    cl.setStatus(getStatus());
+                    cl.setStockID(getStockID());
+                    table = cl.CanopyTable(false);
+                    break;
+                case "Запасные парашюты":
+                    ReserveList rl = new ReserveList();
+                    rl.setStatus(getStatus());
+                    rl.setStockID(getStockID());
+                    table = rl.ReserveTable(false);
+                    break;
+                case "Страхующие приборы":
+                    AADList al = new AADList();
+                    al.setStatus(getStatus());
+                    al.setStockID(getStockID());
+                    table = al.AADTable(false);
+                    break;
+            }
         });
         
         ComboBox <Status> statusBox = new ComboBox<>();
@@ -172,6 +199,33 @@ public class ElementsIndex extends Application {
             setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
             dr.setStatus(getStatus());
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
+            table.getChildren().clear();
+            switch (elementsBox.getSelectionModel().getSelectedItem()){
+                case "Ранцы":
+                    ContainerList col = new ContainerList();
+                    col.setStatus(getStatus());
+                    col.setStockID(getStockID());
+                    table = col.ContainerTable(false);
+                    break;
+                case "Основные парашюты":
+                    CanopyList cl = new CanopyList();
+                    cl.setStatus(getStatus());
+                    cl.setStockID(getStockID());
+                    table = cl.CanopyTable(false);
+                    break;
+                case "Запасные парашюты":
+                    ReserveList rl = new ReserveList();
+                    rl.setStatus(getStatus());
+                    rl.setStockID(getStockID());
+                    table = rl.ReserveTable(false);
+                    break;
+                case "Страхующие приборы":
+                    AADList al = new AADList();
+                    al.setStatus(getStatus());
+                    al.setStockID(getStockID());
+                    table = al.AADTable(false);
+                    break;
+            }
         });
         topMenu.getChildren().addAll(elementsBox, new Label("Элементы системы"), stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
         index.setTop(topMenu);

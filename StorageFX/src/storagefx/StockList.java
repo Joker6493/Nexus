@@ -5,13 +5,16 @@
  */
 package storagefx;
 
+import java.util.Optional;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -52,7 +55,6 @@ public class StockList extends Application {
         
         BorderPane index = StockList(false);
         Scene scene = new Scene(index);
-        
         primaryStage.setTitle("Список складов");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -92,12 +94,9 @@ public class StockList extends Application {
         Button refreshBtn = new Button();
         refreshBtn.setText("Обновить");
         refreshBtn.setOnAction((ActionEvent event) -> {
-            //Refreshing indexList - in process
             System.out.println("Идет обновление списка");
-            //Some code here
             stockList.getItems().clear();
             stockList.setItems(dr.getStockList());
-            //indexStore.refresh();
             System.out.println("Обновление списка завершено");
         });
         
@@ -133,6 +132,8 @@ public class StockList extends Application {
             dr.setStatus(statusBox.getSelectionModel().getSelectedItem().getStatusID());
             status = statusBox.getSelectionModel().getSelectedItem().getStatusID();
             System.out.println("Выбран статус "+ statusBox.getSelectionModel().getSelectedItem().getStatusName() +"!");
+            stockList.getItems().clear();
+            stockList.setItems(dr.getStockList());
         });
         
         HBox storageBar = new HBox();
@@ -151,43 +152,103 @@ public class StockList extends Application {
         MenuItem editItem = new MenuItem("Переименовать");
         editItem.setOnAction((ActionEvent e) -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            System.out.println("Редактируем склад "+ selectedStock.getStockName() + "?");
-            ElementDetails detail = new ElementDetails(selectedStock, true);
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
-            
+            System.out.println("Переименовать склад "+ selectedStock.getStockName() + "?");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Переименовать склад "+ selectedStock.getStockName() + "?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    ElementDetails detail = new ElementDetails(selectedStock, true);
+                    Stage detailStage = new Stage();
+                    detailStage.initModality(Modality.WINDOW_MODAL);
+                    detailStage.initOwner(index.getScene().getWindow());
+                    detail.start(detailStage);
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
-            //Refreshing indexList - in process
             System.out.println("Добавить склад?");
-            ElementDetails detail = new ElementDetails("stock",0);
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Добавить склад?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    ElementDetails detail = new ElementDetails("stock",0);
+                    Stage detailStage = new Stage();
+                    detailStage.initModality(Modality.WINDOW_MODAL);
+                    detailStage.initOwner(index.getScene().getWindow());
+                    detail.start(detailStage);
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             System.out.println("Удалить склад "+ selectedStock.getStockName() + "?");
-            dr.setStatusStock(selectedStock,1);
-            System.out.println("Склад удален!");
-            stockList.getItems().clear();
-            stockList.setItems(dr.getStockList());
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Удалить склад "+ selectedStock.getStockName() + "?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusStock(selectedStock,1);
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Внимание!");
+                    info.setHeaderText(null);
+                    info.setContentText("Склад удален!");
+                    info.showAndWait();
+                    System.out.println("Склад удален!");
+                    stockList.getItems().clear();
+                    stockList.setItems(dr.getStockList());
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
         restoreItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             System.out.println("Восстановить склад "+ selectedStock.getStockName() + "?");
-            dr.setStatusStock(selectedStock,0);
-            System.out.println("Склад восстановлен!");
-            stockList.getItems().clear();
-            stockList.setItems(dr.getStockList());
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Подтверждение изменений");
+            confirm.setHeaderText("Восстановить склад "+ selectedStock.getStockName() + "?");
+            ButtonType yes = new ButtonType("Да");
+            ButtonType no = new ButtonType("Нет");
+            confirm.getButtonTypes().clear();
+            confirm.getButtonTypes().addAll(yes, no);
+            Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    dr.setStatusStock(selectedStock,0);
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Внимание!");
+                    info.setHeaderText(null);
+                    info.setContentText("Склад восстановлен!");
+                    info.showAndWait();
+                    System.out.println("Склад восстановлен!");
+                    stockList.getItems().clear();
+                    stockList.setItems(dr.getStockList());
+                } else if (option.get() == no) {
+                } else {
+                }
         });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem);
         switch (getStatus()){
@@ -207,7 +268,6 @@ public class StockList extends Application {
         Button closeBtn = new Button();
         closeBtn.setText("Закрыть");
         closeBtn.setOnAction((ActionEvent event) -> {
-            //Some code here
             index.getScene().getWindow().hide();
             System.out.println("Закрыть?");
         });
