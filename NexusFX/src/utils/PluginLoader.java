@@ -53,6 +53,7 @@ public class PluginLoader {
                     //Loading all classes from file
                 }else{
                     clazz = cl.loadClass(classes);
+                    //System.out.println(classes);
                     //System.out.println("Класс загружен");
                     //Loading and get required class
                 }

@@ -536,17 +536,15 @@ public class StorageIndex extends Application {
             System.out.println("Закрыть?");
             try {
         //Call a method dynamically (Reflection)
-                Object paramsObj[] = {btnID};        
-                Class params[] = {paramsObj.getClass()};
+                Class params[] = {int.class};
                 Class bar = Class.forName("nexusfx.StatusBar");
                 Object barClass = bar.newInstance();
                 Method RemoveMethod = bar.getDeclaredMethod("RemoveTask", params);
-                RemoveMethod.invoke(barClass, paramsObj);
-                
+                RemoveMethod.invoke(barClass, getBtnID());
             }catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                 System.out.println("Ошибка: " + e.getMessage());
-                System.exit(0);
 //              e.printStackTrace();
+                System.exit(0);
             }
         });
         return index;

@@ -5,6 +5,8 @@
  */
 package nexusfx;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -59,18 +61,25 @@ public class StatusBar {
         
         return statusBar;
     }
-    public int AddTask(String name, BorderPane parent, Node scene){
+    public void AddTask(String name, Class cls, Object obj, BorderPane parent, Node scene){
         int id = 0;
         Button btn = new Button(name);
         btn.setOnAction((ActionEvent event) -> {
             parent.setCenter(scene);
+            
         });
         taskBar.getChildren().add(btn);
         taskBar.getChildren().indexOf(btn);
-        System.out.println(taskBar.getChildren().indexOf(btn));
-        taskBar.getChildren().size();
-        System.out.println(taskBar.getChildren().size());
-        return id;
+        id = taskBar.getChildren().indexOf(btn);
+        try {
+        //Call a method dynamically (Reflection)
+                Class params[] = {int.class};
+                Method RemoveMethod = cls.getDeclaredMethod("setBtnID", params);
+                RemoveMethod.invoke(obj, id);
+            }catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+                e.printStackTrace();
+            }
     }
     public void RemoveTask(int id){
         taskBar.getChildren().remove(id);

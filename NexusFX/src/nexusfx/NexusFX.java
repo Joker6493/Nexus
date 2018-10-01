@@ -5,6 +5,8 @@
  */
 package nexusfx;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import javafx.application.Application;
@@ -54,8 +56,8 @@ public class NexusFX extends Application {
                 Object storageObj = storageClass.newInstance();
                 Method storageMethod = storageClass.getDeclaredMethod("StorageIndex", params);
                 root.setCenter((BorderPane) storageMethod.invoke(storageObj, paramsObj));
-                bar.AddTask("Склад", root, (BorderPane) storageMethod.invoke(storageObj, paramsObj));
-            } catch (Exception e) {
+                bar.AddTask("Склад", storageClass, storageObj, root, (BorderPane) storageMethod.invoke(storageObj, paramsObj));
+            } catch (IOException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.out.println("Ошибка " + e.getMessage());
             //e.printStackTrace();
         }
@@ -63,6 +65,7 @@ public class NexusFX extends Application {
         MenuItem clear = new MenuItem("Очистить");
         clear.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         clear.setOnAction((ActionEvent t) -> {
+//            root.getChildren().remove(root.getCenter().getClip().getId());
         });
         MenuItem exit = new MenuItem("Выход");
         clear.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
