@@ -35,6 +35,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 
 /**
@@ -534,6 +535,9 @@ public class StorageIndex extends Application {
         closeBtn.setOnAction((ActionEvent event) -> {
             //Some code here
             System.out.println("Закрыть?");
+            if (index.getParent() instanceof Pane) {
+                ((Pane) index.getParent()).getChildren().remove(index);
+            }
             try {
         //Call a method dynamically (Reflection)
                 Class params[] = {int.class};

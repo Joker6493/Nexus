@@ -81,6 +81,17 @@ public class StatusBar {
                 e.printStackTrace();
             }
     }
+    public void newTask(String name, BorderPane parent, Node scene){
+        int id = 0;
+        Button btn = new Button(name);
+        btn.setOnAction((ActionEvent event) -> {
+            parent.setCenter(scene);
+            
+        });
+        taskBar.getChildren().add(btn);
+        taskBar.getChildren().indexOf(btn);
+        id = taskBar.getChildren().indexOf(btn);
+    }
     public void RemoveTask(int id){
         taskBar.getChildren().remove(id);
     }
