@@ -273,12 +273,7 @@ public class StorageIndex extends Application {
         });
         
         directoryMenu.getItems().addAll(stocksList, manufacturersList);
-        MenuItem close = new MenuItem("Закрыть");
-        close.setOnAction((ActionEvent event) -> {
-            //Some code here
-            System.out.println("Закрыть?");
-        });
-        storageMenu.getItems().addAll(elementsList, new SeparatorMenuItem(), directoryMenu, close);
+        storageMenu.getItems().addAll(elementsList, new SeparatorMenuItem(), directoryMenu);
         storageBarMenu.getMenus().add(storageMenu);
         HBox storageBar = new HBox();
         storageBar.getChildren().addAll(storageBarMenu, stockBox, new Label("Склад"), statusBox, new Label("Статус системы"), refreshBtn);
@@ -296,100 +291,124 @@ public class StorageIndex extends Application {
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Редактировать систему "+currentSystem.getSystemCode()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Редактировать систему "+currentSystem.getSystemCode()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
-                    detail.setStatus(getStatus());
-                    detail.setStockID(getStockID());
-                    Stage detailStage = new Stage();
-                    detailStage.initModality(Modality.WINDOW_MODAL);
-                    detailStage.initOwner(index.getScene().getWindow());
-                    detail.start(detailStage);
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (currentSystem!=null){
+               System.out.println("Редактировать систему "+currentSystem.getSystemCode()+"?");
+               Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+               confirm.setTitle("Подтверждение изменений");
+               confirm.setHeaderText("Редактировать систему "+currentSystem.getSystemCode()+"?");
+               ButtonType yes = new ButtonType("Да");
+               ButtonType no = new ButtonType("Нет");
+               confirm.getButtonTypes().clear();
+               confirm.getButtonTypes().addAll(yes, no);
+               Optional<ButtonType> option = confirm.showAndWait();
+                   if (option.get() == null) {
+                   } else if (option.get() == yes) {
+                       SystemDetails detail = new SystemDetails(indexStore.getSelectionModel().getSelectedItem(), true);
+                       detail.setStatus(getStatus());
+                       detail.setStockID(getStockID());
+                       Stage detailStage = new Stage();
+                       detailStage.initModality(Modality.WINDOW_MODAL);
+                       detailStage.initOwner(index.getScene().getWindow());
+                       detail.start(detailStage);
+                   } else if (option.get() == no) {
+                   } else {
+                   } 
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem disassembleItem = new MenuItem("Разобрать");
         disassembleItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Разобрать систему "+currentSystem.getSystemCode()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Разобрать систему "+currentSystem.getSystemCode()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.disassembleSkydiveSystem(currentSystem);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Система разобрана!");
-                    info.showAndWait();
-                    System.out.println("Система разобрана!");
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (currentSystem!=null){
+                System.out.println("Разобрать систему "+currentSystem.getSystemCode()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Разобрать систему "+currentSystem.getSystemCode()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.disassembleSkydiveSystem(currentSystem);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Система разобрана!");
+                        info.showAndWait();
+                        System.out.println("Система разобрана!");
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem moveItem = new MenuItem("Переместить");
         moveItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Переместить систему "+currentSystem.getSystemCode()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    Stage chooseWindow = new Stage();
-                    chooseWindow.setTitle("Выберите склад");
-                    //TODO - transmit to modal window stock and current canopy
-                    StockList sl = new StockList();
-                    Scene sList = new Scene(sl.StockList(true));
-                    chooseWindow.setScene(sList);
-                    chooseWindow.initModality(Modality.WINDOW_MODAL);
-                    chooseWindow.initOwner(index.getScene().getWindow());
-                    chooseWindow.showAndWait();
-                    if (sl.getSelectedStock() != null){
-                        Stock newStock = sl.getSelectedStock();
-                        currentSystem.setStockID(newStock.getStockID());
-                        Canopy sCanopy = new Canopy(currentSystem.getSystemID(), currentSystem.getCanopyID(), currentSystem.getCanopyModel(), currentSystem.getCanopySize(), currentSystem.getCanopySN(), currentSystem.getCanopyDOM(), currentSystem.getCanopyJumps(), currentSystem.getCanopyManufacturerID(), currentSystem.getCanopyManufacturerName(), currentSystem.getStockID());
-                        dr.editCanopy(sCanopy);
-                        Reserve sReserve = new Reserve(currentSystem.getSystemID(), currentSystem.getReserveID(), currentSystem.getReserveModel(), currentSystem.getReserveSize(), currentSystem.getReserveSN(), currentSystem.getReserveDOM(), currentSystem.getReserveJumps(), currentSystem.getReservePackDate(), currentSystem.getReserveManufacturerID(), currentSystem.getReserveManufacturerName(), currentSystem.getStockID());
-                        dr.editReserve(sReserve);
-                        AAD sAAD = new AAD(currentSystem.getSystemID(), currentSystem.getAadID(), currentSystem.getAadModel(), currentSystem.getAadSN(), currentSystem.getAadDOM(), currentSystem.getAadJumps(), currentSystem.getAadNextRegl(), currentSystem.getAadSaved(), currentSystem.getAadManufacturerID(), currentSystem.getAadManufacturerName(), currentSystem.getStockID());
-                        dr.editAAD(sAAD);
-                        dr.editSkydiveSystem(currentSystem);
-                        Alert info = new Alert(Alert.AlertType.INFORMATION);
-                        info.setTitle("Внимание!");
-                        info.setHeaderText(null);
-                        info.setContentText("Система перемещена!");
-                        info.showAndWait();
-                        System.out.println("Система перемещена!");
-                    //Updating skydive system list
-                        currentSystem.setStockID(newStock.getStockID());
-                        indexStore.getItems().clear();
-                        indexStore.setItems(dr.getSystemsList());
+            if (currentSystem!=null){
+                System.out.println("Переместить систему "+currentSystem.getSystemCode()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Переместить систему "+currentSystem.getSystemCode()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        Stage chooseWindow = new Stage();
+                        chooseWindow.setTitle("Выберите склад");
+                        //TODO - transmit to modal window stock and current canopy
+                        StockList sl = new StockList();
+                        Scene sList = new Scene(sl.StockList(true));
+                        chooseWindow.setScene(sList);
+                        chooseWindow.initModality(Modality.WINDOW_MODAL);
+                        chooseWindow.initOwner(index.getScene().getWindow());
+                        chooseWindow.showAndWait();
+                        if (sl.getSelectedStock() != null){
+                            Stock newStock = sl.getSelectedStock();
+                            currentSystem.setStockID(newStock.getStockID());
+                            Canopy sCanopy = new Canopy(currentSystem.getSystemID(), currentSystem.getCanopyID(), currentSystem.getCanopyModel(), currentSystem.getCanopySize(), currentSystem.getCanopySN(), currentSystem.getCanopyDOM(), currentSystem.getCanopyJumps(), currentSystem.getCanopyManufacturerID(), currentSystem.getCanopyManufacturerName(), currentSystem.getStockID());
+                            dr.editCanopy(sCanopy);
+                            Reserve sReserve = new Reserve(currentSystem.getSystemID(), currentSystem.getReserveID(), currentSystem.getReserveModel(), currentSystem.getReserveSize(), currentSystem.getReserveSN(), currentSystem.getReserveDOM(), currentSystem.getReserveJumps(), currentSystem.getReservePackDate(), currentSystem.getReserveManufacturerID(), currentSystem.getReserveManufacturerName(), currentSystem.getStockID());
+                            dr.editReserve(sReserve);
+                            AAD sAAD = new AAD(currentSystem.getSystemID(), currentSystem.getAadID(), currentSystem.getAadModel(), currentSystem.getAadSN(), currentSystem.getAadDOM(), currentSystem.getAadJumps(), currentSystem.getAadNextRegl(), currentSystem.getAadSaved(), currentSystem.getAadManufacturerID(), currentSystem.getAadManufacturerName(), currentSystem.getStockID());
+                            dr.editAAD(sAAD);
+                            dr.editSkydiveSystem(currentSystem);
+                            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                            info.setTitle("Внимание!");
+                            info.setHeaderText(null);
+                            info.setContentText("Система перемещена!");
+                            info.showAndWait();
+                            System.out.println("Система перемещена!");
+                        //Updating skydive system list
+                            currentSystem.setStockID(newStock.getStockID());
+                            indexStore.getItems().clear();
+                            indexStore.setItems(dr.getSystemsList());
+                        }
+                    } else if (option.get() == no) {
+                    } else {
                     }
-                } else if (option.get() == no) {
-                } else {
-                }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
@@ -420,97 +439,121 @@ public class StorageIndex extends Application {
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
-        //ask for deleting system elements too or disassemble system and delete container only
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Удалить систему " + currentSystem.getSystemCode() +" целиком, или разобрать систему и удалить только ранец?");
-            ButtonType yes = new ButtonType("Удалить все");
-            ButtonType containerOnly = new ButtonType("Только ранец");
-            ButtonType no = new ButtonType("Отмена");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, containerOnly, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusSkydiveSystem(currentSystem,1);
-                    indexStore.getItems().clear();
-                    indexStore.setItems(dr.getSystemsList());
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Система удалена!");
-                    info.showAndWait();
-                    System.out.println("Система удалена!");
-                } else if (option.get() == containerOnly) {
-                    dr.disassembleSkydiveSystem(currentSystem);
-                    dr.setStatusContainer(currentSystem,1);
-                    indexStore.getItems().clear();
-                    indexStore.setItems(dr.getSystemsList());
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Система разобрана, ранец удален!");
-                    info.showAndWait();
-                    System.out.println("Система разобрана, ранец удален!");
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (currentSystem!=null){
+                System.out.println("Удалить систему "+currentSystem.getSystemCode()+"?");
+            //ask for deleting system elements too or disassemble system and delete container only
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Удалить систему " + currentSystem.getSystemCode() +" целиком, или разобрать систему и удалить только ранец?");
+                ButtonType yes = new ButtonType("Удалить все");
+                ButtonType containerOnly = new ButtonType("Только ранец");
+                ButtonType no = new ButtonType("Отмена");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, containerOnly, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusSkydiveSystem(currentSystem,1);
+                        indexStore.getItems().clear();
+                        indexStore.setItems(dr.getSystemsList());
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Система удалена!");
+                        info.showAndWait();
+                        System.out.println("Система удалена!");
+                    } else if (option.get() == containerOnly) {
+                        dr.disassembleSkydiveSystem(currentSystem);
+                        dr.setStatusContainer(currentSystem,1);
+                        indexStore.getItems().clear();
+                        indexStore.setItems(dr.getSystemsList());
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Система разобрана, ранец удален!");
+                        info.showAndWait();
+                        System.out.println("Система разобрана, ранец удален!");
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
         restoreItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Восстановить систему "+currentSystem.getSystemCode()+"?");
-        //ask for deleting system elements too or disassemble system and delete container only
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Восстановить систему " + currentSystem.getSystemCode() +"?");
-            ButtonType yes = new ButtonType("Удалить все");
-            ButtonType no = new ButtonType("Отмена");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusSkydiveSystem(currentSystem,0);
-                    indexStore.getItems().clear();
-                    indexStore.setItems(dr.getSystemsList());
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Система восстановлена!");
-                    info.showAndWait();
-                    System.out.println("Система восстановлена!");
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (currentSystem!=null){
+                System.out.println("Восстановить систему "+currentSystem.getSystemCode()+"?");
+            //ask for deleting system elements too or disassemble system and delete container only
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Восстановить систему " + currentSystem.getSystemCode() +"?");
+                ButtonType yes = new ButtonType("Удалить все");
+                ButtonType no = new ButtonType("Отмена");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusSkydiveSystem(currentSystem,0);
+                        indexStore.getItems().clear();
+                        indexStore.setItems(dr.getSystemsList());
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Система восстановлена!");
+                        info.showAndWait();
+                        System.out.println("Система восстановлена!");
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem repairItem = new MenuItem("В ремонт");
         repairItem.setOnAction((ActionEvent e) -> {
             SkydiveSystem currentSystem = indexStore.getSelectionModel().getSelectedItem();
-            System.out.println("Передать систему "+currentSystem.getSystemCode()+" в ремонт?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Передать систему " + currentSystem.getSystemCode() +" в ремонт?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusSkydiveSystem(currentSystem,2);
-                    indexStore.getItems().clear();
-                    indexStore.setItems(dr.getSystemsList());
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Система передана в ремонт!");
-                    info.showAndWait();
-                    System.out.println("Система передана в ремонт!");
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (currentSystem!=null){
+                System.out.println("Передать систему "+currentSystem.getSystemCode()+" в ремонт?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Передать систему " + currentSystem.getSystemCode() +" в ремонт?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusSkydiveSystem(currentSystem,2);
+                        indexStore.getItems().clear();
+                        indexStore.setItems(dr.getSystemsList());
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Система передана в ремонт!");
+                        info.showAndWait();
+                        System.out.println("Система передана в ремонт!");
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem, moveItem, disassembleItem);
         switch (getStatus()){
@@ -524,33 +567,10 @@ public class StorageIndex extends Application {
                 storageContextMenu.getItems().addAll(deleteItem,restoreItem);
                 break;
         }
-        indexStore.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            storageContextMenu.show(indexStore, event.getScreenX(), event.getScreenY());
-        });
+        indexStore.setContextMenu(storageContextMenu);
         
         index.setCenter(indexStore);
         
-        Button closeBtn = new Button();
-        closeBtn.setText("Закрыть");
-        closeBtn.setOnAction((ActionEvent event) -> {
-            //Some code here
-            System.out.println("Закрыть?");
-            if (index.getParent() instanceof Pane) {
-                ((Pane) index.getParent()).getChildren().remove(index);
-            }
-            try {
-        //Call a method dynamically (Reflection)
-                Class params[] = {int.class};
-                Class bar = Class.forName("nexusfx.StatusBar");
-                Object barClass = bar.newInstance();
-                Method RemoveMethod = bar.getDeclaredMethod("RemoveTask", params);
-                RemoveMethod.invoke(barClass, getBtnID());
-            }catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
-                System.out.println("Ошибка: " + e.getMessage());
-//              e.printStackTrace();
-                System.exit(0);
-            }
-        });
         return index;
     }
         

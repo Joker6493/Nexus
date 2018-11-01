@@ -152,25 +152,33 @@ public class ManufacturerList extends Application {
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
-            System.out.println("Редактировать производителя " + selectedManufacturer.getManufacturerName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Редактировать производителя " + selectedManufacturer.getManufacturerName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    ElementDetails detail = new ElementDetails(selectedManufacturer, true);
-                    Stage detailStage = new Stage();
-                    detailStage.initModality(Modality.WINDOW_MODAL);
-                    detailStage.initOwner(index.getScene().getWindow());
-                    detail.start(detailStage);
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedManufacturer!=null){
+                System.out.println("Редактировать производителя " + selectedManufacturer.getManufacturerName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Редактировать производителя " + selectedManufacturer.getManufacturerName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        ElementDetails detail = new ElementDetails(selectedManufacturer, true);
+                        Stage detailStage = new Stage();
+                        detailStage.initModality(Modality.WINDOW_MODAL);
+                        detailStage.initOwner(index.getScene().getWindow());
+                        detail.start(detailStage);
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
@@ -199,56 +207,72 @@ public class ManufacturerList extends Application {
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить производителя " + selectedManufacturer.getManufacturerName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Удалить производителя " + selectedManufacturer.getManufacturerName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusManufacturer(selectedManufacturer,1);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Производитель удален!");
-                    info.showAndWait();
-                    System.out.println("Производитель удален!");
-                    manufacturerList.getItems().clear();
-                    manufacturerList.setItems(dr.getManufacturerList());
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedManufacturer!=null){
+                System.out.println("Удалить производителя " + selectedManufacturer.getManufacturerName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Удалить производителя " + selectedManufacturer.getManufacturerName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusManufacturer(selectedManufacturer,1);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Производитель удален!");
+                        info.showAndWait();
+                        System.out.println("Производитель удален!");
+                        manufacturerList.getItems().clear();
+                        manufacturerList.setItems(dr.getManufacturerList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
         restoreItem.setOnAction((ActionEvent e) -> {
             Manufacturer selectedManufacturer = manufacturerList.getSelectionModel().getSelectedItem();
-            System.out.println("Восстановить производителя " + selectedManufacturer.getManufacturerName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Восстановить производителя " + selectedManufacturer.getManufacturerName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusManufacturer(selectedManufacturer,1);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Производитель восстановлен!");
-                    info.showAndWait();
-                    System.out.println("Производитель восстановлен!");
-                    manufacturerList.getItems().clear();
-                    manufacturerList.setItems(dr.getManufacturerList());
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedManufacturer!=null){
+                System.out.println("Восстановить производителя " + selectedManufacturer.getManufacturerName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Восстановить производителя " + selectedManufacturer.getManufacturerName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusManufacturer(selectedManufacturer,1);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Производитель восстановлен!");
+                        info.showAndWait();
+                        System.out.println("Производитель восстановлен!");
+                        manufacturerList.getItems().clear();
+                        manufacturerList.setItems(dr.getManufacturerList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         manufacturerContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem);
         switch (getStatus()){
@@ -259,10 +283,7 @@ public class ManufacturerList extends Application {
                 manufacturerContextMenu.getItems().add(restoreItem);
                 break;
         }
-        manufacturerList.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            manufacturerContextMenu.show(manufacturerList, event.getScreenX(), event.getScreenY());
-        });
-        
+        manufacturerList.setContextMenu(manufacturerContextMenu);
         index.setCenter(manufacturerList);
         
         Button closeBtn = new Button();

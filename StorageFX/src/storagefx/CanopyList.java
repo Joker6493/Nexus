@@ -201,79 +201,103 @@ public class CanopyList extends Application {
         MenuItem viewItem = new MenuItem("Просмотр");
         viewItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Просмотр информации о куполе "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize());
-            ElementDetails detail = new ElementDetails(selectedCanopy, false);
-            detail.setStatus(getStatus());
-            detail.setStockID(getStockID());
-            Stage detailStage = new Stage();
-            detailStage.initModality(Modality.WINDOW_MODAL);
-            detailStage.initOwner(index.getScene().getWindow());
-            detail.start(detailStage);
+            if (getSelectedCanopy()!=null){
+                System.out.println("Просмотр информации о куполе "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize());
+                ElementDetails detail = new ElementDetails(selectedCanopy, false);
+                detail.setStatus(getStatus());
+                detail.setStockID(getStockID());
+                Stage detailStage = new Stage();
+                detailStage.initModality(Modality.WINDOW_MODAL);
+                detailStage.initOwner(index.getScene().getWindow());
+                detail.start(detailStage);
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem editItem = new MenuItem("Редактировать");
         editItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Редактировать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Редактировать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    ElementDetails detail = new ElementDetails(selectedCanopy, true);
-                    detail.setStatus(getStatus());
-                    detail.setStockID(getStockID());
-                    Stage detailStage = new Stage();
-                    detailStage.initModality(Modality.WINDOW_MODAL);
-                    detailStage.initOwner(index.getScene().getWindow());
-                    detail.start(detailStage);
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (getSelectedCanopy()!=null){
+                System.out.println("Редактировать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Редактировать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        ElementDetails detail = new ElementDetails(selectedCanopy, true);
+                        detail.setStatus(getStatus());
+                        detail.setStockID(getStockID());
+                        Stage detailStage = new Stage();
+                        detailStage.initModality(Modality.WINDOW_MODAL);
+                        detailStage.initOwner(index.getScene().getWindow());
+                        detail.start(detailStage);
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem moveItem = new MenuItem("Переместить");
         moveItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Переместить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Переместить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    Stage chooseWindow = new Stage();
-                    chooseWindow.setTitle("Выберите склад");
-                    StockList sl = new StockList();
-                    Scene sList = new Scene(sl.StockList(true));
-                    chooseWindow.setScene(sList);
-                    chooseWindow.initModality(Modality.WINDOW_MODAL);
-                    chooseWindow.initOwner(index.getScene().getWindow());
-                    chooseWindow.showAndWait();
-                    if (sl.getSelectedStock() != null){
-                        Stock newStock = sl.getSelectedStock();
-                        selectedCanopy.setStockID(newStock.getStockID());
-                        dr.editCanopy(selectedCanopy);
-                        Alert info = new Alert(Alert.AlertType.INFORMATION);
-                        info.setTitle("Внимание!");
-                        info.setHeaderText(null);
-                        info.setContentText("Купол ОП перемещен!");
-                        info.showAndWait();
-                        System.out.println("Купол ОП перемещен!");
-                    //Updating skydive system list
-                        canopyTable.getItems().clear();
-                        canopyTable.setItems(dr.getCanopyList());
+            if (getSelectedCanopy()!=null){
+                System.out.println("Переместить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Переместить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        Stage chooseWindow = new Stage();
+                        chooseWindow.setTitle("Выберите склад");
+                        StockList sl = new StockList();
+                        Scene sList = new Scene(sl.StockList(true));
+                        chooseWindow.setScene(sList);
+                        chooseWindow.initModality(Modality.WINDOW_MODAL);
+                        chooseWindow.initOwner(index.getScene().getWindow());
+                        chooseWindow.showAndWait();
+                        if (sl.getSelectedStock() != null){
+                            Stock newStock = sl.getSelectedStock();
+                            selectedCanopy.setStockID(newStock.getStockID());
+                            dr.editCanopy(selectedCanopy);
+                            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                            info.setTitle("Внимание!");
+                            info.setHeaderText(null);
+                            info.setContentText("Купол ОП перемещен!");
+                            info.showAndWait();
+                            System.out.println("Купол ОП перемещен!");
+                        //Updating skydive system list
+                            canopyTable.getItems().clear();
+                            canopyTable.setItems(dr.getCanopyList());
+                        }
+                    } else if (option.get() == no) {
+                    } else {
                     }
-                } else if (option.get() == no) {
-                } else {
-                }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
@@ -302,87 +326,107 @@ public class CanopyList extends Application {
         MenuItem deleteItem = new MenuItem("Удалить");
         deleteItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Удалить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Удалить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusCanopy(getSelectedCanopy(),1);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Купол ОП удален!");
-                    info.showAndWait();
-                    System.out.println("Купол ОП удален!");
-                    canopyTable.getItems().clear();
-                    canopyTable.setItems(dr.getCanopyList());
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (getSelectedCanopy()!=null){
+                System.out.println("Удалить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Удалить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusCanopy(getSelectedCanopy(),1);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Купол ОП удален!");
+                        info.showAndWait();
+                        System.out.println("Купол ОП удален!");
+                        canopyTable.getItems().clear();
+                        canopyTable.setItems(dr.getCanopyList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
         restoreItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Восстановить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Восстановить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+"?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusCanopy(getSelectedCanopy(),0);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Купол ОП восстановлен!");
-                    info.showAndWait();
-                    System.out.println("Купол ОП восстановлен!");
-                    canopyTable.getItems().clear();
-                    canopyTable.setItems(dr.getCanopyList());
-                } else if (option.get() == no) {
-
-                } else {
-
-                }
+            if (getSelectedCanopy()!=null){
+                System.out.println("Восстановить купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+"?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Восстановить купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusCanopy(getSelectedCanopy(),0);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Купол ОП восстановлен!");
+                        info.showAndWait();
+                        System.out.println("Купол ОП восстановлен!");
+                        canopyTable.getItems().clear();
+                        canopyTable.setItems(dr.getCanopyList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem repairItem = new MenuItem("В ремонт");
         repairItem.setOnAction((ActionEvent e) -> {
             setSelectedCanopy(canopyTable.getSelectionModel().getSelectedItem());
-            System.out.println("Передать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+" в ремонт?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Передать купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+" в ремонт?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusCanopy(getSelectedCanopy(),2);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Купол ОП передан в ремонт!");
-                    info.showAndWait();
-                    System.out.println("Купол ОП передан в ремонт!");
-                    canopyTable.getItems().clear();
-                    canopyTable.setItems(dr.getCanopyList());
-                } else if (option.get() == no) {
-
-                } else {
-
-                }
+            if (getSelectedCanopy()!=null){
+                System.out.println("Передать купол "+selectedCanopy.getCanopyModel()+"-"+selectedCanopy.getCanopySize()+" в ремонт?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Передать купол ОП " + getSelectedCanopy().getCanopyModel() +"-"+ getSelectedCanopy().getCanopySize()+" в ремонт?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusCanopy(getSelectedCanopy(),2);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Купол ОП передан в ремонт!");
+                        info.showAndWait();
+                        System.out.println("Купол ОП передан в ремонт!");
+                        canopyTable.getItems().clear();
+                        canopyTable.setItems(dr.getCanopyList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         canopyContextMenu.getItems().addAll(refreshList, viewItem, new SeparatorMenuItem(), addItem, editItem, moveItem);
         switch (getStatus()){
@@ -396,9 +440,7 @@ public class CanopyList extends Application {
                 canopyContextMenu.getItems().addAll(deleteItem,restoreItem);
                 break;
         }
-        canopyTable.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            canopyContextMenu.show(canopyTable, event.getScreenX(), event.getScreenY());
-        });
+        canopyTable.setContextMenu(canopyContextMenu);
         index.getChildren().add(canopyTable);
         return index;
     }

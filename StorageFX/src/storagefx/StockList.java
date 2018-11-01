@@ -152,25 +152,33 @@ public class StockList extends Application {
         MenuItem editItem = new MenuItem("Переименовать");
         editItem.setOnAction((ActionEvent e) -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            System.out.println("Переименовать склад "+ selectedStock.getStockName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Переименовать склад "+ selectedStock.getStockName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    ElementDetails detail = new ElementDetails(selectedStock, true);
-                    Stage detailStage = new Stage();
-                    detailStage.initModality(Modality.WINDOW_MODAL);
-                    detailStage.initOwner(index.getScene().getWindow());
-                    detail.start(detailStage);
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedStock!=null){
+                System.out.println("Переименовать склад "+ selectedStock.getStockName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Переименовать склад "+ selectedStock.getStockName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        ElementDetails detail = new ElementDetails(selectedStock, true);
+                        Stage detailStage = new Stage();
+                        detailStage.initModality(Modality.WINDOW_MODAL);
+                        detailStage.initOwner(index.getScene().getWindow());
+                        detail.start(detailStage);
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem addItem = new MenuItem("Добавить");
         addItem.setOnAction((ActionEvent e) -> {
@@ -198,57 +206,73 @@ public class StockList extends Application {
         deleteItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            System.out.println("Удалить склад "+ selectedStock.getStockName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Удалить склад "+ selectedStock.getStockName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusStock(selectedStock,1);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Склад удален!");
-                    info.showAndWait();
-                    System.out.println("Склад удален!");
-                    stockList.getItems().clear();
-                    stockList.setItems(dr.getStockList());
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedStock!=null){
+                System.out.println("Удалить склад "+ selectedStock.getStockName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Удалить склад "+ selectedStock.getStockName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusStock(selectedStock,1);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Склад удален!");
+                        info.showAndWait();
+                        System.out.println("Склад удален!");
+                        stockList.getItems().clear();
+                        stockList.setItems(dr.getStockList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         MenuItem restoreItem = new MenuItem("Восстановить");
         restoreItem.setOnAction((ActionEvent e) -> {
             //Refreshing indexList - in process
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            System.out.println("Восстановить склад "+ selectedStock.getStockName() + "?");
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Подтверждение изменений");
-            confirm.setHeaderText("Восстановить склад "+ selectedStock.getStockName() + "?");
-            ButtonType yes = new ButtonType("Да");
-            ButtonType no = new ButtonType("Нет");
-            confirm.getButtonTypes().clear();
-            confirm.getButtonTypes().addAll(yes, no);
-            Optional<ButtonType> option = confirm.showAndWait();
-                if (option.get() == null) {
-                } else if (option.get() == yes) {
-                    dr.setStatusStock(selectedStock,0);
-                    Alert info = new Alert(Alert.AlertType.INFORMATION);
-                    info.setTitle("Внимание!");
-                    info.setHeaderText(null);
-                    info.setContentText("Склад восстановлен!");
-                    info.showAndWait();
-                    System.out.println("Склад восстановлен!");
-                    stockList.getItems().clear();
-                    stockList.setItems(dr.getStockList());
-                } else if (option.get() == no) {
-                } else {
-                }
+            if (selectedStock!=null){
+                System.out.println("Восстановить склад "+ selectedStock.getStockName() + "?");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждение изменений");
+                confirm.setHeaderText("Восстановить склад "+ selectedStock.getStockName() + "?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                    if (option.get() == null) {
+                    } else if (option.get() == yes) {
+                        dr.setStatusStock(selectedStock,0);
+                        Alert info = new Alert(Alert.AlertType.INFORMATION);
+                        info.setTitle("Внимание!");
+                        info.setHeaderText(null);
+                        info.setContentText("Склад восстановлен!");
+                        info.showAndWait();
+                        System.out.println("Склад восстановлен!");
+                        stockList.getItems().clear();
+                        stockList.setItems(dr.getStockList());
+                    } else if (option.get() == no) {
+                    } else {
+                    }
+            }else{
+                Alert emptyWarn = new Alert(Alert.AlertType.WARNING);
+                emptyWarn.setTitle("Внимание!");
+                emptyWarn.setHeaderText(null);
+                emptyWarn.setContentText("Внимание! Ничего не выделено! Выделите элемент и повторите попытку");
+                emptyWarn.showAndWait(); 
+            }
         });
         storageContextMenu.getItems().addAll(refreshList, new SeparatorMenuItem(), addItem, editItem);
         switch (getStatus()){
@@ -259,10 +283,7 @@ public class StockList extends Application {
                 storageContextMenu.getItems().add(restoreItem);
                 break;
         }
-        stockList.setOnContextMenuRequested((ContextMenuEvent event) -> {
-            storageContextMenu.show(stockList, event.getScreenX(), event.getScreenY());
-        });
-        
+        stockList.setContextMenu(storageContextMenu);
         index.setCenter(stockList);
         
         Button closeBtn = new Button();
