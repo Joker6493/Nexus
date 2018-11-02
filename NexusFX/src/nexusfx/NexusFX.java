@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,7 +32,8 @@ public class NexusFX extends Application {
     PluginLoader classLoader = new PluginLoader();
     Logger logger = new Logger();
     SAMConn mysqlconn = new SAMConn();
-    StatusBar bar = new StatusBar();
+    Desktop desktop = new Desktop();
+    //StatusBar desktop = new StatusBar();
     Connection dbconn = mysqlconn.connectDatabase();
     String status = logger.readLastLog();
     
@@ -51,8 +53,7 @@ public class NexusFX extends Application {
                 Class storageClass = classLoader.loadClass (pluginPath, "StorageFX", "storagefx.StorageIndex");
                 Object storageObj = storageClass.newInstance();
                 Method storageMethod = storageClass.getDeclaredMethod("StorageIndex", params);
-                root.setCenter((BorderPane) storageMethod.invoke(storageObj, paramsObj));
-                bar.AddTask("Склад", storageClass, storageObj, root, (BorderPane) storageMethod.invoke(storageObj, paramsObj));
+                desktop.addTab("Склад", (BorderPane) storageMethod.invoke(storageObj, paramsObj));
             } catch (IOException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.out.println("Ошибка " + e.getMessage());
             //e.printStackTrace();
@@ -108,10 +109,10 @@ public class NexusFX extends Application {
         });
         
         root.setTop(MenuBarMain);
-        root.setLeft(/*new Button("Left")*/btn);
-        root.setRight(new Button("Right"));
-        root.setBottom(bar.init());
-        //root.setCenter(new Button("Center"));
+//        root.setLeft(/*new Button("Left")*/btn);
+//        root.setRight(new Button("Right"));
+        root.setBottom(desktop.statusBar());
+        root.setCenter(desktop.mainWindow());
         //root.setCenter(btn);
         
         Scene scene = new Scene(root);

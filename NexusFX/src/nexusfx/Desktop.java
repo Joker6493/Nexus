@@ -8,19 +8,27 @@ package nexusfx;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import logger.Level;
 import logger.Logger;
 import utils.ConnectionCheck;
 
@@ -30,37 +38,56 @@ import utils.ConnectionCheck;
  */
 public class Desktop {
     private Logger logger = new Logger();
-//Task Bar
-    private HBox taskBar = new HBox(5);
 //Windows list
-    private Map<String,AnchorPane> windowList = new LinkedHashMap<>();
-    private Map<String,Integer> btnIDList = new LinkedHashMap<>();
-    private AnchorPane currentWindow = new AnchorPane();
-    public AnchorPane getCurrentWindow() {
-        return currentWindow;
+    private TabPane mainTab = new TabPane();
+    private Map<String,Tab> tabList = new LinkedHashMap<>();
+    public TabPane getMainTab() {
+        return mainTab;
     }
-    public void setCurrentWindow(AnchorPane currentWindow) {
-        this.currentWindow = currentWindow;
+    public void setMainTab(TabPane mainTab) {
+        this.mainTab = mainTab;
     }
-    
-    public void addWindow(String name, Node scene, BorderPane parent){
-        if (!windowList.containsKey(name)){
-            AnchorPane newWindow = new AnchorPane();
-            newWindow.getChildren().add(scene);
-            windowList.put(name, newWindow);
-            setCurrentWindow(newWindow);
-            btnIDList.put(name, addTask(name, getCurrentWindow(), parent));
+    public TabPane mainWindow(){
+        Tab welcomeTab = new Tab();
+        welcomeTab.setText("Welcome");
+        HBox welcomeBox = new HBox();
+        welcomeBox.getChildren().add(new Label("Some welcome text here"));
+        welcomeBox.setAlignment(Pos.CENTER);
+        welcomeTab.setContent(welcomeBox);
+        getMainTab().getTabs().add(welcomeTab);
+        return getMainTab();
+    }
+    public void addTab (String name, Node scene){
+        if (tabList.containsKey(name)){
+            getMainTab().getSelectionModel().select(tabList.get(name));
         }else{
-            setCurrentWindow(windowList.get(name));
+            Tab tab = new Tab();
+            tab.setText(name);
+            tab.setContent(scene);
+            tab.setOnCloseRequest((Event e) -> {
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Подтверждите закрытия вкладки");
+                confirm.setHeaderText("Вы уверены, что хотите закрыть вкладку \"" + name +"\"?");
+                ButtonType yes = new ButtonType("Да");
+                ButtonType no = new ButtonType("Нет");
+                confirm.getButtonTypes().clear();
+                confirm.getButtonTypes().addAll(yes, no);
+                Optional<ButtonType> option = confirm.showAndWait();
+                if (option.get() == null) {
+                } else if (option.get() == yes) {
+                    getMainTab().getTabs().remove(tab);
+                    tabList.remove(name);
+                } else if (option.get() == no) {
+                } else {
+                }
+            });
+            tab.setOnClosed((Event e) -> {
+                logger.writeLog(Level.INFO, "Владка \"" + name +"\" закрыта!");
+            });
+            getMainTab().getTabs().add(tab);
+            getMainTab().getSelectionModel().select(tab);
+            tabList.put(name, tab);
         }
-    }
-    public void closeWindow (String name){
-        windowList.remove(name);
-        removeTask(btnIDList.get(name));
-        btnIDList.remove(name);
-        Entry<String,AnchorPane>[] set = new Entry[windowList.size()];
-        windowList.entrySet().toArray(set);
-        setCurrentWindow(windowList.get(set[windowList.size()-1].getKey()));
     }
 //Status Bar
     public GridPane statusBar(){
@@ -77,33 +104,16 @@ public class Desktop {
         });
         Button menuButton = new Button("Menu");
         statusBar.add(menuButton, 0, 0);
-        statusBar.add(taskBar, 1, 0);
-        statusBar.add(statusLabel, 2, 0);
-        statusBar.add(connStatus, 3, 0);
+        statusBar.add(statusLabel, 1, 0);
+        statusBar.add(connStatus, 2, 0);
         
         ColumnConstraints menuCol = new ColumnConstraints(Control.USE_COMPUTED_SIZE);
-        ColumnConstraints buttonCol = new ColumnConstraints();
-        buttonCol.setPercentWidth(70);
-        buttonCol.setHgrow(Priority.ALWAYS);
         ColumnConstraints logCol = new ColumnConstraints();
-        logCol.setPercentWidth(20);
         logCol.setHgrow(Priority.ALWAYS);
         ColumnConstraints statusCol = new ColumnConstraints(Control.USE_COMPUTED_SIZE);
-        statusBar.getColumnConstraints().addAll(menuCol, buttonCol, logCol, statusCol);
+        statusBar.getColumnConstraints().addAll(menuCol, logCol, statusCol);
         
         return statusBar;
     }
-    public int addTask(String name, AnchorPane window, BorderPane parent){
-        int id = 0;
-        Button btn = new Button(name);
-        btn.setOnAction((ActionEvent event) -> {
-            parent.setCenter(window);
-        });
-        taskBar.getChildren().add(btn);
-        id = taskBar.getChildren().indexOf(btn);
-        return id;
-    }
-    public void removeTask(int id){
-        taskBar.getChildren().remove(id);
-    }
+    
 }
