@@ -9,8 +9,14 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -31,14 +37,38 @@ public class JumpsFX extends Application {
             }
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        BorderPane root = jumpsWindow();
+//        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root);
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public BorderPane jumpsWindow(){
+        BorderPane window = new BorderPane();
+        //ButtonPane
+        Accordion menu = new Accordion(); 
+        TitledPane jumps = new TitledPane();
+        jumps.setText("Запись/редактирование прыжков");
+        
+        TitledPane reports = new TitledPane();
+        reports.setText("Отчеты");
+        
+        TitledPane graphics = new TitledPane();
+        graphics.setText("Графики");
+        
+        
+        menu.getPanes().addAll(jumps, reports, graphics);
+        //CentralPane
+        AnchorPane welcomePane = new AnchorPane();
+        welcomePane.getChildren().add(new Label("This is default welcome text"));
+        
+        window.setCenter(welcomePane);
+        window.setLeft(menu);
+        return window;
     }
 
     /**

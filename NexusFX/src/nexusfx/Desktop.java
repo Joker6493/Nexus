@@ -31,6 +31,7 @@ import javafx.scene.layout.Priority;
 import logger.Level;
 import logger.Logger;
 import utils.ConnectionCheck;
+import utils.DraggingTabPaneSupport;
 
 /**
  *
@@ -40,6 +41,7 @@ public class Desktop {
     private Logger logger = new Logger();
 //Windows list
     private TabPane mainTab = new TabPane();
+    private DraggingTabPaneSupport draggingTabPane = new DraggingTabPaneSupport();
     private Map<String,Tab> tabList = new LinkedHashMap<>();
     public TabPane getMainTab() {
         return mainTab;
@@ -48,6 +50,7 @@ public class Desktop {
         this.mainTab = mainTab;
     }
     public TabPane mainWindow(){
+        draggingTabPane.addSupport(mainTab);
         Tab welcomeTab = new Tab();
         welcomeTab.setText("Welcome");
         HBox welcomeBox = new HBox();
